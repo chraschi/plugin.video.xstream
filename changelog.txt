@@ -1,8 +1,199 @@
-xStream 3.5.11~nightly
+3.5.20~nightly
+- [kinoag] add site
+- [hd-streams.to] entfernt
+- [stream_to] entfernt
+- [s.to] TMDB deaktiviert bei "Alle Serien"
+- [TMDB] fix ValueError invalid literal for int
+- [TMDB] serien erkennung erhöht, overhead reduziert, code cleanup
+- [topstreamfilm] add Beliebte, code cleanup
+- [TMDB] episodes add support crew
+- [filmpalast] fix episodes
+- [moviestream] fix episodes
+- [movietown] fix episodes
+- [TMDB] episodes unterstützung hinzugefügt
+- [Erweiterte Info (TMDB)] Info überarbeitet
+
+3.5.19
+  15.11.2020
+- [moviestream] Seite hinzugefügt
+- [general] Ersetzte script.module.metahandler durch TMDB scraper
+- [general] füge contextmenu Erweiterte Info TMDB hinzu
+- [general] add erkennung von jahr in title
+- [general] add einstellung Benutze Cover als Fanart
+- [hd-streams.to] fix episode
+- [kinox] update domains
+- entfernt moviestream
+- [Movie4k Click] add site
+- [kkiste] fix suche
+- [requestHandler] use socket.setdefaulttimeout
+- [streamkiste] fix Serien
+- entfernt alleserien, moviedream, movie4k
+- [hd-streams.to] fix site
+- fix hosterSelect List
+- [HD-Streams.org] fix site
+- [cinenator] fix nextpage
+
+3.5.18
+  06.10.2020
+- [flimmerstube] fix hoster
+- [streamkiste] Seite hinzugefügt
+- [hd-streams.org] fix für Kodi 19
+- [movie4k.space] Seite hinzugefügt
+- [general] fix für Kodi 19 Alpha2
+
+3.5.17
+  20.09.2020
+- [filmpalast] serien überarbeitet
+- [topstreamfilm] add rating fix duration
+- [kinoger] fix hoster (c|f)sst
+- [general] code optimiert
+- [movieking] fix cover
+- [kinoger] code optimiert
+- [hd-streams_org] neu geschrieben
+- [kinoger] fix serien und hoster
+- [stream.to] seite hinzugefügt
+- [general] code optimiert
+- [dokus4] fix setView
+- [filmpalast] fix setView
+- [movieking] fix setView
+- [moviestream] fix setView
+- [movietown] fix setView
+- [netzkino] fix setView
+- [topstreamfilm] fix setView
+- [general] kleiner fix für autoplay, mehrere für Kodi 19
+- [cinenator] fix hosterauswahl automatisch
+- [dokus4] fix  fix hosterauswahl automatisch
+- [hd-streams.to] fix hosterauswahl automatisch
+- [serienstream] Kodi 19 fix
+- [cinenator] fix next-page
+- [dokus4] add description
+- [filmpalast] add rating
+- [moviestream] add rating
+- [topstreamfilm] fix hoster
+- [movieking] code cleanup
+- [hd-streams_org] hinzugefügt und code cleanup
+- [xStream] Kodi 19 Contextmenu fix usw.
+
+3.5.16
+  18.08.2020
+- [xStream] Kodi 19 Support Beta
+- [ddl] entfernt keine streams
+- Suchergebnisse verbessert mehrere seiten
+- [HDfilme Suche fix 
+-  mehrere seiten py23 kompatibel
+- [xcine] remove cloudflare problem
+- [Cinenator] add duration fix year
+- [moviedream] add top10 fix for py23
+- [topstreamfilm] fix hoster
+- [kkiste] Add Serie und Release Jahre
+- [Pureanime] add konto und fix suche
+
+3.5.15.1
+  28.06.2020
+  Update:
+- script.module.six Anhängigkeit hinzugefügt
+
+3.5.15
+  02.06.2020
+  Update:
+- Update Manager (Change URLResolver master auf nightly branche)
+- [pureanime] fix hoster
+- [Flimmerstube] fix
+- Languages strings.po und strings.xml (Benutername umgestellt auf E-Mail für s.to)
+- [topstreamfilm] add again fix hoster
+- UpdateManager add 'enforce Update'
+
+3.5.14
+  02.04.2020
+- Nightly Updates select auto/manual
+- [cinenator] hoster add lang and qualy
+- [moviestream] code cleanup
+- [cinenator] code cleanup
+- [pureanime] cloudplayer add Qualy
+- [pureanime] add site
+- [hdfilme] hoster optimierung tnx loki and code cleanup
+- [xcine] code cleanup
+- [xcine] code optimierung tnx loki
+- [xcine] add site tnx loki
+- [hdfilme] fix hoster tnx loki
+- [dokus4] add site
+- [dokustream] remove offline
+- [alleserien] code cleanup
+- [filmpalast] code cleanup
+- [flimmerstube] code cleanup
+- [hd-streams.to] code cleanup
+- [hd-streams.org] cloudflare problem remove
+- [kino.cx] keine hoster remove
+- [kindertube] code cleanup
+- [kinoger] code cleanup
+- [kkiste] code cleanup
+- [moviedream] code cleanup
+- [movietown] code cleanup
+- [netzkino] code cleanup
+- [serienstream] code cleanup
+- [streamit.ws] keine hoster remove
+- [topstreamfilm] hoster problem remove 
+- [streamking] code cleanup add serien und jahr
+- Update service.py
+
+xStream 3.5.13
+  05.03.2020
+- Update settings.xml und service.py
+- Fix UpdateManager
+- Fix "Indexseiten" Übersicht im Einstellungs Menü
+- Update settings.xml und UpdateManager
+  URLResolver Update über xStream möglich
+  xStream bzw.URLResolver Update wird bei Kodistart ausgeführt, wenn im Einstellungsmenü aktiviert
+- [kinoger] add hoster cloudvideo.tv und kinoger.re
+- [hdfilme] fix hoster
+- [kinoger] add ddos guard support und fix site
+- [hd-streams.to] fix site
+- [hdfilme] fix hoster und Code cleanup
+
+xStream 3.5.12
+  03.01.2020
+- [streamking] fix filthy site
+- [kkiste.co] fix hoster supervideo
+- [kinox] fix
+- [movie4k] fix
+- [movietown] add site
+- [hdfilme] fix hoster
+- [parser] py23 kompatibel
+- add requestHandler2 beta for cloudflare
+- [moviedream] fix nextpage
+- [flimmerstube] fix search
+- [filmpalast] fix nextpage
+- [flimmerstube] youtube erkennung eingebaut und fix hoster youtube usw
+- [kindertube] youtube erkennung eingebaut usw
+- [iload] seite offline entfernt
+- [freikino] alles offline entfernt
+- [hdstreamfilme]  alles offline entfernt
+- [s.to] fix filme
+- [moviedream] fix genre
+- [kkiste.co] fix hoster supervideo
+- [movie4k] temporärer fix
+- [hdfilme] fix hoster
+
+xStream 3.5.11
+  14.10.2019
+- Update settings.xml und Language strings
+- [filmpalast_to] add vivo support
+- [streamking] wieder hinzugefügt
+- [cinemaxx.cc] Blazingfast problem entfernt
+- [foxx.to] offline
+- [movietown.org] cloudflare problem entfernt
+- [mykino.to] fast alle links offline
+- [streamking.eu] offline
+- [KKiste.co] Add supervideo support
+- [topstreamfilm] add description and duration usw
+- [KKiste.co] Add site
+- [MovieStream] fix such filter
+- [hdfilme] fix movie hoster and episodes tnx Ahnz
 - [Kinoger] add hoster newcloud aka fsst.online
 
 xStream 3.5.10
   09.09.2019
+- [hd-streams.to] Fix
 - [kinoger.com] fix hoster add description and duration
 - [filmpalast] add partially year and duration
 - [foxx] add duration

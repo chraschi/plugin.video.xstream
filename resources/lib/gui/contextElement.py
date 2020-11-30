@@ -1,7 +1,8 @@
+# -*- coding: utf-8 -*-
 from resources.lib.handler.ParameterHandler import ParameterHandler
 
-class cContextElement:
 
+class cContextElement:
     def __init__(self):
         self.__sTitle = ''
         self.__oOutputParameterHandler = ParameterHandler()
@@ -35,6 +36,3 @@ class cContextElement:
 
     def getOutputParameterHandler(self):
         return self.__oOutputParameterHandler
-
-
-

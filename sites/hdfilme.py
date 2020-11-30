@@ -1,73 +1,65 @@
 # -*- coding: utf-8 -*-
-from resources.lib import logger
-from resources.lib.gui.gui import cGui
-from resources.lib.gui.guiElement import cGuiElement
 from resources.lib.handler.ParameterHandler import ParameterHandler
 from resources.lib.handler.requestHandler import cRequestHandler
-from resources.lib.parser import cParser
+from resources.lib.tools import logger, cParser
+from resources.lib.gui.guiElement import cGuiElement
+from resources.lib.gui.gui import cGui
 
 SITE_IDENTIFIER = 'hdfilme'
 SITE_NAME = 'HDfilme'
 SITE_ICON = 'hdfilme.png'
+URL_MAIN = 'https://hdfilme.cx/'
+URL_MOVIES = URL_MAIN + 'filme1?'
+URL_SHOWS = URL_MAIN + 'serien1?'
+URL_SEARCH = URL_MAIN + 'search?key=%s'
 
-URL_MAIN = 'https://hdfilme.cc'
-URL_MOVIES = URL_MAIN + '/filme1?'
-URL_SHOWS = URL_MAIN + '/serien1?'
-URL_SEARCH = URL_MAIN + '/movie-search?key=%s'
 
 def load():
-    logger.info("Load %s" % SITE_NAME)
-    oGui = cGui()
+    logger.info('Load %s' % SITE_NAME)
     params = ParameterHandler()
     params.setParam('sUrl', URL_MOVIES)
-    oGui.addFolder(cGuiElement('Filme', SITE_IDENTIFIER, 'showMenu'), params)
+    cGui().addFolder(cGuiElement('Filme', SITE_IDENTIFIER, 'showMenu'), params)
     params.setParam('sUrl', URL_SHOWS)
-    oGui.addFolder(cGuiElement('Serien', SITE_IDENTIFIER, 'showMenu'), params)
-    oGui.addFolder(cGuiElement('Suche', SITE_IDENTIFIER, 'showSearch'))
-    oGui.setEndOfDirectory()
+    cGui().addFolder(cGuiElement('Serien', SITE_IDENTIFIER, 'showMenu'), params)
+    cGui().addFolder(cGuiElement('Suche', SITE_IDENTIFIER, 'showSearch'))
+    cGui().setEndOfDirectory()
 
 
 def showMenu():
-    oGui = cGui()
     params = ParameterHandler()
     baseURL = params.getValue('sUrl')
     params.setParam('sUrl', baseURL + 'sort=top&sort_type=desc')
-    oGui.addFolder(cGuiElement('Update', SITE_IDENTIFIER, 'showEntries'), params)
+    cGui().addFolder(cGuiElement('Update', SITE_IDENTIFIER, 'showEntries'), params)
     params.setParam('sUrl', baseURL + 'sort=year&sort_type=desc')
-    oGui.addFolder(cGuiElement('Year', SITE_IDENTIFIER, 'showEntries'), params)
+    cGui().addFolder(cGuiElement('Year', SITE_IDENTIFIER, 'showEntries'), params)
     params.setParam('sUrl', baseURL + 'sort=name&sort_type=desc')
-    oGui.addFolder(cGuiElement('Name', SITE_IDENTIFIER, 'showEntries'), params)
+    cGui().addFolder(cGuiElement('Name', SITE_IDENTIFIER, 'showEntries'), params)
     params.setParam('sUrl', baseURL + 'sort=imdb_rate&sort_type=desc')
-    oGui.addFolder(cGuiElement('IMDB', SITE_IDENTIFIER, 'showEntries'), params)
+    cGui().addFolder(cGuiElement('IMDB', SITE_IDENTIFIER, 'showEntries'), params)
     params.setParam('sUrl', baseURL + 'sort=rate_point&sort_type=desc')
-    oGui.addFolder(cGuiElement('Rate', SITE_IDENTIFIER, 'showEntries'), params)
+    cGui().addFolder(cGuiElement('Rate', SITE_IDENTIFIER, 'showEntries'), params)
     params.setParam('sUrl', baseURL + 'sort=view_total&sort_type=desc')
-    oGui.addFolder(cGuiElement('View', SITE_IDENTIFIER, 'showEntries'), params)
+    cGui().addFolder(cGuiElement('View', SITE_IDENTIFIER, 'showEntries'), params)
     params.setParam('sUrl', baseURL)
-    oGui.addFolder(cGuiElement('Genre', SITE_IDENTIFIER, 'showGenre'), params)
-    oGui.setEndOfDirectory()
+    cGui().addFolder(cGuiElement('Genre', SITE_IDENTIFIER, 'showGenre'), params)
+    cGui().setEndOfDirectory()
 
 
 def showGenre():
-    oGui = cGui()
     params = ParameterHandler()
     entryUrl = params.getValue('sUrl')
     sHtmlContent = cRequestHandler(entryUrl).request()
-    pattern = 'Genre</option>.*?</div>'
-    isMatch, sContainer = cParser.parseSingleResult(sHtmlContent, pattern)
-
-    if  isMatch:
-        pattern = 'value="([^"]+)">([^<]+)'
-        isMatch, aResult = cParser.parse(sContainer, pattern)
-
+    isMatch, sContainer = cParser.parseSingleResult(sHtmlContent, 'Genre</option>.*?</div>')
+    if isMatch:
+        isMatch, aResult = cParser.parse(sContainer, 'value="([^"]+)">([^<]+)')
     if not isMatch:
-        oGui.showInfo('xStream', 'Es wurde kein Eintrag gefunden')
+        cGui().showInfo()
         return
 
     for sID, sName in sorted(aResult, key=lambda k: k[1]):
         params.setParam('sUrl', entryUrl + 'category=' + sID + '&country=&sort=&key=&sort_type=desc')
-        oGui.addFolder(cGuiElement(sName.strip(), SITE_IDENTIFIER, 'showEntries'), params)
-    oGui.setEndOfDirectory()
+        cGui().addFolder(cGuiElement(sName, SITE_IDENTIFIER, 'showEntries'), params)
+    cGui().setEndOfDirectory()
 
 
 def showEntries(entryUrl=False, sGui=False, sSearchText=False):
@@ -76,51 +68,45 @@ def showEntries(entryUrl=False, sGui=False, sSearchText=False):
     if not entryUrl: entryUrl = params.getValue('sUrl')
     iPage = int(params.getValue('page'))
     oRequest = cRequestHandler(entryUrl + '&page=' + str(iPage) if iPage > 0 else entryUrl, ignoreErrors=(sGui is not False))
-    oRequest.addHeaderEntry('Referer', 'https://hdfilme.cc/')
+    oRequest.addHeaderEntry('Referer', URL_MAIN)
     oRequest.addHeaderEntry('Upgrade-Insecure-Requests', '1')
-    oRequest.addParameters('load', 'full-page')
-    oRequest.setRequestType(1)
-    
+    if not sSearchText:
+        oRequest.addParameters('load', 'full-page')
     sHtmlContent = oRequest.request()
     pattern = '<ul[^>]class="products row">(.*?)</ul>'
     isMatch, sContainer = cParser.parseSingleResult(sHtmlContent, pattern)
-
     if isMatch:
         pattern = '<div class="box-product clearfix" data-popover.*?href="([^"]+).*?data-src="([^"]+).*?title=".*?">([^<]+)'
         isMatch, aResult = cParser.parse(sContainer, pattern)
-
     if not isMatch:
-        if not sGui: oGui.showInfo('xStream', 'Es wurde kein Eintrag gefunden')
+        if not sGui: oGui.showInfo()
         return
 
-    cf = cRequestHandler.createUrl(entryUrl, oRequest)
     total = len(aResult)
     for sUrl, sThumbnail, sName in aResult:
         sName = sName.replace(' stream', '')
         if sSearchText and not cParser().search(sSearchText, sName):
             continue
-        sThumbnail = sThumbnail.replace('_thumb', '') + cf
-        isMatch, sYear = cParser.parse(sName, "(.*?)\((\d*)\)")
+        sThumbnail = sThumbnail.replace('_thumb', '')
+        isMatch, sYear = cParser.parse(sName, '(.*?)\((\d*)\)')
         for name, year in sYear:
             sName = name
             sYear = year
             break
 
         isTvshow = True if 'staffel' in sUrl or 'staffel' in sName else False
-
         if 'sort=year&sort_type=desc' in entryUrl and not isTvshow:
             sName += ' (' + str(sYear) + ')'
         oGuiElement = cGuiElement(sName, SITE_IDENTIFIER, 'showEpisodes' if isTvshow else 'showHosters')
         oGuiElement.setMediaType('tvshow' if isTvshow else 'movie')
         oGuiElement.setThumbnail(sThumbnail)
-        oGuiElement.setFanart(sThumbnail)
         if sYear:
             oGuiElement.setYear(sYear)
         params.setParam('entryUrl', sUrl)
         params.setParam('sName', sName)
         params.setParam('sThumbnail', sThumbnail)
         oGui.addFolder(oGuiElement, params, isTvshow, total)
-    if not sGui:
+    if not sGui and not sSearchText:
         sPageNr = int(params.getValue('page'))
         if sPageNr == 0:
             sPageNr = 2
@@ -134,112 +120,79 @@ def showEntries(entryUrl=False, sGui=False, sSearchText=False):
 
 
 def showEpisodes():
-    oGui = cGui()
     params = ParameterHandler()
-    sUrl = urlEncode(params.getValue('entryUrl'),':|/') + '/folge-1'
+    sUrl = cParser.urlEncode(params.getValue('entryUrl'), ':|/') + '/folge-1'
     sThumbnail = params.getValue('sThumbnail')
     sHtmlContent = cRequestHandler(sUrl).request()
     pattern = 'data-episode-id="([\d]+).*?folge.*?([\d]+)'
     isMatch, aResult = cParser.parse(sHtmlContent, pattern)
-    pattern = 'data-movie-id="([\d]+)'
-    isMatch, sID = cParser.parse(sHtmlContent, pattern)
-
+    isMatch, sID = cParser.parse(sHtmlContent, 'data-movie-id="([\d]+)')
     if not isMatch:
-        oGui.showInfo('xStream', 'Es wurde kein Eintrag gefunden')
+        cGui().showInfo()
         return
 
-    
     total = len(aResult)
     for eID, eNr in aResult:
-        oGuiElement = cGuiElement('Folge ' + eNr , SITE_IDENTIFIER, "showHosterserie")
+        oGuiElement = cGuiElement('Folge ' + eNr, SITE_IDENTIFIER, 'showHosters')
         oGuiElement.setThumbnail(sThumbnail)
-        oGuiElement.setFanart(sThumbnail)
         params.setParam('eID', eID)
         params.setParam('sID', sID[0])
-        oGui.addFolder(oGuiElement, params, False, total)
-    oGui.setView('episodes')
-    oGui.setEndOfDirectory()
-
-
-def showHosterserie():
-    eID = ParameterHandler().getValue('eID')
-    sID = ParameterHandler().getValue('sID')
-    rUrl = ParameterHandler().getValue('entryUrl')
-    hosters = []
-    oRequest = cRequestHandler(URL_MAIN + '/movie/load-stream/' + sID + '/' + eID +  '?')
-    oRequest.addHeaderEntry('X-Requested-With', 'XMLHttpRequest')
-    oRequest.addHeaderEntry('Referer', rUrl)
-    sHtmlContent = oRequest.request()
-    pattern = 'urlVideo = "([^"]+)'
-    isMatch, hUrl = cParser().parse(sHtmlContent, pattern)
-    oRequest = cRequestHandler(hUrl[0])
-    sHtmlContent = oRequest.request()
-    url = cParser().urlparse(hUrl[0])
-    pattern = 'RESOLUTION=\d+x([\d]+)([^#]+)'
-    isMatch, aResult = cParser().parse(sHtmlContent, pattern)
-    for sQualy, sUrl in aResult:
-        if 'hydrax' in hUrl[0]:
-            hoster = {'link': hUrl[0].replace('playlist.m3u8', '') + sUrl, 'name': sQualy}
-        else:
-            hoster = {'link': 'http://' + url + sUrl, 'name': sQualy}
-        hosters.append(hoster)
-    if hosters:
-        hosters.append('getHosterUrl')
-    return hosters
+        cGui().addFolder(oGuiElement, params, False, total)
+    cGui().setView('episodes')
+    cGui().setEndOfDirectory()
 
 
 def showHosters():
-    sUrl = urlEncode(ParameterHandler().getValue('entryUrl'),':|/') + '/deutsch'
-    rUrl = ParameterHandler().getValue('entryUrl')
-    sHtmlContent = cRequestHandler(sUrl).request()
-    pattern = 'data-movie-id="(.*?)"[\s\S]*?data-episode-id="(.*?)"' #'data-episode-id="([^"]+).*?load[^>] "([^"]+)"'
-    isMatch, aResult = cParser().parse(sHtmlContent, pattern)
-
     hosters = []
+    eID = ParameterHandler().getValue('eID')
+    sID = ParameterHandler().getValue('sID')
+    rUrl = ParameterHandler().getValue('entryUrl')
+    sUrl = cParser.urlEncode(ParameterHandler().getValue('entryUrl'), ':|/') + '/deutsch'
+    if not eID and not sID:
+        oRequest = cRequestHandler(sUrl)
+        oRequest.addHeaderEntry('Origin', URL_MAIN)
+        oRequest.addHeaderEntry('Referer', sUrl)
+        sHtmlContent = oRequest.request()
+        pattern = 'data-movie-id="(\d+).*?data-episode-id="(\d+)"'
+        isMatch, aResult = cParser().parse(sHtmlContent, pattern)
+        if isMatch:
+            sID = aResult[0][0]
+            eID = aResult[0][1]
+
+    oRequest = cRequestHandler(URL_MAIN + 'movie/load-stream/' + sID + '/' + eID + '?')
+    oRequest.addHeaderEntry('X-Requested-With', 'XMLHttpRequest')
+    oRequest.addHeaderEntry('Referer', rUrl)
+    sHtmlContentBase = oRequest.request()
+    isMatch, hUrl = cParser().parse(sHtmlContentBase, 'urlVideo = "([^"]+)')
+
     if isMatch:
-        for sMID, sEID in aResult:
-
-            oRequest = cRequestHandler(str(URL_MAIN + '/movie/load-stream/' + sMID +'/'+ sEID + '?server=1'))
-            oRequest.addHeaderEntry('X-Requested-With', 'XMLHttpRequest')
-            oRequest.addHeaderEntry('Referer', rUrl)
-            sHtmlContent = oRequest.request()
-            pattern = 'urlVideo = "([^"]+)'
-
-            isMatch, hUrl = cParser().parse(sHtmlContent, pattern)
-            sHtmlContent = cRequestHandler(hUrl[0]).request()
-            url = cParser().urlparse(hUrl[0])
-            pattern = 'RESOLUTION=\d+x([\d]+)([^#]+)'
-            isMatch, aResult = cParser().parse(sHtmlContent, pattern)
-
+        oRequest = cRequestHandler(hUrl[0])
+        oRequest.addHeaderEntry('Referer', sUrl)
+        oRequest.addHeaderEntry('Origin', URL_MAIN)
+        sHtmlContent = oRequest.request()
+        url = cParser().urlparse(hUrl[0])
+        pattern = 'RESOLUTION=\d+x([\d]+)([^#]+)'
+        isMatch, aResult = cParser().parse(sHtmlContent, pattern)
+        if isMatch:
             for sQualy, sUrl in aResult:
-                if 'hydrax' in hUrl[0]:
-                    hoster = {'link': hUrl[0].replace('playlist.m3u8', '') + sUrl, 'name': sQualy}
-                else:
-                    hoster = {'link': 'http://' + url + sUrl, 'name': sQualy}
+                sUrl = 'https://' + url + sUrl + '|Origin=https%3A%2F%2Fhdfilme.cx%2F&Referer=https%3A%2F%2Fhdfilme.cx%2F'
+                hoster = {'link': sUrl, 'name': sQualy}
                 hosters.append(hoster)
-    if hosters:
-        hosters.append('getHosterUrl')
-    return hosters
+        if hosters:
+            hosters.append('getHosterUrl')
+        return hosters
 
 
 def getHosterUrl(sUrl=False):
-    if 'hydrax' in sUrl:
-        sUrl = sUrl + '|' + 'Origin=https%3A%2F%2Fhdfilme.net%2F&Accept-Language=de-de,de;q=0.8,en-us;q=0.5,en;q=0.3&Accept-Encoding=gzip&Referer=https%3A%2F%2Fhdfilme.net%2F'
     return [{'streamUrl': sUrl, 'resolved': True}]
 
 
 def showSearch():
-    oGui = cGui()
-    sSearchText = oGui.showKeyBoard()
+    sSearchText = cGui().showKeyBoard()
     if not sSearchText: return
     _search(False, sSearchText)
-    oGui.setEndOfDirectory()
+    cGui().setEndOfDirectory()
 
 
 def _search(oGui, sSearchText):
-    showEntries(URL_SEARCH % sSearchText, oGui, sSearchText)
-
-
-def urlEncode(sUrl, safe=''):
-    import urllib
-    return urllib.quote(sUrl, safe)
+    showEntries(URL_SEARCH % cParser().quotePlus(sSearchText), oGui, sSearchText)

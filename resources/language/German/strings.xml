@@ -17,12 +17,14 @@
     <string id="30013">Bevorzugte Qualität bei Auto-Play Funktion</string>
     <string id="30014">Timeout für HTTP-Anfragen in Sekunden</string>
     <string id="30015">Auto-Update für URLResolver</string>
+    <string id="30019">Benutze Cover als Fanart</string>
 
     <!-- settingtabs begin by 30020 - 30029 -->
     <string id="30020">Allgemein</string>
-    <string id="30021">Site-Plugins</string>
+    <string id="30021">Indexseiten</string>
     <string id="30022">Ansichten</string>
     <string id="30023">Downloads</string>
+    <string id="30024">Konten</string>
 
     <!-- settingsheader begin by 30030 - 30039 -->
     <string id="30030">Update</string>
@@ -64,7 +66,7 @@
     <string id="30080">Kodi-Download</string>
     <string id="30081">Download-Verzeichnis</string>
     <string id="30082">PyLoad an/aus</string>
-    <string id="30083">Benutzername</string>
+    <string id="30083">E-Mail</string>
     <string id="30084">Passwort</string>
 
     <string id="30302">Staffeln Deutsch</string>

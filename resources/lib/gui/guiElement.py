@@ -1,27 +1,24 @@
 # -*- coding: utf-8 -*-
-from os import path
-from resources.lib.common import addon
+from resources.lib.tools import logger, cParser, cUtil
 from resources.lib.config import cConfig
-from resources.lib.util import cUtil
-from resources.lib import logger
+from resources.lib.common import addon
+from os import path
+
 
 class cGuiElement:
     '''
     This class "abstracts" a xbmc listitem.
-
     Kwargs:
         sTitle    (str): title/label oft the GuiElement/listitem
-        sSite     (str): siteidentifier of the siteplugin, which is called if the GuiElement is selected 
+        sSite     (str): siteidentifier of the siteplugin, which is called if the GuiElement is selected
         sFunction (str): name of the function, which is called if the GuiElement is selected
-    
-        These arguments are mandatory. If not given on init, they have to be set by their setter-methods, before the GuiElement is added to the Gui. 
+        These arguments are mandatory. If not given on init, they have to be set by their setter-methods, before the GuiElement is added to the Gui.
     '''
-
     DEFAULT_FOLDER_ICON = 'DefaultFolder.png'
-    DEFAULT_FANART = path.join(addon.getAddonInfo('path'),'fanart.jpg')
-    MEDIA_TYPES = ['movie','tvshow','season','episode']
+    DEFAULT_FANART = path.join(addon.getAddonInfo('path'), 'fanart.jpg')
+    MEDIA_TYPES = ['movie', 'tvshow', 'season', 'episode']
 
-    def __init__(self, sTitle = '', sSite = None, sFunction = None):
+    def __init__(self, sTitle='', sSite=None, sFunction=None):
         self.__sType = 'video'
         self.__sMediaUrl = ''
         self.__sTitle = cUtil.cleanse_text(sTitle)
@@ -42,7 +39,7 @@ class cGuiElement:
         self._mediaType = ''
         self._season = ''
         self._episode = ''
-        self._imdbID = ''
+        self._tmdbID = ''
         self._rating = ''
         self._isMetaSet = False
 
@@ -74,12 +71,32 @@ class cGuiElement:
         self.__sTitle = cUtil.cleanse_text(sTitle)
 
     def getTitle(self):
-        return self.__sTitle
+        if ' (19' in self.__sTitle or ' (20' in self.__sTitle:
+            isMatch, aYear = cParser.parse(self.__sTitle, '(.*?)\((\d{4})\)')
+            if isMatch:
+                self.__sTitle = aYear[0][0]
+                self.setYear(aYear[0][1])
+        if '*19' in self.__sTitle or '*20' in self.__sTitle:
+            isMatch, aYear = cParser.parse(self.__sTitle, '(.*?)\*(\d{4})\*')
+            if isMatch:
+                self.__sTitle = aYear[0][0]
+                self.setYear(aYear[0][1])
+        if '*english*' in self.__sTitle.lower():
+            isMatch, aLang = cParser.parse(self.__sTitle, '(.*?)\*(.*?)\*')
+            if isMatch:
+                self.__sTitle = aLang[0][0]
+                self.setLanguage('Englisch')
+        if 'English:' in self.__sTitle:
+            self.__sTitle = self.__sTitle.replace('English:', '')
+            self.setLanguage('Englisch')
+        if '(omu)' in self.__sTitle.lower():
+            self.__sTitle = self.__sTitle.replace('(OmU) ', '').replace('(Omu) ', '')
+            self.setLanguage('OmU')
+        return self.__sTitle.strip()
 
     def setMediaType(self, mediaType):
         '''
         Set mediatype for GuiElement
-
         Args:
             mediaType(str): 'movie'/'tvshow'/'season'/'episode'
         '''
@@ -87,7 +104,7 @@ class cGuiElement:
         if mediaType in self.MEDIA_TYPES:
             self._mediaType = mediaType
         else:
-            logger.info('Unknown MediaType given for %s' % self.getTitle())
+            logger.error('Unknown MediaType given for %s' % self.getTitle())
 
     def setSeason(self, season):
         self._season = season
@@ -104,17 +121,17 @@ class cGuiElement:
         try:
             year = int(year)
         except:
-            logger.info('Year given for %s seems not to be a valid number' % self.getTitle())
+            logger.error('Year given for %s seems not to be a valid number' % self.getTitle())
             return False
         if len(str(year)) != 4:
-            logger.info('Year given for %s has %s digits, required 4 digits' % (self.getTitle(), len(str(year))))
+            logger.error('Year given for %s has %s digits, required 4 digits' % (self.getTitle(), len(str(year))))
             return False
         if year > 0:
             self._sYear = str(year)
             self.__aItemValues['year'] = year
             return True
         else:
-            logger.info('Year given for %s must be greater than 0' % self.getTitle())
+            logger.error('Year given for %s must be greater than 0' % self.getTitle())
             return False
 
     def setTitleSecond(self, sTitleSecond):
@@ -136,6 +153,8 @@ class cGuiElement:
 
     def setThumbnail(self, sThumbnail):
         self.__sThumbnail = sThumbnail
+        if cConfig().getSetting('replacefanart') == 'true' and sThumbnail.startswith('http'):
+            self.__sFanart = sThumbnail
 
     def getThumbnail(self):
         return self.__sThumbnail
@@ -145,7 +164,7 @@ class cGuiElement:
 
     def getIcon(self):
         return self.__sIcon
-    
+
     def setFanart(self, sFanart):
         self.__sFanart = sFanart
 
@@ -154,7 +173,7 @@ class cGuiElement:
 
     def addItemValue(self, sItemKey, sItemValue):
         self.__aItemValues[sItemKey] = sItemValue
-        
+
     def setItemValues(self, aValueList):
         self.__aItemValues = aValueList
 
@@ -165,13 +184,13 @@ class cGuiElement:
         for sPropertyKey in self.__aProperties.keys():
             self.__aItemValues[sPropertyKey] = self.__aProperties[sPropertyKey]
         return self.__aItemValues
-    
+
     def addItemProperties(self, sPropertyKey, sPropertyValue):
         self.__aProperties[sPropertyKey] = sPropertyValue
-  
+
     def getItemProperties(self):
         for sItemValueKey in self.__aItemValues.keys():
-            if not self.__aItemValues[sItemValueKey]=='':
+            if not self.__aItemValues[sItemValueKey] == '':
                 try:
                     self.__aProperties[sItemValueKey] = str(self.__aItemValues[sItemValueKey])
                 except:
@@ -190,45 +209,45 @@ class cGuiElement:
     def setSubLanguage(self, sLang):
         self._sSubLanguage = str(sLang)
 
-    def getMeta(self, mediaType, imdbID='', TVShowTitle = '', season='', episode ='', mode = 'add'):
+    def getMeta(self, mediaType, tmdbID='', TVShowTitle='', season='', episode='', mode='add'):
         '''
         Fetch metainformations for GuiElement.
         Args:
             mediaType(str): 'movie'/'tvshow'/'season'/'episode'
-
         Kwargs:
-            imdbID (str)        :
+            tmdbID (str)        :
             TVShowTitle (str)   :
             mode (str)          : 'add'/'replace' defines if fetched metainformtions should be added to existing informations, or if they should replace them.
         '''
-
-        if cConfig().getSetting('metahandler')=='false':
-           return False
+        if cConfig().getSetting('TMDBMETA') == 'false':
+            return False
         if not self._mediaType:
             self.setMediaType(mediaType)
-        if not mode in ['add','replace']:
-            logger.info('Wrong meta set mode')
+        if mode not in ['add', 'replace']:
+            logger.error('Wrong meta set mode')
         if not season and self._season:
             season = self._season
         if not episode and self._episode:
             episode = self._episode
-
         if not self._mediaType:
-            logger.info('Could not get MetaInformations for %s, mediaType not defined' % self.getTitle())
+            logger.error('Could not get MetaInformations for %s, mediaType not defined' % self.getTitle())
             return False
-        from xstream import get_metahandler
-        oMetaget = get_metahandler()
+        from tmdb import cTMDB
+        oMetaget = cTMDB()
         if not oMetaget:
             return False
-        if self._mediaType == 'movie' or self._mediaType == 'tvshow':
-            if self._mediaType == 'tvshow' and self.__aItemValues.get('TVShowTitle',False):
-                meta = oMetaget.get_meta(self._mediaType, self.__aItemValues['TVShowTitle'])
+
+        if self._mediaType == 'movie':
+            if self._sYear:
+                meta = oMetaget.get_meta(self._mediaType, self.getTitle(), year=self._sYear, advanced=cConfig().getSetting('advanced'))
             else:
-                meta = oMetaget.get_meta(self._mediaType, self.__sTitle)         
+                meta = oMetaget.get_meta(self._mediaType, self.getTitle(), advanced=cConfig().getSetting('advanced'))
+        elif self._mediaType == 'tvshow':
+            meta = oMetaget.get_meta(self._mediaType, self.getTitle(), advanced=cConfig().getSetting('advanced'))
         elif self._mediaType == 'season':
-            meta = oMetaget.get_seasons(TVShowTitle, imdbID, [str(season)])
+            meta = {}
         elif self._mediaType == 'episode':
-            meta = oMetaget.get_episode_meta(TVShowTitle, imdbID, str(season), str(episode))
+            meta = oMetaget.get_meta_episodes(self._mediaType, TVShowTitle, tmdbID, str(season), str(episode))
         else:
             return False
 
@@ -240,21 +259,23 @@ class cGuiElement:
 
         if mode == 'replace':
             self.setItemValues(meta)
-            if not meta['cover_url'] == '':
+            if 'cover_url' in meta:
                 self.setThumbnail(meta['cover_url'])
-            if not meta['backdrop_url'] == '':
+            if 'backdrop_url' in meta:
                 self.setFanart(meta['backdrop_url'])
+            if 'title' in meta and episode:
+                self.setTitle(str(episode) + '. ' + meta['title'])
+
         else:
             meta.update(self.__aItemValues)
             meta.update(self.__aProperties)
-            if meta['cover_url'] != '' and self.__sThumbnail == '':
+            if 'cover_url' in meta != '' and self.__sThumbnail == '':
                 self.setThumbnail(meta['cover_url'])
-            if meta['backdrop_url'] != '' and self.__sFanart == self.DEFAULT_FANART:
+
+            if 'backdrop_url' in meta and self.__sFanart == self.DEFAULT_FANART:
                 self.setFanart(meta['backdrop_url'])
             self.setItemValues(meta)
-
-        if meta['imdb_id']:
-            self._imdbID = meta['imdb_id']
-
+        if 'tmdb_id' in meta:
+            self._tmdbID = meta['tmdb_id']
         self._isMetaSet = True
         return meta
