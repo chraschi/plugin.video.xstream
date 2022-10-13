@@ -1,3 +1,9 @@
+3.5.36~nightly7
+  14.10.22
+  -[Movie4k]Domain Fix für Suchfunktion
+			Qualität Anzeige hinzugefügt
+  -[updatemanager.py] Fix Py2
+			
 3.5.36~nightly6
   05.10.22
   -[Flimmerstube]Erweiterter Fix für Filme mit Direktlink

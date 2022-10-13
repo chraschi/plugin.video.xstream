@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-# 2022.04.27 heptamer
+
+# 2022.10.14 DWH
 
 from resources.lib.handler.ParameterHandler import ParameterHandler
 from resources.lib.handler.requestHandler import cRequestHandler
@@ -11,7 +12,7 @@ SITE_IDENTIFIER = 'movie4k_click'
 SITE_NAME = 'Movie4k Click'
 SITE_ICON = 'movie4k_click.png'
 
-URL_MAIN = 'https://movie4k.cyou'
+URL_MAIN = 'https://movie4k.homes'
 URL_KINO = URL_MAIN + '/aktuelle-kinofilme-im-kino'
 URL_FILME = URL_MAIN + '/kinofilme-online'
 URL_SERIE = URL_MAIN + '/serienstream-deutsch'
@@ -67,14 +68,14 @@ def showEntries(entryUrl=False, sGui=False, sSearchText=False):
         oRequest.addParameters('do', 'search')
         oRequest.addParameters('subaction', 'search')
     sHtmlContent = oRequest.request()
-    pattern = 'movie-item.*?href="([^"]+).*?<h3>([^<]+).*?white">([^<]+).*?src="([^"]+)'
+    pattern = 'movie-item.*?href="([^"]+).*?<h3>([^<]+).*?<ul><li>([^<]+).*?white">([^<]+).*?src="([^"]+)'
     isMatch, aResult = cParser.parse(sHtmlContent, pattern)
     if not isMatch:
         if not sGui: oGui.showInfo()
         return
 
     total = len(aResult)
-    for sUrl, sName, sYear, sThumbnail in aResult:
+    for sUrl, sName, sQuality, sYear, sThumbnail in aResult:
         if sThumbnail.startswith('/'):
             sThumbnail = URL_MAIN + sThumbnail
         if sSearchText and not cParser().search(sSearchText, sName):
@@ -83,6 +84,7 @@ def showEntries(entryUrl=False, sGui=False, sSearchText=False):
         oGuiElement = cGuiElement(sName, SITE_IDENTIFIER, 'showEpisodes' if isTvshow else 'showHosters')
         oGuiElement.setMediaType('tvshow' if isTvshow else 'movie')
         oGuiElement.setThumbnail(sThumbnail)
+        oGuiElement.setQuality(sQuality)
         oGuiElement.setYear(sYear)
         params.setParam('entryUrl', sUrl)
         params.setParam('sName', sName)

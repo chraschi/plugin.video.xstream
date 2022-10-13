@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# 2022.05.26 DWH-WFC
+# 2022.10.14 DWH-WFC
 
 import os, base64, sys
 import shutil
@@ -85,7 +85,10 @@ def UpdateResolve(username, resolve_dir, resolve_id, branch, token, silent):
             if isTrue is True:
                 log(HEADERMESSAGE + ' - %s - Aktualisierung wird heruntergeladen.' % resolve_id, LOGNOTICE)
                 shutil.make_archive(ADDON_PATH, 'zip', ADDON_PATH)
-                shutil.unpack_archive(ADDON_PATH + '.zip', INSTALL_PATH)
+                unpack_archive = zipfile.ZipFile(ADDON_PATH + '.zip')   # Py2/Py3
+                unpack_archive.extractall(INSTALL_PATH)                 # Py2/Py3
+                unpack_archive.close()                                  # Py2/Py3
+                #shutil.unpack_archive(ADDON_PATH + '.zip', INSTALL_PATH)   # Py3
                 log(HEADERMESSAGE + ' - %s - Aktualisierung wird installiert.' % resolve_id, LOGNOTICE)
                 if os.path.exists(ADDON_PATH + '.zip'): os.remove(ADDON_PATH + '.zip')                
                 if silent is False: Dialog().ok(HEADERMESSAGE, resolve_id + ' - Update erfolgreich.')
