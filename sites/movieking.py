@@ -56,17 +56,18 @@ def showEntries(entryUrl=False, sGui=False, sSearchText=False):
     if not entryUrl: entryUrl = params.getValue('sUrl')
     oRequest = cRequestHandler(entryUrl, ignoreErrors=(sGui is not False))
     sHtmlContent = oRequest.request()
-    pattern = 'data-src="([^"]+)(.*?)href="([^"]+)">([^<]+)'
+    pattern = 'data-src="([^"]+)(.*?)href="([^"]+)">([^<]+).*?label-primary">([^<]+)'
     isMatch, aResult = cParser().parse(sHtmlContent, pattern)
     if not isMatch:
         if not sGui: oGui.showInfo()
         return
 
     total = len(aResult)
-    for sThumbnail, sType, sUrl, sName in aResult:
+    for sThumbnail, sType, sUrl, sName, sQuality in aResult:
         if sSearchText and not cParser().search(sSearchText, sName):
             continue
         oGuiElement = cGuiElement(sName, SITE_IDENTIFIER, 'showHosters')
+        oGuiElement.setQuality(sQuality)
         oGuiElement.setThumbnail(sThumbnail.replace('https', 'http'))
         oGuiElement.setMediaType('movie')
         params.setParam('entryUrl', sUrl)

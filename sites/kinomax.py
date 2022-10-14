@@ -13,7 +13,7 @@ from resources.lib.gui.gui import cGui
 SITE_IDENTIFIER = 'kinomax'
 SITE_NAME = 'Kinomax.me'
 SITE_ICON = 'kinomax.png'
-URL_MAIN = 'https://kinomax.click'
+URL_MAIN = 'https://kinomax.cam'
 URL_KINO = URL_MAIN + '/aktuelle-kinofilme-im-kino/'
 URL_MOVIE = URL_MAIN + '/kinofilme-online'
 URL_SERIEN = URL_MAIN + '/serienstream-deutsch/'

@@ -64,19 +64,20 @@ def showEntries(entryUrl=False, sGui=False, sSearchText=False):
         oRequest.addParameters('story', sSearchText)
         oRequest.addParameters('titleonly', '3')
     sHtmlContent = oRequest.request()
-    pattern = 'short clearfix.*?href="([^"]+).*?title">([^<]+).*? src="([^"]+)'
+    pattern = 'short clearfix.*?href="([^"]+).*?title">([^<]+).*? src="([^"]+).*?short-label sl-y">([^<]+)'
     isMatch, aResult = cParser.parse(sHtmlContent, pattern)
     if not isMatch:
         if not sGui: oGui.showInfo()
         return
 
     total = len(aResult)
-    for sUrl, sName, sThumbnail in aResult:
+    for sUrl, sName, sThumbnail, sQuality in aResult:
         if sSearchText and not cParser().search(sSearchText, sName):
             continue
         if 'taffel' in sName:
             continue
         oGuiElement = cGuiElement(sName, SITE_IDENTIFIER, 'showHosters')
+        oGuiElement.setQuality(sQuality)
         oGuiElement.setMediaType('movie')
         if sThumbnail.startswith('/'):
             oGuiElement.setThumbnail(URL_MAIN + sThumbnail)

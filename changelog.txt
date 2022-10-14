@@ -7,6 +7,14 @@
   -[MegaKino] 		Regex überarbeitet
 					Qualität Anzeige aus der Webseite hinzugefügt
 					Dokumentationen hinzugefügt
+  -[Kinofox] 		Qualität Anzeige aus der Webseite hinzugefügt
+  -[Kinomax] 		Domain Fix für Suchfunktion
+  -[KKiste] 		Domain Fix für Suchfunktion
+					Menü überarbeitet
+					Youtube Hoster aktiviert wegen Dokus
+  -[Movieking] 		Qualität Anzeige aus der Webseite hinzugefügt
+  -[Hoster] 		Kinoger deaktiviert
+					KinoKiste deaktiviert
 
 3.5.36~nightly7
   14.10.22

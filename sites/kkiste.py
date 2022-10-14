@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# 2022-08-19 DWH Domain Update
+# 2022.10.14 DWH
 
 from resources.lib.handler.ParameterHandler import ParameterHandler
 from resources.lib.handler.requestHandler import cRequestHandler
@@ -12,14 +12,29 @@ from resources.lib.gui.gui import cGui
 SITE_IDENTIFIER = 'kkiste'
 SITE_NAME = 'KKiste'
 SITE_ICON = 'kkiste.png'
-URL_MAIN = 'https://kkiste.show/'
+URL_MAIN = 'https://kkiste.network/'
+URL_KINO = URL_MAIN + 'aktuelle-kinofilme-im-kino/'
+URL_FILME = URL_MAIN + 'kinofilme-online/'
+URL_SERIEN = URL_MAIN + 'serienstream-deutsch/'
+URL_ANIMATION = URL_MAIN + 'animation/'
+URL_DOKU = URL_MAIN + 'dokumentation/'
 
 
 def load():
     logger.info('Load %s' % SITE_NAME)
     params = ParameterHandler()
     params.setParam('sUrl', URL_MAIN)
-    cGui().addFolder(cGuiElement('Filme & Serien', SITE_IDENTIFIER, 'showEntries'), params)
+    cGui().addFolder(cGuiElement('Neues', SITE_IDENTIFIER, 'showEntries'), params)
+    params.setParam('sUrl', URL_KINO)
+    cGui().addFolder(cGuiElement('Aktuelle Kinofilme', SITE_IDENTIFIER, 'showEntries'), params)
+    params.setParam('sUrl', URL_FILME)
+    cGui().addFolder(cGuiElement('Filme', SITE_IDENTIFIER, 'showEntries'), params)
+    params.setParam('sUrl', URL_SERIEN)
+    cGui().addFolder(cGuiElement('Serien', SITE_IDENTIFIER, 'showEntries'), params)    
+    params.setParam('sUrl', URL_ANIMATION)
+    cGui().addFolder(cGuiElement('Animation', SITE_IDENTIFIER, 'showEntries'), params)    
+    params.setParam('sUrl', URL_DOKU)
+    cGui().addFolder(cGuiElement('Dokumentationen', SITE_IDENTIFIER, 'showEntries'), params)      
     params.setParam('Value', 'Genres')
     cGui().addFolder(cGuiElement('Genre', SITE_IDENTIFIER, 'showValue'), params)
     params.setParam('Value', 'Release Jahre')
@@ -125,9 +140,7 @@ def showHosters():
     isMatch, aResult = cParser().parse(sHtmlContent, 'link="([^"]+)')
     if isMatch:
         for sUrl in aResult:
-            if 'youtube' in sUrl:
-                continue
-            elif 'vod' in sUrl:
+            if 'vod' in sUrl:
                 continue
             elif sUrl.startswith('//'):
                 sUrl = 'https:' + sUrl
