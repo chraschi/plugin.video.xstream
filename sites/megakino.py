@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# 2022-01-13
+# 2022.10.14 DWH
 
 from resources.lib.handler.ParameterHandler import ParameterHandler
 from resources.lib.handler.requestHandler import cRequestHandler
@@ -16,6 +16,7 @@ URL_KINO = URL_MAIN + 'kinofilme/'
 URL_FILME = URL_MAIN + 'films/'
 URL_SERIEN = URL_MAIN + 'serials/'
 URL_ANIMATION = URL_MAIN + 'multfilm/'
+URL_DOKU = URL_MAIN + 'documentary/'
 URL_SEARCH = URL_MAIN + '?do=search&subaction=search&story=%s'
 
 
@@ -32,6 +33,8 @@ def load():
     cGui().addFolder(cGuiElement('Serien', SITE_IDENTIFIER, 'showEntries'), params)
     params.setParam('sUrl', URL_ANIMATION)
     cGui().addFolder(cGuiElement('Animation', SITE_IDENTIFIER, 'showEntries'), params)
+    params.setParam('sUrl', URL_DOKU)
+    cGui().addFolder(cGuiElement('Dokumentationen', SITE_IDENTIFIER, 'showEntries'), params)    
     params.setParam('sUrl', URL_MAIN)
     cGui().addFolder(cGuiElement('Genre', SITE_IDENTIFIER, 'showGenre'), params)
     cGui().addFolder(cGuiElement('Suche', SITE_IDENTIFIER, 'showSearch'))
@@ -64,7 +67,7 @@ def showEntries(entryUrl=False, sGui=False, sSearchText=False):
     if not entryUrl: entryUrl = params.getValue('sUrl')
     oRequest = cRequestHandler(entryUrl, ignoreErrors=(sGui is not False))
     sHtmlContent = oRequest.request()
-    pattern = '<a\s+class=[^>]*href="([^"]+)">\s*<div\s+class="[^"]+">\s*<img\s+data-src="([^"]+)"\s+src="[^"]+"\s+alt="([^"]+)">\s*<div\s+class="poster__label">(.*?</div>)\s*</div>\s*</a>'
+    pattern = '<a[^>]*class="poster grid-item.*?href="([^"]+).*?<img data-src="([^"]+).*?alt="([^"]+)".*?class="poster__label">([^<]+).*?class="poster__text[^"]+">([^<]+)'
     isMatch, aResult = cParser.parse(sHtmlContent, pattern)
 
     if not isMatch:
@@ -72,17 +75,17 @@ def showEntries(entryUrl=False, sGui=False, sSearchText=False):
         return
 
     total = len(aResult)
-    for sUrl, sThumbnail, sName, sInfo in aResult:
+    for sUrl, sThumbnail, sName, sQuality, sDesc in aResult:
         if sSearchText and not cParser.search(sSearchText, sName):
             continue
 
         isTvshow, aResult = cParser.parse(sName, '\s+-\s+Staffel\s+\d+')
         oGuiElement = cGuiElement(sName, SITE_IDENTIFIER, 'showEpisodes' if isTvshow else 'showHosters')
-        isDesc, sDesc = cParser.parseSingleResult(sInfo, '<div\s+class="poster__text[^"]+">([^<]+)</div>')
-        if isDesc:
-            if sDesc[-1] != '.':
-                sDesc += '...'
-            oGuiElement.setDescription(sDesc)
+      
+        if sDesc[-1] != '.':
+            sDesc += '...'
+        oGuiElement.setDescription(sDesc)
+        oGuiElement.setQuality(sQuality)          
         oGuiElement.setThumbnail(URL_MAIN + sThumbnail)
         oGuiElement.setMediaType('season' if isTvshow else 'movie')
         params.setParam('entryUrl', sUrl)

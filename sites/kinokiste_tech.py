@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# 2022-01-13
+# 2022.10.14 DWH
 
 from resources.lib.handler.ParameterHandler import ParameterHandler
 from resources.lib.handler.requestHandler import cRequestHandler
@@ -11,10 +11,10 @@ from resources.lib.gui.gui import cGui
 SITE_IDENTIFIER = 'kinokiste_tech'
 SITE_NAME = 'Kinokiste Tech'
 SITE_ICON = 'kinokistetech.png'
-URL_MAIN = 'https://kinokiste.tech/'
+URL_MAIN = 'https://kinokiste.cloud/'
 URL_NEU = URL_MAIN + 'kinofilme-online/'
 URL_KINO = URL_MAIN + 'aktuelle-kinofilme-im-kino/'
-URL_DEMNAECHST = URL_MAIN + 'demnachst/'
+URL_KINDER = URL_MAIN + 'animation/'
 URL_SERIEN = URL_MAIN + 'serienstream-deutsch/'
 URL_SEARCH = URL_MAIN + '?do=search&subaction=search&story=%s'
 
@@ -26,8 +26,8 @@ def load():
     cGui().addFolder(cGuiElement('Neues', SITE_IDENTIFIER, 'showEntries'), params)
     params.setParam('sUrl', URL_KINO)
     cGui().addFolder(cGuiElement('Kinofilme', SITE_IDENTIFIER, 'showEntries'), params)
-    params.setParam('sUrl', URL_DEMNAECHST)
-    cGui().addFolder(cGuiElement('Demnaechst', SITE_IDENTIFIER, 'showEntries'), params)
+    params.setParam('sUrl', URL_KINDER)
+    cGui().addFolder(cGuiElement('Filme für Kinder', SITE_IDENTIFIER, 'showEntries'), params)
     params.setParam('sUrl', URL_SERIEN)
     cGui().addFolder(cGuiElement('Serien', SITE_IDENTIFIER, 'showEntries'), params)
     params.setParam('sUrl', URL_MAIN)

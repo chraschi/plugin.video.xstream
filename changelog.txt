@@ -1,7 +1,17 @@
+3.5.36~nightly8
+  14.10.22
+  -[KinoKiste.Tech]	Domain Fix für Suchfunktion
+					Qualität Anzeige aus der Webseite hinzugefügt
+					Demnächst im Kino entfernt
+					Filme für Kinder hinzugefügt
+  -[MegaKino] 		Regex überarbeitet
+					Qualität Anzeige aus der Webseite hinzugefügt
+					Dokumentationen hinzugefügt
+
 3.5.36~nightly7
   14.10.22
-  -[Movie4k]Domain Fix für Suchfunktion
-			Qualität Anzeige hinzugefügt
+  -[Movie4k]		Domain Fix für Suchfunktion
+					Qualität Anzeige aus der Webseite hinzugefügt
   -[updatemanager.py] Fix Py2
 			
 3.5.36~nightly6
