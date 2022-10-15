@@ -1,3 +1,7 @@
+3.5.36~nightly9
+  15.10.22
+  -[Kinoger]		Fix Streamsb
+  
 3.5.36~nightly8
   14.10.22
   -[KinoKiste.Tech]	Domain Fix für Suchfunktion
@@ -13,8 +17,7 @@
 					Menü überarbeitet
 					Youtube Hoster aktiviert wegen Dokus
   -[Movieking] 		Qualität Anzeige aus der Webseite hinzugefügt
-  -[Hoster] 		Kinoger deaktiviert
-					KinoKiste deaktiviert
+  -[Hoster] 		KinoKiste deaktiviert
 
 3.5.36~nightly7
   14.10.22

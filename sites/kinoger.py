@@ -266,7 +266,7 @@ def showHosters():
                 url = get_streamsburl('kinoger.pw', sUrl.replace('.html', '').split('/')[4])
                 oRequest = cRequestHandler(url, caching=False, ignoreErrors=True)
                 oRequest.addHeaderEntry('Referer', sUrl)
-                oRequest.addHeaderEntry('watchsb', 'streamsb')
+                oRequest.addHeaderEntry('watchsb', 'sbstream')
                 sHtmlContent = oRequest.request()
                 isMatch, aResult = cParser.parse(sHtmlContent, 'file":"([^"]+)')
                 if isMatch:
@@ -355,7 +355,7 @@ def get_streamsburl(host, media_id):
     c2 = binascii.hexlify(x.encode('utf8')).decode('utf8')
     x = '{0}||{1}||{2}||streamsb'.format(makeid(12), c2, makeid(12))
     c3 = binascii.hexlify(x.encode('utf8')).decode('utf8')
-    return 'https://{0}/sources43/{1}/{2}'.format(host, c1, c3)
+    return 'https://{0}/sources48/{1}/{2}'.format(host, c1, c3)
 
 
 def toString(number, base):
