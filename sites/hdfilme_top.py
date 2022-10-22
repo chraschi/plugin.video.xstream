@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # 2022-02-01 Hep
-# 2022-08-19 DWH Domain Update
+# 2022-10-22 DWH Domain Update
 
 from resources.lib.handler.ParameterHandler import ParameterHandler
 from resources.lib.handler.requestHandler import cRequestHandler
@@ -13,7 +13,7 @@ from resources.lib.gui.gui import cGui
 SITE_IDENTIFIER = 'hdfilme_top'
 SITE_NAME = 'HD Filme Top'
 SITE_ICON = 'hdfilmetop.png'
-URL_MAIN = 'https://hdfilme.cloud/'
+URL_MAIN = 'https://hdfilme.media/'
 URL_KINO = URL_MAIN + 'aktuelle-kinofilme-im-kino/'
 URL_SERIEN = URL_MAIN + 'serienstream-deutsch/'
 URL_SEARCH = URL_MAIN + 'index.php?story=%s&do=search&subaction=search'
