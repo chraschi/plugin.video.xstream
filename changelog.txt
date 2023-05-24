@@ -1,4 +1,11 @@
-[B]Version: 4.0.5~Nightly13[/B]
+[B]Version: 4.0.5~Nightly14[/B]
+
+24.05.2023
+
+ - [Aniworld] Neuer Menüeintrag Neue Episoden THX @ Reddex
+ - [Flimmerstube] Fix Genre - einige Menüpunkte zeigten keine Einträge
+
+[COLOR cyan]________________________________________________________________________________________[/COLOR]
 
 19.05.2023
 

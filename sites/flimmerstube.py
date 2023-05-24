@@ -99,11 +99,11 @@ def showEntries(entryUrl=False, sGui=False, sSearchText=False):
     pattern = 'class="ve-screen..title="\(.*?D\)([^(]+).(....).*?url[^>]([^")]+).*?href="([^">]+)' #weiterer Pattern für Einträge beginnend mit (OmU...)
     isMatch, aResult2 = cParser.parse(sHtmlContent, pattern)
 
-    if not isMatch:
+    aResult = aResult + aResult2
+    if not aResult:
         if not sGui: oGui.showInfo()
         return
 
-    aResult = aResult + aResult2
     total = len(aResult)
     for sName, sYear, sThumbnail, sUrl in aResult:
         sName = sName.replace('(HD)', '')
