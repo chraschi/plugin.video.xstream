@@ -1,5 +1,12 @@
 [B]Version: 4.0.5~Nightly14[/B]
 
+25.05.2023
+
+ - [Cinemathek] komplett überarbeitet
+
+
+[COLOR cyan]________________________________________________________________________________________[/COLOR]
+
 24.05.2023
 
  - [Aniworld] Neuer Menüeintrag Neue Episoden THX @ Reddex
