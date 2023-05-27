@@ -236,6 +236,10 @@ def showHosters():
             sUrl = 'https://cinemathek.net/wp-json/dooplayer/v2/%s/%s/%s' % (i[1], i[0], i[2])
             hoster = {'link': sUrl, 'name': i[3]}
             hosters.append(hoster)
+    if not isMatch:
+        cGui().showInfo()
+        return
+
     if hosters:
         hosters.append('getHosterUrl')
     return hosters
