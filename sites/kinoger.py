@@ -1,10 +1,14 @@
 # -*- coding: utf-8 -*-
 # Python 3
 # Always pay attention to the translations in the menu!
+# HTML LangzeitCache hinzugefügt
+    #showGenre:     48 Stunden
+    #showEntries:    6 Stunden
+    #showSeasons:    6 Stunden
+    #showEpisodes:   4 Stunden
 
 import base64
 import binascii
-import json
 import random
 import string
 
@@ -82,7 +86,11 @@ def showEntries(entryUrl=False, sGui=False, sSearchText=False):
         oRequest.addParameters('set_new_sort', 'dle_sort_main')
         oRequest.addParameters('set_direction_sort', 'dle_direction_main')
     sHtmlContent = oRequest.request()
-    pattern = 'class="title.*?href="([^"]+)">([^<]+).*?src="([^"]+)(.*?)</span>'
+    pattern = 'class="title".*?' # container start
+    pattern += 'href="([^"]+)' # url
+    pattern += '">([^<]+).*?' # name
+    pattern += 'src="([^"]+)' # thumb
+    pattern += '(.*?)</span>' # dummy
     isMatch, aResult = cParser().parse(sHtmlContent, pattern)
     if not isMatch:
         if not sGui: oGui.showInfo()
@@ -93,15 +101,13 @@ def showEntries(entryUrl=False, sGui=False, sSearchText=False):
         if sSearchText and not cParser().search(sSearchText, sName):
             continue
         isTvshow = True if 'staffel' in sName.lower() or 'serie' in entryUrl or ';">S0' in sDummy else False
-        isYear, sYear = cParser.parse(sName, '(.*?)\((\d*)\)')
+        isYear, sYear = cParser.parse(sName, '(.*?)\((\d*)\)') # Jahr und Name trennen
         for name, year in sYear:
             sName = name
             sYear = year
             break
-        isDesc, sDesc = cParser.parseSingleResult(sDummy, '</b>([^<]+)')
-        isDuration, sDuration = cParser.parseSingleResult(sDummy, '(?:Laufzeit|Spielzeit).*?(\d[^<]+)')
-        if ':' in sDuration:
-            sDuration = time2minutes(sDuration)
+        isDesc, sDesc = cParser.parseSingleResult(sDummy, '</b>([^<]+)') # Beschreibung
+        isDuration, sDuration = cParser.parseSingleResult(sDummy, '(?:Laufzeit|Spielzeit).*?([\d]+)') # Laufzeit
         oGuiElement = cGuiElement(sName, SITE_IDENTIFIER, 'showSeasons' if isTvshow else 'showHosters')
         oGuiElement.setThumbnail(sThumbnail)
         if isYear:
@@ -111,6 +117,7 @@ def showEntries(entryUrl=False, sGui=False, sSearchText=False):
         if isDuration:
             oGuiElement.addItemValue('duration', sDuration)
         oGuiElement.setMediaType('tvshow' if isTvshow else 'movie')
+        # Parameter übergeben
         params.setParam('sThumbnail', sThumbnail)
         params.setParam('TVShowTitle', sName)
         params.setParam('entryUrl', sUrl)
@@ -126,39 +133,44 @@ def showEntries(entryUrl=False, sGui=False, sSearchText=False):
 
 def showSeasons():
     params = ParameterHandler()
+    # Parameter laden
     entryUrl = params.getValue('entryUrl')
     sThumbnail = params.getValue('sThumbnail')
     sTVShowTitle = params.getValue('TVShowTitle')
-    sHtmlContent = cRequestHandler(entryUrl).request()
+    oRequest = cRequestHandler(entryUrl)
+    if cConfig().getSetting('global_search_' + SITE_IDENTIFIER) == 'true':
+        oRequest.cacheTime = 60 * 60 * 6  # HTML Cache Zeit 6 Stunden
+    sHtmlContent = oRequest.request()
     L11 = []
-    isMatchsst, sstsContainer = cParser.parseSingleResult(sHtmlContent, 'sst.show.*?</script>') # FSST.Online Links
+    isMatchsst, sstsContainer = cParser.parseSingleResult(sHtmlContent, 'sst.show.*?</script>')
     if isMatchsst:
         sstsContainer = sstsContainer.replace('[', '<').replace(']', '>')
         isMatchsst, L11 = cParser.parse(sstsContainer, "<'([^>]+)")
         if isMatchsst:
             total = len(L11)
     L22 = []
-    isMatchollhd, ollhdsContainer = cParser.parseSingleResult(sHtmlContent, 'ollhd.show.*?</script>') # Kinoger.ru Links Passwort geschützt
+    isMatchollhd, ollhdsContainer = cParser.parseSingleResult(sHtmlContent, 'ollhd.show.*?</script>')
     if isMatchollhd:
         ollhdsContainer = ollhdsContainer.replace('[', '<').replace(']', '>')
         isMatchollhd, L22 = cParser.parse(ollhdsContainer, "<'([^>]+)")
         if isMatchollhd:
             total = len(L22)
     L33 = []
-    isMatchpw, pwsContainer = cParser.parseSingleResult(sHtmlContent, 'pw.show.*?</script>') # StreamSB Links
+    isMatchpw, pwsContainer = cParser.parseSingleResult(sHtmlContent, 'pw.show.*?</script>')
     if isMatchpw:
         pwsContainer = pwsContainer.replace('[', '<').replace(']', '>')
         isMatchpw, L33 = cParser.parse(pwsContainer, "<'([^>]+)")
         if isMatchpw:
             total = len(L33)
-    isMatchgo, gosContainer = cParser.parseSingleResult(sHtmlContent, 'go.show.*?</script>') # Stream-u Links (Offline)
+    L44 = []
+    isMatchgo, gosContainer = cParser.parseSingleResult(sHtmlContent, 'go.show.*?</script>')
     if isMatchgo:
         gosContainer = gosContainer.replace('[', '<').replace(']', '>')
         isMatchgo, L44 = cParser.parse(gosContainer, "<'([^>]+)")
         if isMatchgo:
             total = len(L44)
 
-    isDesc, sDesc = cParser.parseSingleResult(sHtmlContent, '</b>([^"]+)<br><br>')
+    isDesc, sDesc = cParser.parseSingleResult(sHtmlContent, '</b>([^"]+)<br><br>') # Beschreibung
     for i in range(0, total):
         try:
             params.setParam('L11', L11[i])
@@ -184,6 +196,7 @@ def showSeasons():
         oGuiElement.setThumbnail(sThumbnail)
         if isDesc:
             oGuiElement.setDescription(sDesc)
+        # Parameter übergeben
         params.setParam('sDesc', sDesc)
         params.setParam('sSeasonNr', i)
         cGui().addFolder(oGuiElement, params, True, total)
@@ -193,6 +206,7 @@ def showSeasons():
 
 def showEpisodes():
     params = ParameterHandler()
+    # Parameter laden
     sSeasonNr = params.getValue('sSeasonNr')
     sThumbnail = params.getValue('sThumbnail')
     sTVShowTitle = params.getValue('TVShowTitle')
@@ -246,56 +260,88 @@ def showHosters():
         isMatch, aResult = cParser().parse(sHtmlContent, pattern)
     if isMatch:
         for sUrl in aResult:
-            if 'kinoger.ru' in sUrl:
-                continue # Da geschützt ist wird es entfernt
-            elif 'kinoger.pw' in sUrl: # StreamSB Hoster
-                url = get_streamsburl('kinoger.pw', sUrl.replace('.html', '').split('/')[4])
-                oRequest = cRequestHandler(url, caching=False, ignoreErrors=True)
-                oRequest.addHeaderEntry('Referer', sUrl)
-                oRequest.addHeaderEntry('watchsb', 'sbstream')
+            if 'kinoger.ru' in sUrl: # Muss neu erstellt werden
+                continue
+
+            if 'kinoger.be' in sUrl:
+                oRequest = cRequestHandler(sUrl, caching=False, ignoreErrors=True)
+                oRequest.addHeaderEntry('Referer', 'https://kinoger.com/')
                 sHtmlContent = oRequest.request()
-                isMatch, aResult = cParser.parse(sHtmlContent, 'file":"([^"]+)')
+                isMatch, packed = cParser.parseSingleResult(sHtmlContent, '(eval\s*\(function.*?)</script>')
                 if isMatch:
-                    oRequest = cRequestHandler(aResult[0], caching=False, ignoreErrors=True)
-                    oRequest.addHeaderEntry('Referer', 'https://kinoger.pw/')
-                    oRequest.addHeaderEntry('Origin', 'https://kinoger.pw')
+                    sHtmlContent = jsunpacker.unpack(packed)
+                isMatch, j = cParser.parse(sHtmlContent, 'ct":"([^"]+)","iv":"([^"]+)","s":"([^"]+)')
+                if isMatch:
+                    try:
+                        ciphertext = base64.b64decode(j[0][0])
+                        salt = binascii.unhexlify(j[0][2])
+                        password = 'XOmurdOgNnjMwYah'.encode('utf-8')
+                        sHtmlContent = cUtil.evp_decode(ciphertext, password, salt)
+                    except Exception:
+                        sHtmlContent = ''
+                isMatch, hUrl = cParser.parseSingleResult(sHtmlContent, 'sources.*?file.*?(http[^"]+)')
+                if isMatch:
+                    hUrl = hUrl.replace('\\', '')
+                    oRequest = cRequestHandler(hUrl, caching=False, ignoreErrors=True)
+                    oRequest.addHeaderEntry('Referer', 'https://kinoger.be/')
+                    oRequest.addHeaderEntry('Origin', 'https://kinoger.be')
+                    oRequest.removeNewLines(False)
                     sHtmlContent = oRequest.request()
-                    isMatch, aResult = cParser.parse(sHtmlContent, 'RESOLUTION=(\d+x\d+).*?(http[^"]+)#')
+                    pattern = 'RESOLUTION=(\d+x\d+).*?\n([^#"]+)'
+                    isMatch, aResult = cParser.parse(sHtmlContent, pattern)
                 if isMatch:
                     for sQualy, sUrl in aResult:
-                        sUrl = sUrl + '|Origin=https%3A%2F%2Fkinoger.pw&Referer=https%3A%2F%2Fkinoger.pw%2F' + headers
-                        hoster = {'link': sUrl, 'name': 'StreamSB ' + sQualy + 'p', 'resolveable': True}
+                        sUrl = (hUrl.split('video')[0].strip() + sUrl.strip())
+                        sUrl = sUrl + '|Origin=https%3A%2F%2Fkinoger.be&Referer=https%3A%2F%2Fkinoger.be%2F' + headers
+                        hoster = {'link': sUrl, 'name': 'Kinoger.be ' + sQualy + 'p', 'resolveable': True}
                         hosters.append(hoster)
-            elif 'kinoger.re' in sUrl: # Hausinterne Hoster
+
+            elif 'kinoger.pw' in sUrl:
+                try:
+                    url = get_streamsburl('kinoger.pw', sUrl.replace('.html', '').split('/')[4])
+                    oRequest = cRequestHandler(url, caching=False, ignoreErrors=True)
+                    oRequest.addHeaderEntry('Referer', sUrl)
+                    oRequest.addHeaderEntry('watchsb', 'sbstream')
+                    sHtmlContent = oRequest.request()
+                    isMatch, aResult = cParser.parse(sHtmlContent, 'file":"([^"]+)')
+                    if isMatch:
+                        oRequest = cRequestHandler(aResult[0], caching=False, ignoreErrors=True)
+                        oRequest.addHeaderEntry('Referer', 'https://kinoger.pw/')
+                        oRequest.addHeaderEntry('Origin', 'https://kinoger.pw')
+                        sHtmlContent = oRequest.request()
+                        isMatch, aResult = cParser.parse(sHtmlContent, 'RESOLUTION=(\d+x\d+).*?(http[^"]+)#')
+                    if isMatch:
+                        for sQualy, sUrl in aResult:
+                            sUrl = sUrl + '|Origin=https%3A%2F%2Fkinoger.pw&Referer=https%3A%2F%2Fkinoger.pw%2F' + headers
+                            hoster = {'link': sUrl, 'name': 'StreamSB ' + sQualy + 'p', 'resolveable': True}
+                            hosters.append(hoster)
+                except Exception:
+                    pass
+
+            elif 'kinoger.re' in sUrl:
                 oRequest = cRequestHandler('https://kinoger.re/api/video/stream/get', ignoreErrors=True, jspost=True)
                 oRequest.addHeaderEntry('Referer', sUrl)
                 oRequest.addParameters('id', sUrl.split('/')[-1])
                 sHtmlContent = oRequest.request()
-                isMatch, aResult = cParser.parse(sHtmlContent, 'file":"([^"]+)')
+                isMatch, aResult = cParser.parse(sHtmlContent, '"label":"([^"]+).*?file":"([^"]+)')
                 if isMatch:
-                    for sUrl in aResult:
+                    for sQualy, sUrl in aResult:
                         sUrl = sUrl + '|Referer=https%3A%2F%2Fkinoger.re%2F' + headers
-                        hoster = {'link': sUrl, 'name': 'Kinoger.re ', 'resolveable': True}
+                        hoster = {'link': sUrl, 'name': 'Kinoger.re ' + sQualy, 'resolveable': True}
                         hosters.append(hoster)
-            elif 'start.u' in sUrl: # Offline die Domain gibt es nicht mehr
+            elif 'start.u' in sUrl: # Da Offline überspringen
                 continue
-            else: # Direktlinks wie FSST und Dood
+
+            else:
                 hoster = {'link': sUrl + 'DIREKT', 'name': cParser.urlparse(sUrl)}
                 hosters.append(hoster)
+    if not isMatch:
+        cGui().showInfo()
+        return
+
     if hosters:
         hosters.append('getHosterUrl')
         return hosters
-
-
-def Qualy(q):
-    if '480-' in q:
-        return ' 480p'
-    elif '720-' in q:
-        return ' 720p'
-    elif '1080-' in q:
-        return ' 1080p'
-    else:
-        return ' 360p'
 
 
 def getHosterUrl(sUrl=False):
@@ -321,7 +367,7 @@ def _search(oGui, sSearchText):
     showEntries(URL_MAIN, oGui, sSearchText)
 
 
-def get_streamsburl(host, media_id):
+def get_streamsburl(host, media_id): # StreamSB Url Abfrage
     # Copyright (c) 2019 vb6rocod
 
     def makeid(length):
@@ -333,81 +379,3 @@ def get_streamsburl(host, media_id):
     x = '7Vd5jIEF2lKy||nuewwgxb1qs'
     c2 = binascii.hexlify(x.encode('utf8')).decode('utf8')
     return 'https://{0}/{1}7/{2}'.format(host, c2, c1)
-
-
-def toString(number, base):
-    string = '0123456789abcdefghijklmnopqrstuvwxyz'
-    if number < base:
-        return string[number]
-    else:
-        return toString(number // base, base) + string[number % base]
-
-
-def keys(s):
-    if s == '1': return ('54A80Ibc3VBdefWGTSFg1X7hEYNijZU', 'kQl2mCnDoMpOq9rHsPt6uLvawRxJyKz')
-    elif s == '2': return ('4YMHUe5OFZ7L2PEJ8fgKAh1RGiIj0kV', 'aTlNmCn3oBpDqSr9sbtWu6vcwdxXyQz')
-    elif s == '3': return ('AN4YZVHTJEOeLS2fGaFghiKWjQMbIkl', 'Xmc1d3nCo7p5qBrUsDt9u8vRw6x0yPz')
-    elif s == '4': return ('V6YD2ZNWaTefXgObhS3UcRAP4dIiJjK', 'k7l5mLnCoEpMqGrBsFtQuHv1w0x9y8z')
-    elif s == '5': return ('OGAFaN985MDHTbYW7ceQfdIgZhJiXj3', 'kSl6mRn2oCpKqErPsUt1u0v4wLxByVz')
-    elif s == '6': return ('cZXK8O3BS5NRedFPfLAg2U6hIiDj7VT', 'k9lQmJnWoGp1q0rCsatHuYvbw4xMyEz')
-    elif s == '7': return ('UZQXTPHcVS7deEfWDgRMLh9iIa1Y0j2', 'klb3m8nOoBpNqKr5s6tJuAvCwGxFy4z')
-    elif s == '8': return ('AZI4WCcKOdNJGF3YEa2eHfgb8hMiLjD', 'kUlPmBnSoVp5q7r6s9t1uTv0wQxRyXz')
-    elif s == '9': return ('OWZYcP3adUNSbeCfJVghTQDRIiKjBkG', 'X5lMmFnAoLp1q7r6s0tHu2vEw9x4y8z')
-    else: return ('', '')
-
-
-def decodeStr(e):
-    d = ''
-    t0, t1 = keys(e[-1])
-    e = e[:-1]
-    for i in range(len(e)):
-        for ii in range(len(t0)):
-            if e[i] in t0[ii]:
-                d += t1[ii]
-            elif e[i] in t1[ii]:
-                d += t0[ii]
-    return cParser.unquotePlus(base64.b64decode(d[::-1] + '==').decode())
-
-
-def encodeStr(e):
-    d = ''
-    k = str(random.randint(2, 7))
-    t0, t1 = keys(k)
-    e = cParser.quotePlus(e)
-    e = base64.b64encode(e.encode())
-    e = e.decode().replace('=', '')[::-1]
-    for i in range(len(e)):
-        for ii in range(len(t0)):
-            if e[i] in t0[ii]:
-                d += t1[ii]
-            elif e[i] in t1[ii]:
-                d += t0[ii]
-    return d + k
-
-
-def encodeUrl(e):
-    n = ''
-    a = random.randint(2, 9)
-    t0, t1 = keys(str(a))
-    t = a + 5
-    for r in range(len(e)):
-        n += toString(ord(e[r]), t)
-        n += '!'
-    n = base64.b64encode(n[:-1].encode()).decode().replace('=', '')
-    e = ''
-    for i in range(len(n)):
-        for ii in range(len(t0)):
-            if n[i] in t0[ii]:
-                e = e + t1[ii]
-            elif n[i] in t1[ii]:
-                e = e + t0[ii]
-    return encodeStr(e + str(a))
-
-
-def time2minutes(time):
-    if type(time) == bytes:
-        time = time.decode()
-    t = time.split(":")
-    minutes = float(t[0]) * 60 + float(t[1]) + float(t[2]) * 0.05 / 3
-    minutes = str(minutes).split(".")[0] if '.' in str(minutes) else str(minutes)
-    return minutes
