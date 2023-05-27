@@ -1,9 +1,13 @@
-[B]Version: 4.0.5~Nightly14[/B]
+[B]Version: 4.0.5~Nightly16[/B]
 
+27.05.2023
+
+ - [Kinoger] Kinoger.ru und Start-u Stream entfernt 
+ Code etwas angepasst (muss überarbeitet werden)
+ 
 25.05.2023
 
  - [Cinemathek] komplett überarbeitet
-
 
 [COLOR cyan]________________________________________________________________________________________[/COLOR]
 
