@@ -84,12 +84,11 @@ def showSeriesMenu():   # Menu structure of series menu
 def showValue():
     params = ParameterHandler()
     value = params.getValue("value")
-    #sHtmlContent = cRequestHandler(params.getValue('sUrl')).request()
     oRequest = cRequestHandler(params.getValue('sUrl'))
     if cConfig().getSetting('global_search_' + SITE_IDENTIFIER) == 'true':
         oRequest.cacheTime = 60 * 60 * 24 # HTML Cache Zeit 1 Tag
     sHtmlContent = oRequest.request()
-    pattern = '<section[^>]id="%s">(.*?)</section>' % value
+    pattern = '<section[^>]id="%s">(.*?)</section>' % value # Suche in der Section Einträge
     isMatch, sContainer = cParser.parseSingleResult(sHtmlContent, pattern)
     if isMatch:
         isMatch, aResult = cParser.parse(sContainer, 'href="([^"]+)">([^<]+)')
@@ -112,17 +111,19 @@ def showEntries(entryUrl=False, sGui=False, sSearchText=False):
     if cConfig().getSetting('global_search_' + SITE_IDENTIFIER) == 'true':
         oRequest.cacheTime = 60 * 60 * 6  # 6 Stunden
     sHtmlContent = oRequest.request()
-    # will match movies from first page (filmpalast.to)
-    pattern = '<article[^>]*>\s*<a href="([^"]+)" title="([^"]+)">\s*<img src=["\']([^"\']+)["\'][^>]*>(.*?)</article>'
+    # Durchsuche Einträge auf (filmpalast.to)
+    pattern = '<article[^>]*>\s*' # container start
+    pattern += '<a href="([^"]+)' # url
+    pattern += '" title="([^"]+)">\s*' # name
+    pattern += '<img src=["\']([^"\']+)["\'][^>]*>' # thumb
+    pattern += '(.*?)</article>' # dummy
     isMatch, aResult = cParser.parse(sHtmlContent, pattern)
     if not isMatch:
-        # will match movies from specific pages (filmpalast.to/movies/new)
-        # last match is just a dummy!
-        pattern = '<a[^>]*href="([^"]*)"[^>]*title="([^"]*)"[^>]*>[^<]*<img[^>]*src=["\']([^"\']*)["\'][^>]*>\s*</a>(\s*)</article>'
-        isMatch, aResult = cParser.parse(sHtmlContent, pattern)
-    if not isMatch:
-        # not needed anymore???
-        pattern = '</div><a[^>]href="([^"]+)"[^>]title="([^"]+)">.*?src="([^"]+)(.*?)alt'
+        # Durchsuche Einträge auf (filmpalast.to/movies/new)
+        pattern = '<a[^>]*href="([^"]*)"[^>]*'  # url
+        pattern += 'title="([^"]*)"'  # name
+        pattern += '[^>]*>[^<]*<img[^>]*src=["\']([^"\']*)["\'][^>]*>\s*</a>'  # thumb
+        pattern += '(\s*)</article>'  # dummy
         isMatch, aResult = cParser.parse(sHtmlContent, pattern)
     if not isMatch:
         if not sGui: oGui.showInfo()
@@ -148,6 +149,7 @@ def showEntries(entryUrl=False, sGui=False, sSearchText=False):
             oGuiElement.addItemValue('duration', sDuration)
         if isRating:
             oGuiElement.addItemValue('rating', sRating.replace(',', '.'))
+        # Parameter übergeben
         if sUrl.startswith('//'):
             params.setParam('entryUrl', 'https:' + sUrl)
         else:
@@ -170,10 +172,14 @@ def showEntries(entryUrl=False, sGui=False, sSearchText=False):
 
 def showSeasons():
     params = ParameterHandler()
+    # Parameter laden
     sUrl = params.getValue('entryUrl')
     sThumbnail = params.getValue("sThumbnail")
     sName = params.getValue('sName')
-    sHtmlContent = cRequestHandler(sUrl).request()
+    oRequest = cRequestHandler(sUrl)
+    if cConfig().getSetting('global_search_' + SITE_IDENTIFIER) == 'true':
+        oRequest.cacheTime = 60 * 60 * 6  # HTML Cache Zeit 6 Stunden
+    sHtmlContent = oRequest.request()
     pattern = '<a[^>]*class="staffTab"[^>]*data-sid="(\d+)"[^>]*>'
     isMatch, aResult = cParser.parse(sHtmlContent, pattern)
     if not isMatch:
@@ -197,11 +203,11 @@ def showSeasons():
 
 def showEpisodes():
     params = ParameterHandler()
+    # Parameter laden
     sUrl = params.getValue('entryUrl')
     sThumbnail = params.getValue("sThumbnail")
     sSeason = params.getValue('season')
     sShowName = params.getValue('TVShowTitle')
-    #sHtmlContent = cRequestHandler(sUrl).request()
     oRequest = cRequestHandler(sUrl)
     if cConfig().getSetting('global_search_' + SITE_IDENTIFIER) == 'true':
         oRequest.cacheTime = 60 * 60 * 4  # HTML Cache Zeit 4 Stunden
@@ -253,13 +259,7 @@ def showHosters():
 
 
 def getHosterUrl(sUrl=False):
-    if 'vivo.php' in sUrl:
-        oRequest = cRequestHandler(sUrl, caching=False)
-        oRequest.addHeaderEntry('Referer', URL_MAIN)
-        oRequest.request()
-        return [{'streamUrl': oRequest.getRealUrl(), 'resolved': False}]
-    else:
-        return [{'streamUrl': sUrl, 'resolved': False}]
+    return [{'streamUrl': sUrl, 'resolved': False}]
 
 
 def showSearch():

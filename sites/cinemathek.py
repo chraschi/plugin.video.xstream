@@ -234,6 +234,7 @@ def showHosters():
     if isMatch:
         for i in aResult:
             sUrl = 'https://cinemathek.net/wp-json/dooplayer/v2/%s/%s/%s' % (i[1], i[0], i[2])
+            if cConfig().isBlockedHoster(i[3])[0]: continue  # Hoster aus settings.xml oder deaktivierten Resolver ausschließen
             hoster = {'link': sUrl, 'name': i[3]}
             hosters.append(hoster)
     if not isMatch:

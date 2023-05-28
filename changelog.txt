@@ -1,4 +1,12 @@
-[B]Version: 4.0.5~Nightly17[/B]
+[B]Version: 4.0.5~Nightly18[/B]
+
+28.05.2023
+
+ - [Cinemathek] Hoster ausschließen hinzugefügt
+ - [Filmpalast] Code überarbeitet
+ - [Movieking] entfernt
+
+[COLOR cyan]________________________________________________________________________________________[/COLOR
 
 27.05.2023
 
@@ -6,6 +14,8 @@
 	+ Code komplett überarbeitet
 	+ Kinoger.be hinzugefügt
 	+ Kinoger.re Qualität hinzugefügt
+	
+[COLOR cyan]________________________________________________________________________________________[/COLOR
  
 25.05.2023
 
