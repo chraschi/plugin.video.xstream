@@ -143,15 +143,6 @@ def showEntries(entryUrl=False, sGui=False, sSearchText=False):
 
     total = len(aResult)
     for sName, sUrl, sThumbnail, sYear in aResult:
-        # Abfrage der voreingestellten Sprache
-        sLanguage = cConfig().getSetting('prefLanguage')
-        if (sLanguage == '1' and 'English*' in sName):   # Deutsch
-            continue
-        if (sLanguage == '2' and not 'English*' in sName):   # English
-            continue
-        elif sLanguage == '3':    # Japanisch
-            cGui().showLanguage()
-            continue
         if sSearchText and not cParser.search(sSearchText, sName):
             continue
         if sThumbnail[0] == '/':
@@ -160,7 +151,7 @@ def showEntries(entryUrl=False, sGui=False, sSearchText=False):
         oGuiElement = cGuiElement(sName, SITE_IDENTIFIER, 'showHosters')
         oGuiElement.setThumbnail(URL_MAIN + sThumbnail)
         oGuiElement.setMediaType('movie')
-        oGuiElement.setYear(sYear)
+        #oGuiElement.setYear(sYear) #ToDo sYear erzeugt falschen Suchstring in tmdb.py (re.sub in tmdb.py)
         params.setParam('entryUrl', sUrl)
         params.setParam('sName', sName)
         params.setParam('sThumbnail', sThumbnail)
@@ -194,23 +185,14 @@ def showSeries(entryUrl=False, sGui=False, sSearchText=False): # Neu eingebaut d
 
     total = len(aResult)
     for sName, sUrl, sThumbnail, sYear in aResult:
-        # Abfrage der voreingestellten Sprache
-        sLanguage = cConfig().getSetting('prefLanguage')
-        if (sLanguage == '1' and 'English*' in sName):  # Deutsch
-            continue
-        if (sLanguage == '2' and not 'English*' in sName):  # English
-            continue
-        elif sLanguage == '3':  # Japanisch
-            cGui().showLanguage()
-            continue
         if sSearchText and not cParser.search(sSearchText, sName):
             continue
         if sThumbnail[0] == '/':
             sThumbnail = sThumbnail[1:]
         oGuiElement = cGuiElement(sName, SITE_IDENTIFIER, 'showEpisodes')
         oGuiElement.setThumbnail(URL_MAIN + sThumbnail)
-        oGuiElement.setMediaType('season')
-        oGuiElement.setYear(sYear)
+        oGuiElement.setMediaType('tvshow')
+        #oGuiElement.setYear(sYear) #ToDo sYear erzeugt falschen Suchstring in tmdb.py (jahr in name)
         params.setParam('entryUrl', sUrl)
         params.setParam('sName', sName)
         params.setParam('sThumbnail', sThumbnail)
@@ -227,7 +209,7 @@ def showSeries(entryUrl=False, sGui=False, sSearchText=False): # Neu eingebaut d
         oGui.setEndOfDirectory()
 
 
-def showEpisodes(): # #ToDo Findet keine Episoden
+def showEpisodes():
     params = ParameterHandler()
     entryUrl = params.getValue('entryUrl')
     sThumbnail = params.getValue('sThumbnail')

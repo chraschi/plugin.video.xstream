@@ -26,6 +26,7 @@ class cTMDB:
         name = re.sub(' +', ' ', name)
         if year:
             term = quote_plus(name) + '&year=' + year
+            name = re.sub(year, ' ', name) #Wenn das Jahr im Namen auftaucht dann das Jahr löschen
         else:
             term = quote_plus(name)
         meta = self._call('search/movie', 'query=' + term + '&page=' + str(page))
@@ -38,10 +39,13 @@ class cTMDB:
                     movie = meta['results'][0]
                 else:
                     for searchMovie in meta['results']:
-                        if searchMovie['genre_ids'] and 99 not in searchMovie['genre_ids']:
-                            if searchMovie['title'].lower() == name.lower():
-                                movie = searchMovie
-                                break
+                        try: # Exception Handling notwendig da TMDb in seltenen Fällen keine genre_ids mitliefert
+                            if searchMovie['genre_ids'] and 99 not in searchMovie['genre_ids']:
+                                if searchMovie['title'].lower() == name.lower():
+                                    movie = searchMovie
+                                    break
+                        except Exception:
+                            break
                     if not movie:
                         for searchMovie in meta['results']:
                             if searchMovie['genre_ids'] and 99 not in searchMovie['genre_ids']:

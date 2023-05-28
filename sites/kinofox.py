@@ -43,7 +43,6 @@ def load(): # Menu structure of the site plugin
 
 def showValue():
     params = ParameterHandler()
-    #sHtmlContent = cRequestHandler(URL_MAIN).request()
     oRequest = cRequestHandler(URL_MAIN)
     if cConfig().getSetting('global_search_' + SITE_IDENTIFIER) == 'true':
         oRequest.cacheTime = 60 * 60 * 48  # 48 Stunden

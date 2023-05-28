@@ -321,6 +321,6 @@ class cBF:
 class RedirectFilter(HTTPRedirectHandler):
     def redirect_request(self, req, fp, code, msg, hdrs, newurl):
         if 'notice.cuii' in newurl:
-            xbmcgui.Dialog().ok(cConfig().getLocalizedString(30260), cConfig().getLocalizedString(30261))
+            xbmcgui.Dialog().ok(cConfig().getLocalizedString(30265), cConfig().getLocalizedString(30260) + '\n' + cConfig().getLocalizedString(30261))
             return None
         return HTTPRedirectHandler.redirect_request(self, req, fp, code, msg, hdrs, newurl)

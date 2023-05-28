@@ -161,7 +161,7 @@ def showEntries(entryUrl=False, sGui=False):
     sHtmlContent = oRequest.request()
     pattern = '<div[^>]*class="col-md-[^"]*"[^>]*>.*?'  # start element
     pattern += '<a[^>]*href="([^"]*)"[^>]*>.*?'  # url
-    pattern += '<img[^>]*src="([^"]*)"[^>]*>.*?'  # thumbnail
+    pattern += 'data-src="([^"]*).*?'  # thumbnail
     pattern += '<h3>(.*?)<span[^>]*class="paragraph-end">.*?'  # title
     pattern += '<\\/div>'  # end element
     isMatch, aResult = cParser.parse(sHtmlContent, pattern)
@@ -173,7 +173,7 @@ def showEntries(entryUrl=False, sGui=False):
     for sUrl, sThumbnail, sName in aResult:
         #sThumbnail = URL_MAIN + sThumbnail
         oGuiElement = cGuiElement(sName, SITE_IDENTIFIER, 'showSeasons')
-        oGuiElement.setThumbnail(sThumbnail)
+        oGuiElement.setThumbnail(URL_MAIN + sThumbnail)
         oGuiElement.setMediaType('tvshow')
         params.setParam('sUrl', URL_MAIN + sUrl)
         params.setParam('TVShowTitle', sName)
@@ -204,7 +204,7 @@ def showSeasons():
         return
 
     isDesc, sDesc = cParser.parseSingleResult(sHtmlContent, '<p[^>]*data-full-description="(.*?)"[^>]*>')
-    isThumbnail, sThumbnail = cParser.parseSingleResult(sHtmlContent, '<div[^>]*class="seriesCoverBox"[^>]*>.*?<img[^>]*src="([^"]*)"[^>]*>')
+    isThumbnail, sThumbnail = cParser.parseSingleResult(sHtmlContent, '<div[^>]*class="seriesCoverBox"[^>]*>.*?data-src="([^"]*)"[^>]*>')
     if isThumbnail:
         if sThumbnail.startswith('/'):
             sThumbnail = URL_MAIN + sThumbnail
@@ -363,6 +363,7 @@ def _search(oGui, sSearchText):
 
 
 def SSsearch(sGui=False, sSearchText=False):
+
     from json import loads
     oGui = sGui if sGui else cGui()
     params = ParameterHandler()
@@ -397,14 +398,25 @@ def SSsearch(sGui=False, sSearchText=False):
             continue
         else:
             #get images thumb / descr pro call. (optional)
-            sThumbnail, sDescription = getMetaInfo(link, title)
-            oGuiElement = cGuiElement(title, SITE_IDENTIFIER, 'showSeasons')
-            oGuiElement.setThumbnail(sThumbnail)
-            oGuiElement.setDescription(sDescription)
-            oGuiElement.setMediaType('tvshow')
-            params.setParam('sUrl', URL_MAIN + link)
-            params.setParam('sName', title)
-            oGui.addFolder(oGuiElement, params, True, total)
+            try:
+                sThumbnail, sDescription = getMetaInfo(link, title)
+                oGuiElement = cGuiElement(title, SITE_IDENTIFIER, 'showSeasons')
+                oGuiElement.setThumbnail(URL_MAIN + sThumbnail)
+                oGuiElement.setDescription(sDescription)
+                oGuiElement.setTVShowTitle(title)
+                oGuiElement.setMediaType('tvshow')
+                params.setParam('sUrl', URL_MAIN + link)
+                params.setParam('sName', title)
+                oGui.addFolder(oGuiElement, params, True, total)
+            except Exception:
+                oGuiElement = cGuiElement(title, SITE_IDENTIFIER, 'showSeasons')
+                oGuiElement.setTVShowTitle(title)
+                oGuiElement.setMediaType('tvshow')
+                params.setParam('sUrl', URL_MAIN + link)
+                params.setParam('sName', title)
+                oGui.addFolder(oGuiElement, params, True, total)
+
+
         if not sGui:
             oGui.setView('tvshows')
 
@@ -421,13 +433,12 @@ def getMetaInfo(link, title):   # Setzen von Metadata in Suche:
     if not sHtmlContent:
         return
 
-    pattern = 'seriesCoverBox">.*?<img src="(http.\:.+?)"\ al.+?data-full-description="([^"]+)"' #img , descr
+    pattern = 'seriesCoverBox">.*?data-src="([^"]+).*?data-full-description="([^"]+)"' #img , descr
 
     oParser = cParser()
     aResult = oParser.parse(sHtmlContent, pattern)
 
     if not aResult[0]:
-        oGui.showInfo()
         return
 
     for sImg, sDescr in aResult[1]:

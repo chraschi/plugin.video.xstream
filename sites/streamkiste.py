@@ -9,7 +9,7 @@
 
 from resources.lib.handler.ParameterHandler import ParameterHandler
 from resources.lib.handler.requestHandler import cRequestHandler
-from resources.lib.tools import logger, cParser, cUtil
+from resources.lib.tools import logger, cParser
 from resources.lib.gui.guiElement import cGuiElement
 from resources.lib.config import cConfig
 from resources.lib.gui.gui import cGui
@@ -43,8 +43,8 @@ def load(): # Menu structure of the site plugin
     cGui().addFolder(cGuiElement(cConfig().getLocalizedString(30507), SITE_IDENTIFIER, 'showGenre'), params)    # Categories
     params.setParam('sUrl', URL_MAIN)
     cGui().addFolder(cGuiElement(cConfig().getLocalizedString(30508), SITE_IDENTIFIER, 'showYears'), params)    # Release
-    params.setParam('sUrl', URL_MAIN)
-    cGui().addFolder(cGuiElement(cConfig().getLocalizedString(30538), SITE_IDENTIFIER, 'showCountry'), params)  # Country
+    #params.setParam('sUrl', URL_MAIN)
+    #cGui().addFolder(cGuiElement(cConfig().getLocalizedString(30538), SITE_IDENTIFIER, 'showCountry'), params)  # Country - deaktiviert da zur Zeit auf der Seite inaktiv
     params.setParam('sUrl', URL_SERIES)
     cGui().addFolder(cGuiElement(cConfig().getLocalizedString(30511), SITE_IDENTIFIER, 'showEntries'), params)  # Series
     cGui().addFolder(cGuiElement(cConfig().getLocalizedString(30520), SITE_IDENTIFIER, 'showSearch'))   # Search
@@ -128,24 +128,18 @@ def showEntries(entryUrl=False, sGui=False, sSearchText=False):
     if cConfig().getSetting('global_search_' + SITE_IDENTIFIER) == 'true':
         oRequest.cacheTime = 60 * 60 * 6  # HTML Cache Zeit 6 Stunden
     sHtmlContent = oRequest.request()
-    pattern = 'class="thumb".*?title="([^"]+).*?href="([^"]+).*?src="([^"]+).*?_year">([^<]+)'
+    pattern = 'class="thumb".*?'    # start
+    pattern += 'title="([^(D]+).*?'     # name
+    pattern += 'href="([^"]+).*?'   # url
+    pattern += 'src="([^"]+).*?'    # thumbnail
+    pattern += '_year">([^<]+)' #year
     isMatch, aResult = cParser.parse(sHtmlContent, pattern)
-
     if not isMatch:
         if not sGui: oGui.showInfo()
         return
 
     total = len(aResult)
     for sName, sUrl, sThumbnail, sYear in aResult:
-        # Abfrage der voreingestellten Sprache
-        sLanguage = cConfig().getSetting('prefLanguage')
-        if (sLanguage == '1' and 'English*' in sName):   # Deutsch
-            continue
-        if (sLanguage == '2' and not 'English*' in sName):   # English
-            continue
-        elif sLanguage == '3':    # Japanisch
-            cGui().showLanguage()
-            continue
         if sSearchText and not cParser.search(sSearchText, sName):
             continue
         if sThumbnail[0] == '/':
@@ -153,17 +147,18 @@ def showEntries(entryUrl=False, sGui=False, sSearchText=False):
         isTvshow, aResult = cParser.parse(sName, '\s+-\s+Staffel\s+\d+')
         oGuiElement = cGuiElement(sName, SITE_IDENTIFIER, 'showEpisodes' if isTvshow else 'showHosters')
         oGuiElement.setThumbnail(URL_MAIN + sThumbnail)
-        oGuiElement.setMediaType('season' if isTvshow else 'movie')
+        oGuiElement.setMediaType('tvshow' if isTvshow else 'movie')
         oGuiElement.setYear(sYear)
         params.setParam('entryUrl', sUrl)
         params.setParam('sName', sName)
         params.setParam('sThumbnail', sThumbnail)
         params.setParam('sYear', sYear)
-
         oGui.addFolder(oGuiElement, params, isTvshow, total)
         
     if not sGui and not sSearchText:
         isMatchNextPage, sNextUrl = cParser().parseSingleResult(sHtmlContent, '"nav_ext.*?>\d[1-9]+<.*?href="([^"]+).*?</div>')
+        if not isMatchNextPage:
+            isMatchNextPage, sNextUrl = cParser().parseSingleResult(sHtmlContent, '"nav_ext.*?chste<.*?href="([^"]+).*?</div>')
         if isMatchNextPage:
             params.setParam('sUrl', sNextUrl)
             oGui.addNextPage(SITE_IDENTIFIER, 'showEntries', params)
@@ -174,7 +169,6 @@ def showEntries(entryUrl=False, sGui=False, sSearchText=False):
 def showEpisodes():
     params = ParameterHandler()
     entryUrl = params.getValue('entryUrl')
-    entryUrl = entryUrl + '/watching.html'
     sThumbnail = params.getValue('sThumbnail')
     sHtmlContent = cRequestHandler(entryUrl).request()
     isMatch, aResult = cParser.parse(sHtmlContent, '"><a href="#">([^<]+)')

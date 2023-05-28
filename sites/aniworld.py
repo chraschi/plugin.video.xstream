@@ -34,6 +34,7 @@ URL_MAIN = 'https://' + DOMAIN
 #URL_MAIN = 'https://aniworld.to'
 URL_SERIES = URL_MAIN + '/animes'
 URL_POPULAR = URL_MAIN + '/beliebte-animes'
+URL_NEW_EPISODES = URL_MAIN + '/neue-episoden'
 URL_LOGIN = URL_MAIN + '/login'
 
 
@@ -47,6 +48,8 @@ def load(): # Menu structure of the site plugin
     else:
         params.setParam('sUrl', URL_SERIES)
         cGui().addFolder(cGuiElement(cConfig().getLocalizedString(30518), SITE_IDENTIFIER, 'showAllSeries'), params)    # All Series
+        params.setParam('sUrl', URL_NEW_EPISODES)
+        cGui().addFolder(cGuiElement(cConfig().getLocalizedString(30516), SITE_IDENTIFIER, 'showNewEpisodes'), params)  # New Episodes
         params.setParam('sUrl', URL_POPULAR)
         cGui().addFolder(cGuiElement(cConfig().getLocalizedString(30519), SITE_IDENTIFIER, 'showEntries'), params)    # Popular Series
         params.setParam('sUrl', URL_MAIN)
@@ -108,6 +111,32 @@ def showAllSeries(entryUrl=False, sGui=False, sSearchText=False):
         oGui.setView('tvshows')
         oGui.setEndOfDirectory()
 
+def showNewEpisodes(entryUrl=False, sGui=False):
+    oGui = sGui if sGui else cGui()
+    params = ParameterHandler()
+    if not entryUrl:
+        entryUrl = params.getValue('sUrl')
+    oRequest = cRequestHandler(entryUrl, ignoreErrors=(sGui is not False))
+    sHtmlContent = oRequest.request()
+    pattern = '<div[^>]*class="col-md-[^"]*"[^>]*>\s*<a[^>]*href="([^"]*)"[^>]*>\s*<strong>([^<]+)</strong>\s*<span[^>]*>([^<]+)</span>'
+    isMatch, aResult = cParser.parse(sHtmlContent, pattern)
+    if not isMatch:
+        if not sGui: oGui.showInfo()
+        return
+
+    total = len(aResult)
+    for sUrl, sName, sInfo in aResult:
+        sMovieTitle = sName + ' ' + sInfo
+        oGuiElement = cGuiElement(sName, SITE_IDENTIFIER, 'showSeasons')
+        oGuiElement.setMediaType('tvshow')
+        oGuiElement.setTitle(sMovieTitle)
+        params.setParam('sUrl', URL_MAIN + sUrl)
+        params.setParam('TVShowTitle', sMovieTitle)
+
+        oGui.addFolder(oGuiElement, params, True, total)
+    if not sGui:
+        oGui.setView('tvshows')
+        oGui.setEndOfDirectory()
 
 def showEntries(entryUrl=False, sGui=False):
     oGui = sGui if sGui else cGui()
@@ -364,14 +393,24 @@ def SSsearch(sGui=False, sSearchText=False):
             continue
         else:
             #get images thumb / descr pro call. (optional)
-            sThumbnail, sDescription = getMetaInfo(link, title)
-            oGuiElement = cGuiElement(title, SITE_IDENTIFIER, 'showSeasons')
-            oGuiElement.setThumbnail(URL_MAIN + sThumbnail)
-            oGuiElement.setDescription(sDescription)
-            oGuiElement.setMediaType('tvshow')
-            params.setParam('sUrl', URL_MAIN + link)
-            params.setParam('sName', title)
-            oGui.addFolder(oGuiElement, params, True, total)
+            try:
+                sThumbnail, sDescription = getMetaInfo(link, title)
+                oGuiElement = cGuiElement(title, SITE_IDENTIFIER, 'showSeasons')
+                oGuiElement.setThumbnail(URL_MAIN + sThumbnail)
+                oGuiElement.setDescription(sDescription)
+                oGuiElement.setTVShowTitle(title)
+                oGuiElement.setMediaType('tvshow')
+                params.setParam('sUrl', URL_MAIN + link)
+                params.setParam('sName', title)
+                oGui.addFolder(oGuiElement, params, True, total)
+            except Exception:
+                oGuiElement = cGuiElement(title, SITE_IDENTIFIER, 'showSeasons')
+                oGuiElement.setTVShowTitle(title)
+                oGuiElement.setMediaType('tvshow')
+                params.setParam('sUrl', URL_MAIN + link)
+                params.setParam('sName', title)
+                oGui.addFolder(oGuiElement, params, True, total)
+
         if not sGui:
             oGui.setView('tvshows')
 
@@ -394,7 +433,6 @@ def getMetaInfo(link, title):   # Setzen von Metadata in Suche:
     aResult = oParser.parse(sHtmlContent, pattern)
 
     if not aResult[0]:
-        oGui.showInfo()
         return
 
     for sImg, sDescr in aResult[1]:

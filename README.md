@@ -16,8 +16,8 @@ Diese Version läuft ausschließlich unter Python 3, also ab Kodi Version 19 und
 
 Wir suchen derzeit noch Entwickler die das Projekt unterstützen möchten:
 
-Jeder der mithelfen kann und möchte, wird gebeten seine fertigen Fixes einzureichen.
-Wird ein Fix zu einer Seite eingereicht oder ein neuer Scraper zu einer Seite, so werden diese weiterhin eingepflegt.
+Jeder der mithelfen kann und möchte, wird gebeten seine fertigen Fixes oder Scraper einzureichen.
+
 Fixes zu Seiten bzw. neue Seiten am besten als PullRequest einreichen (oder auf Gitter).
 
 ***

@@ -242,7 +242,7 @@ class cGuiElement:
         if not self._mediaType:
             log(LOGMESSAGE + ' -> [guiElement]: Could not get MetaInformations for %s, mediaType not defined' % self.getTitle(), LOGERROR)
             return False
-        from tmdb import cTMDB
+        from resources.lib.tmdb import cTMDB
         oMetaget = cTMDB()
         if not oMetaget:
             return False

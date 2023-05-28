@@ -906,7 +906,7 @@ msgid "Error getting url:"
 msgstr ""
 
 msgctxt "#30260"
-msgid "Your ISP censors your Internet access"
+msgid "Your ISP censors your Internet access!"
 msgstr ""
 
 msgctxt "#30261"
@@ -1238,7 +1238,7 @@ msgid "Movie4k"
 msgstr ""
 
 msgctxt "#30712"
-msgid "MovieKing"
+msgid ""
 msgstr ""
 
 msgctxt "#30713"
@@ -1266,7 +1266,7 @@ msgid "KinoKiste"
 msgstr ""
 
 msgctxt "#30719"
-msgid "MovieDream"
+msgid ""
 msgstr ""
 
 msgctxt "#30720"

@@ -94,16 +94,18 @@ def showEntries(entryUrl=False, sGui=False, sSearchText=False):
         else:
             oRequest.addParameters('c', '')
     sHtmlContent = oRequest.request()
-    pattern = 've-screen.*?title="([^"]+).*?url[^>]([^")]+).*?href="([^">]+)'
-    #pattern = 'vep-title.*?">([^"]+)</h1.*?src=\\\'([^\\]+).*?img src="([^"]+)'
+    pattern = 've-screen..title="([^(]+).(....).*?url[^>]([^")]+).*?href="([^">]+)' #inklusive sYear
     isMatch, aResult = cParser.parse(sHtmlContent, pattern)
-    
-    if not isMatch:
+    pattern = 'class="ve-screen..title="\(.*?D\)([^(]+).(....).*?url[^>]([^")]+).*?href="([^">]+)' #weiterer Pattern für Einträge beginnend mit (OmU...)
+    isMatch, aResult2 = cParser.parse(sHtmlContent, pattern)
+
+    aResult = aResult + aResult2
+    if not aResult:
         if not sGui: oGui.showInfo()
         return
 
     total = len(aResult)
-    for sName, sThumbnail, sUrl in aResult:
+    for sName, sYear, sThumbnail, sUrl in aResult:
         sName = sName.replace('(HD)', '')
         if sSearchText and not cParser().search(sSearchText, sName):
             continue
@@ -112,6 +114,7 @@ def showEntries(entryUrl=False, sGui=False, sSearchText=False):
         oGuiElement = cGuiElement(sName, SITE_IDENTIFIER, 'showHosters')
         oGuiElement.setThumbnail(sThumbnail)
         oGuiElement.setMediaType('movie')
+        oGuiElement.setYear(sYear)
         params.setParam('entryUrl', URL_MAIN + sUrl)
         oGui.addFolder(oGuiElement, params, False, total)
     if not sGui:
