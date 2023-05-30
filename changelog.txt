@@ -1,4 +1,10 @@
-[B]Version: 4.0.5~Release[/B]
+[B]Version: 4.0.6~Nightly 1[/B]
+
+30.05.2023
+
+ - [Cinemathek] show Episodes fix (thumb Regex)
+ 
+[COLOR cyan]________________________________________________________________________________________[/COLOR]
 
 23.03.2023 - 28.05.2023
 

@@ -197,7 +197,7 @@ def showEpisodes():
     isMatch, sContainer = cParser.parseSingleResult(sHtmlContent, pattern)
     if isMatch:
         pattern = '<li class="mark-([\d]+).*?' # Episoden Eintrag
-        pattern += 'data-lazy-src="([^"]+).*?' # sThumbnail
+        pattern += 'src="([^"]+).*?' # sThumbnail
         pattern += '<a href="([^"]+).*?' # sUrl
         pattern += '>([^<]+)' # sName
         isMatch, aResult = cParser.parse(sContainer, pattern)
