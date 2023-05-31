@@ -1,4 +1,10 @@
-[B]Version: 4.0.6~Nightly 1[/B]
+[B]Version: 4.0.6~Nightly 2[/B]
+
+31.05.2023
+
+ - [Movieking] Siteplugin für neue Domain
+ 
+[COLOR cyan]________________________________________________________________________________________[/COLOR]
 
 30.05.2023
 

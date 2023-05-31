@@ -1234,7 +1234,7 @@ msgid "Movie4k"
 msgstr ""
 
 msgctxt "#30712"
-msgid ""
+msgid "MovieKing"
 msgstr ""
 
 msgctxt "#30713"
