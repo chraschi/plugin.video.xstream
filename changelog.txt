@@ -3,6 +3,8 @@
 31.05.2023
 
  - [Movieking] Siteplugin für neue Domain
+ Bitte unbedingt in den xStream Einstellungen die Domain
+ von movieking.cc auf movieking.io wechseln !!!
  
 [COLOR cyan]________________________________________________________________________________________[/COLOR]
 
