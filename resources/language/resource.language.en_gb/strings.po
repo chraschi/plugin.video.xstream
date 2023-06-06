@@ -1026,8 +1026,9 @@ msgctxt "#30404"
 msgid "Exclude specific hosters (separate with a comma)"
 msgstr ""
 
-
-
+msgctxt "#30405"
+msgid "HTML cache folder has been cleaned"
+msgstr ""
 
 ############### Scaper Language ###############
 
@@ -1140,7 +1141,7 @@ msgid "Random Serie"
 msgstr ""
 
 msgctxt "#30527"
-msgid "Exclude specific hosters (separate with a comma)"
+msgid ""
 msgstr ""
 
 msgctxt "#30528"

@@ -17,7 +17,13 @@
 	+ Regex angepasst
 	+ Qualität hinzugefügt
 	+ Episoden Info hinzugefügt
-
+ - [Megakino] teilweise überarbeitet
+	+ Regex angepasst
+	+ Qualität hinzugefügt bzw. überarbeitet
+	+ Episoden Info hinzugefügt
+	+ Beschreibung bei Episode hinzugefügt
+ - [RequestHandler] ClearCache Info Einblendung hinzugefügt
+	
 [COLOR cyan]________________________________________________________________________________________[/COLOR]
  
 31.05.2023

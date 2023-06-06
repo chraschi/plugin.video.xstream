@@ -15,12 +15,14 @@ import json
 from resources.lib.config import cConfig
 from resources.lib.tools import logger
 from resources.lib import common
+
 from urllib.parse import quote, urlencode, urlparse
 from urllib.error import HTTPError, URLError
 from urllib.request import HTTPHandler, HTTPSHandler, HTTPCookieProcessor, build_opener, Request, HTTPRedirectHandler
 from http.cookiejar import LWPCookieJar, Cookie
 from http.client import HTTPException
 from xbmc import LOGINFO as LOGNOTICE, LOGERROR, LOGWARNING, LOGDEBUG, log, executebuiltin, getCondVisibility, getInfoLabel
+
 
 class cRequestHandler:
     def __init__(self, sUrl, caching=True, ignoreErrors=False, compression=True, jspost=False, ssl_verify=False):
@@ -275,6 +277,8 @@ class cRequestHandler:
         files = os.listdir(self._cachePath)
         for file in files:
             os.remove(os.path.join(self._cachePath, file))
+            from resources.lib.gui.gui import cGui
+            cGui().showInfo('xStream', cConfig().getLocalizedString(30405), 5)
 
 
 class cBF:
