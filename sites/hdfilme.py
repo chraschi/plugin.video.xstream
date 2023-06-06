@@ -5,11 +5,11 @@
     #showGenre:     48 Stunden
     #showYears:     48 Stunden
     #showEpisodes:   4 Stunden
-# 2022-02-01 Hep
+
 
 from resources.lib.handler.ParameterHandler import ParameterHandler
 from resources.lib.handler.requestHandler import cRequestHandler
-from resources.lib.tools import logger, cParser, cUtil
+from resources.lib.tools import logger, cParser
 from resources.lib.gui.guiElement import cGuiElement
 from resources.lib.config import cConfig
 from resources.lib.gui.gui import cGui
@@ -50,7 +50,6 @@ def load(): # Menu structure of the site plugin
 def showGenre(entryUrl=False):
     params = ParameterHandler()
     if not entryUrl: entryUrl = params.getValue('sUrl')
-    #sHtmlContent = cRequestHandler(entryUrl).request()
     oRequest = cRequestHandler(entryUrl)
     if cConfig().getSetting('global_search_' + SITE_IDENTIFIER) == 'true':
         oRequest.cacheTime = 60 * 60 * 48  # 48 Stunden
@@ -70,10 +69,10 @@ def showGenre(entryUrl=False):
         cGui().addFolder(cGuiElement(sName, SITE_IDENTIFIER, 'showEntries'), params)
     cGui().setEndOfDirectory()
 
+
 def showYears(entryUrl=False):
     params = ParameterHandler()
     if not entryUrl: entryUrl = params.getValue('sUrl')
-    #sHtmlContent = cRequestHandler(entryUrl).request()
     oRequest = cRequestHandler(entryUrl)
     if cConfig().getSetting('global_search_' + SITE_IDENTIFIER) == 'true':
         oRequest.cacheTime = 60 * 60 * 48  # 48 Stunden
@@ -103,7 +102,12 @@ def showEntries(entryUrl=False, sGui=False, sSearchText=False):
     if cConfig().getSetting('global_search_' + SITE_IDENTIFIER) == 'true':
         oRequest.cacheTime = 60 * 60 * 6  # HTML Cache Zeit 6 Stunden
     sHtmlContent = oRequest.request()
-    pattern = 'data-src="([^"]+).*?film-item-quality">([^<]+).*?href="([^"]+).*?-title">([^<]+)'
+    pattern = '<li[^>]*>\s*<div class="film-item.*?' # container start
+    pattern += 'data-src="([^"]+).*?' # thumbnail
+    pattern += '</div>(.*?)</span>\s*<a.*?' # info dummy
+    pattern += 'href="([^"]+).*?' # url
+    pattern += '-title">([^<]+).*?' # name
+    pattern += '(.*?)</ul>' # dummy
     isMatch, aResult = cParser.parse(sHtmlContent, pattern)
 
     if not isMatch:
@@ -111,7 +115,7 @@ def showEntries(entryUrl=False, sGui=False, sSearchText=False):
         return
 
     total = len(aResult)
-    for sThumbnail, sQuality, sUrl, sName in aResult:
+    for sThumbnail, sInfo, sUrl, sName, sDummy in aResult:
         # Abfrage der voreingestellten Sprache
         sLanguage = cConfig().getSetting('prefLanguage')
         if (sLanguage == '1' and 'English*' in sName):   # Deutsch
@@ -125,15 +129,28 @@ def showEntries(entryUrl=False, sGui=False, sSearchText=False):
             continue
         if sThumbnail[0] == '/':
             sThumbnail = sThumbnail[1:]
+        isQuality, sQuality = cParser.parseSingleResult(sInfo, 'film-item-quality">([^<]+)')  # Qualität
+        isInfoEpisode, sInfoEpisode = cParser.parseSingleResult(sInfo, 'class="film-item-series">([\d]+)')  # Episodenanzahl
+        isDesc, sDesc = cParser.parseSingleResult(sDummy, 'class="ml-item-text">([^<]+)')  # Beschreibung
+        isYear, sYear = cParser.parseSingleResult(sDummy, 'class="ml-label">([\d]+)</span>')  # Release Jahr
+        isDuration, sDuration = cParser.parseSingleResult(sDummy, '<li><span class="ml-label">([\d]+)\smin')  # Laufzeit
         isTvshow, aResult = cParser.parse(sName, '\s+-\s+Staffel\s+\d+')
         oGuiElement = cGuiElement(sName, SITE_IDENTIFIER, 'showEpisodes' if isTvshow else 'showHosters')
         oGuiElement.setThumbnail(URL_MAIN + sThumbnail)
         oGuiElement.setMediaType('season' if isTvshow else 'movie')
-        oGuiElement.setQuality(sQuality)
+        if isQuality:
+            oGuiElement.setQuality(sQuality)
+        if isInfoEpisode:
+            oGuiElement.setQuality(sInfoEpisode + ' Episoden')
+        if isDesc:
+            oGuiElement.setDescription(sDesc)
+        if isYear:
+            oGuiElement.setYear(sYear)
+        if isDuration:
+            oGuiElement.addItemValue('duration', sDuration)
         params.setParam('entryUrl', sUrl)
         params.setParam('sName', sName)
         params.setParam('sThumbnail', sThumbnail)
-
         oGui.addFolder(oGuiElement, params, isTvshow, total)
         
     if not sGui and not sSearchText:
@@ -160,7 +177,7 @@ def showEpisodes():
     total = len(aResult)
     for sName in aResult:
         oGuiElement = cGuiElement(sName, SITE_IDENTIFIER, 'showHosters')
-        oGuiElement.setThumbnail(sThumbnail)
+        oGuiElement.setThumbnail(URL_MAIN + sThumbnail)
         if isDesc:
             oGuiElement.setDescription(sDesc)
         oGuiElement.setMediaType('episode')

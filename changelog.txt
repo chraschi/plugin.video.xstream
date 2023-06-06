@@ -1,5 +1,16 @@
-[B]Version: 4.0.6~Nightly 2[/B]
+[B]Version: 4.0.6~Nightly 3[/B]
 
+06.06.2023
+
+ - [HDFilme] komplett überarbeitet
+	+ Regex angepasst
+	+ Beschreibung hinzugefügt
+	+ Jahr hinzugefügt
+	+ Laufzeit hinzugefügt
+	+ Episoden Info hinzugefügt
+
+[COLOR cyan]________________________________________________________________________________________[/COLOR]
+ 
 31.05.2023
 
  - [Movieking] Siteplugin für neue Domain
