@@ -85,8 +85,6 @@ def showEntries(entryUrl=False, sGui=False, sSearchText=False):
     pattern = 'class="short">.*?' # container start
     pattern += 'href="([^"]+)' # url
     pattern += '">([^<]+).*?' # name
-    #pattern += '</div>(.*?)</span>\s*<a.*?'  # info dummy
-    #pattern += 'img src="([^"]+).*?' # thumb
     pattern += '(.*?)</article>' # dummy
 
     isMatch, aResult = cParser().parse(sHtmlContent, pattern)
@@ -120,7 +118,7 @@ def showEntries(entryUrl=False, sGui=False, sSearchText=False):
         if isQuality:
             oGuiElement.setQuality(sQuality)
         if isInfoEpisode:
-            oGuiElement.setQuality(sInfoEpisode + ' Episoden')
+            oGuiElement.setInfo(sInfoEpisode + ' Episoden')
         if isDesc:
             oGuiElement.setDescription(sDesc)
         if isYear:
@@ -145,7 +143,6 @@ def showEpisodes():
     params = ParameterHandler()
     entryUrl = params.getValue('entryUrl')
     sThumbnail = params.getValue('sThumbnail')
-    #sHtmlContent = cRequestHandler(entryUrl).request()
     oRequest = cRequestHandler(entryUrl)
     if cConfig().getSetting('global_search_' + SITE_IDENTIFIER) == 'true':
         oRequest.cacheTime = 60 * 60 * 4  # HTML Cache Zeit 4 Stunden

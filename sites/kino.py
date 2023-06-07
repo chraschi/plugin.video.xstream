@@ -99,7 +99,7 @@ def showEntries(entryUrl=False, sGui=False, sSearchText=False):
         if isQuality:
             oGuiElement.setQuality(sQuality)
         if isInfoEpisode:
-            oGuiElement.setQuality(sInfoEpisode + ' Episoden')
+            oGuiElement.setInfo(sInfoEpisode + ' Episoden')
         oGuiElement.setMediaType('season' if isTvshow else 'movie')
         params.setParam('entryUrl', sUrl)
         params.setParam('sThumbnail', sThumbnail)

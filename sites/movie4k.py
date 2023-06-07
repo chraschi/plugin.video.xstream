@@ -23,7 +23,7 @@ if cConfig().getSetting('global_search_' + SITE_IDENTIFIER) == 'false':
     logger.info('-> [SitePlugin]: globalSearch for %s is deactivated.' % SITE_NAME)
 
 # Domain Abfrage
-DOMAIN = cConfig().getSetting('plugin_'+ SITE_IDENTIFIER +'.domain', 'movie4k.pics')
+DOMAIN = cConfig().getSetting('plugin_'+ SITE_IDENTIFIER +'.domain', 'movie4k.productions')
 URL_MAIN = 'https://' + DOMAIN + '/'
 #URL_MAIN = 'https://movie4k.pics/'
 URL_KINO = URL_MAIN + 'aktuelle-kinofilme-im-kino'
@@ -84,19 +84,18 @@ def showEntries(entryUrl=False, sGui=False, sSearchText=False):
     if cConfig().getSetting('global_search_' + SITE_IDENTIFIER) == 'true':
         oRequest.cacheTime = 60 * 60 * 6  # 6 Stunden
     sHtmlContent = oRequest.request()
-    pattern = 'movie-item.*?'               # Container Start
-    pattern += 'href="([^"]+).*?'           # URL
-    pattern += '<h3>([^<]+).*?'             # Name
-    pattern += '<li>([^<]+).*?'             # Quality
-    pattern += 'white">([^<]+).*?'          # Year
-    pattern += 'data-src="([^"]+).*?'          # Thumb
+    pattern = '<article.*?' # Container Start
+    pattern += '(.*?)<a.*?'  # info dummy
+    pattern += 'href="([^"]+).*?' # URL
+    pattern += '<h3>([^<]+).*?' # Name
+    pattern += '(.*?)</article>' # dummy
     isMatch, aResult = cParser.parse(sHtmlContent, pattern)
     if not isMatch:
         if not sGui: oGui.showInfo()
         return
 
     total = len(aResult)
-    for sUrl, sName, sQuality, sYear, sThumbnail in aResult:
+    for sInfo, sUrl, sName, sDummy in aResult:
         if sSearchText and not cParser().search(sSearchText, sName):
             continue
         # Abfrage der voreingestellten Sprache
@@ -108,13 +107,24 @@ def showEntries(entryUrl=False, sGui=False, sSearchText=False):
         elif sLanguage == '3':    # Japanisch
             cGui().showLanguage()
             continue
-        sThumbnail = URL_MAIN + sThumbnail
+        isInfoEpisode, sInfo = cParser.parseSingleResult(sInfo, '</span>([\d]+)')  # Episodenanzahl
+        isThumbnail, sThumbnail = cParser.parseSingleResult(sDummy, 'data-src="([^"]+)')  # Thumbnail
+        isQuality, sQuality = cParser.parseSingleResult(sDummy, '<li>([^<]+)')  # Qualität
+        isYear, sYear = cParser.parseSingleResult(sDummy, 'class="white">([\d]+)')  # Release Jahr
+
         isTvshow = True if 'taffel' in sName else False
         oGuiElement = cGuiElement(sName, SITE_IDENTIFIER, 'showEpisodes' if isTvshow else 'showHosters')
         oGuiElement.setMediaType('tvshow' if isTvshow else 'movie')
-        oGuiElement.setThumbnail(sThumbnail)
-        oGuiElement.setQuality(sQuality)
-        oGuiElement.setYear(sYear)
+        if isThumbnail:
+            sThumbnail = URL_MAIN + sThumbnail
+            oGuiElement.setThumbnail(sThumbnail)
+        if isYear:
+            oGuiElement.setYear(sYear)
+        if isQuality:
+            oGuiElement.setQuality(sQuality)
+        if isInfoEpisode:
+            oGuiElement.setInfo(sInfo + ' Episoden')
+
         params.setParam('entryUrl', sUrl)
         params.setParam('sName', sName)
         params.setParam('sThumbnail', sThumbnail)

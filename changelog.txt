@@ -9,7 +9,25 @@
 	+ TvShowTitle hinzugefügt
 	+ Staffel Nummer hinzugefügt
 	+ Episoden Nummer hinzugefügt
-	
+ - [HDFilme] komplett überarbeitet
+	+ Neues Icon hinzugefügt
+ - [Kino] sInfo korrigiert
+ - [Kinokiste] teilweise überarbeitet
+	+ Regex angepasst 
+	+ Episoden Info hinzugefügt
+	+ Beschreibung bei Episode hinzugefügt
+ - [KKiste] sInfo korrigiert
+ - [Movie4k] teilweise überarbeitet
+	+ Regex angepasst
+	+ Episoden Info hinzugefügt
+	+ Beschreibung bei Episode hinzugefügt
+ - [Streamkiste] teilweise überarbeitet
+	+ Regex angepasst 
+	+ Episoden Info hinzugefügt
+	+ Thumbnail bei Episode repariert
+	+ Abfrage der voreingestellten Sprache
+	+ HTML Cache Episode hinzugefügt
+ 
 [COLOR cyan]________________________________________________________________________________________[/COLOR]
 
 06.06.2023
