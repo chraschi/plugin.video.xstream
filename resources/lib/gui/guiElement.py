@@ -39,6 +39,7 @@ class cGuiElement:
         self._sSubLanguage = ''
         self._sYear = ''
         self._sQuality = ''
+        self._sInfo = ''
         self._mediaType = ''
         self._season = ''
         self._episode = ''
@@ -143,7 +144,13 @@ class cGuiElement:
         
     def getQuality(self):
         return self._sQuality
-    
+
+    def setInfo(self, info):
+        self._sInfo = info
+
+    def getInfo(self):
+        return self._sInfo
+
     def setTitleSecond(self, sTitleSecond):
         self.__sTitleSecond = cUtil.cleanse_text(str(sTitleSecond))
 

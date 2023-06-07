@@ -86,6 +86,8 @@ class cGui:
             infoString += ' *Sub: %s*' % oGuiElement._sSubLanguage
         if oGuiElement._sQuality != '':
             infoString += ' [%s]' % oGuiElement._sQuality
+        if oGuiElement._sInfo != '':
+            infoString += ' [%s]' % oGuiElement._sInfo    
         # if self.globalSearch:
         #     infoString += ' %s' % oGuiElement.getSiteName()
         if infoString:

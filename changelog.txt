@@ -1,4 +1,16 @@
-[B]Version: 4.0.6~Nightly 3[/B]
+[B]Version: 4.0.6~Nightly 4[/B]
+
+07.06.2023
+
+ - [GUI] sInfo Element hinzugefügt
+ - [GUI Element] sInfo Gui Element hinzugefügt
+ - [Cinemathek] Neue Episoden überarbeitet
+	+ Eigene Definition erstellt
+	+ TvShowTitle hinzugefügt
+	+ Staffel Nummer hinzugefügt
+	+ Episoden Nummer hinzugefügt
+	
+[COLOR cyan]________________________________________________________________________________________[/COLOR]
 
 06.06.2023
 
