@@ -277,10 +277,12 @@ def showHosters():
     sUrl = ParameterHandler().getValue('sUrl')
     sHtmlContent = cRequestHandler(sUrl).request()
     pattern = '<li[^>]*data-lang-key="([^"]+).*?data-link-target="([^"]+).*?<h4>([^<]+)<([^>]+)'
+    pattern2 = 'itemprop="keywords".content=".*?Season...([^"]+).S.*?' # HD Kennzeichen
     # data-lang-key="1" Deutsch
     # data-lang-key="2" Englisch
     # data-lang-key="3" Englisch mit deutschen Untertitel
     isMatch, aResult = cParser.parse(sHtmlContent, pattern)
+    aResult2 = cParser.parse(sHtmlContent, pattern2) # pattern 2 auslesen
     if isMatch:
         for sLangCode, sUrl, sName, sQualy in aResult:
             if cConfig().isBlockedHoster(sName)[0]: continue # Hoster aus settings.xml oder deaktivierten Resolver ausschließen
@@ -307,8 +309,8 @@ def showHosters():
                 if sLangCode == '2':    # data-lang-key="2"
                     sLang = 'Englisch'  # Anzeige der Sprache   
                 elif sLangCode == '3':  # data-lang-key="3"
-                    sLang = 'Englisch mit deutschen Untertitel'    # Anzeige der Sprache                    
-            if 'HD' == sQualy:
+                    sLang = 'Englisch mit deutschen Untertitel'    # Anzeige der Sprache
+            if 'HD' in aResult2[1]:     # Prüfen ob tuple aResult2 das Kennzeichen HD enthält, dann übersteuern
                 sQualy = 'HD'
             else:
                 sQualy = 'SD'

@@ -1,5 +1,11 @@
 [B]Version: 4.0.6~Nightly 4[/B]
 
+11.06.2023
+
+ - [Serienstream] Fix Hosterauswahl Anzeige HD SD Stream
+
+[COLOR cyan]________________________________________________________________________________________[/COLOR]
+
 07.06.2023
 
  - [GUI] sInfo Element hinzugefügt
