@@ -11,6 +11,11 @@
 	+ Jahr hinzugefügt 
 	+ Episoden Info hinzugefügt
 	+ Thumbnail bei Episode repariert
+ - [Flimmerstube] Regex angepasst
+	+ Qualität hinzugefügt
+	+ Sprachelemente angepasst
+ - [Tools] zusäztliche Konvertierungselemente hinzugefügt
+ - [RequestHandler] zusäztliche Konvertierungselemente hinzugefügt
 
 [COLOR cyan]________________________________________________________________________________________[/COLOR]
 
