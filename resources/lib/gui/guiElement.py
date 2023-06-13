@@ -157,14 +157,16 @@ class cGuiElement:
             self._sQuality = '2160p'
         if '2K' in quality:
             self._sQuality = '1440p'
-        elif 'HD 1080p' or 'HD 1080' or '1080p' in quality: # quality:
-            self._sQuality = 'Full HD' or '1080p'
-        elif 'HD 720p' or 'HD 720' or '720p' in quality: # quality:
-            self._sQuality = 'HD' or '720p'
-        elif 'HD 480p' or 'HD 480' or '480p' in quality: # quality:
-            self._sQuality = 'HD' or '480p'
-        elif 'HD 360p' or 'HD 360' or '360p' in quality: # quality:
-            self._sQuality = 'HD' or '360p'
+        if '1080p' or '1080' in quality: # quality:
+            self._sQuality = 'Full HD'
+        if '720p' or '720' in quality: # quality:
+            self._sQuality = 'HD 720p'
+        if '480p' or '480' in quality: # quality:
+            self._sQuality = 'HD 480p'
+        if '360p' or '360' in quality: # quality:
+            self._sQuality = 'HD 360p'
+        if 'HD' in quality: # quality:
+            self._sQuality = 'HD'
         else:
             self._sQuality = 'SD' or '576i'
         
