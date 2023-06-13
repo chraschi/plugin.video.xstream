@@ -74,6 +74,7 @@ class cGuiElement:
     def setTitle(self, sTitle):
         self.__sTitle = cUtil.cleanse_text(sTitle)
 
+    # Sprachen im sName ins GUI Element übernehmen
     def getTitle(self):
         if ' (19' in self.__sTitle or ' (20' in self.__sTitle:
             isMatch, aYear = cParser.parse(self.__sTitle, '(.*?)\((\d{4})\)')
@@ -89,13 +90,24 @@ class cGuiElement:
             isMatch, aLang = cParser.parse(self.__sTitle, '(.*?)\*(.*?)\*')
             if isMatch:
                 self.__sTitle = aLang[0][0]
-                self.setLanguage('Englisch')
+                self.setLanguage('EN')
+        if '*deutsch*' in self.__sTitle.lower():
+            isMatch, aLang = cParser.parse(self.__sTitle, '(.*?)\*(.*?)\*')
+            if isMatch:
+                self.__sTitle = aLang[0][0]
+                self.setLanguage('DE')
         if 'English:' in self.__sTitle:
             self.__sTitle = self.__sTitle.replace('English:', '')
-            self.setLanguage('Englisch')
-        if '(omu)' in self.__sTitle.lower():
-            self.__sTitle = self.__sTitle.replace('(OmU) ', '').replace('(Omu) ', '')
+            self.setLanguage('EN')
+        if 'Deutsch:' in self.__sTitle:
+            self.__sTitle = self.__sTitle.replace('Deutsch:', '')
+            self.setLanguage('DE')
+        if '(omu)' in self.__sTitle.lower() or '*OmU*' in self.__sTitle:
+            self.__sTitle = self.__sTitle.replace('(OmU) ', '')
+            self.__sTitle = self.__sTitle.replace('(Omu) ', '')
+            self.__sTitle = self.__sTitle.replace('(OmU*) ', '')
             self.setLanguage('OmU')
+
         if self._sYear: self.__sTitle = self.__sTitle.strip() + ' (' + self._sYear + ')'
         return self.__sTitle.strip()
 
@@ -140,7 +152,15 @@ class cGuiElement:
             return False
 
     def setQuality(self, quality):
-        self._sQuality = quality
+        #self._sQuality = quality
+        if '4K' or 'UHD' in quality:
+            self._sQuality = '3160p'
+        if 'HD 1080p' or 'HD 1080' in quality:
+            self._sQuality = '1080p'
+        if 'HD' in quality:
+            self._sQuality = 'HD' or '720p'
+        if 'SD' in quality:
+            self._sQuality = 'SD' or '576i'
         
     def getQuality(self):
         return self._sQuality

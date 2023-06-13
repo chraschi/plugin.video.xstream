@@ -167,8 +167,8 @@ def textBox(heading, announce):
     TextBox()
     while xbmc.getCondVisibility('Window.IsVisible(10147)'):
         xbmc.sleep(500)
- 
- 
+
+
 class cParser:
     @staticmethod
     def parseSingleResult(sHtmlContent, pattern):
@@ -182,6 +182,7 @@ class cParser:
 
     @staticmethod
     def replaceSpecialCharacters(s):
+        # Umlaute Unicode konvertieren
         for t in (('\\/', '/'), ('&amp;', '&'), ('\\u00c4', 'Ä'), ('\\u00e4', 'ä'),
             ('\\u00d6', 'Ö'), ('\\u00f6', 'ö'), ('\\u00dc', 'Ü'), ('\\u00fc', 'ü'),
             ('\\u00df', 'ß'), ('\\u2013', '-'), ('\\u00b2', '²'), ('\\u00b3', '³'),
@@ -192,6 +193,14 @@ class cParser:
             ('&#8217;', '’'), ('&#8230;', '…'), ('&#039;', "'")):
             try:
                 s = s.replace(*t)
+            except:
+                pass
+        # Umlaute HTML konvertieren
+        for h in (('\\/', '/'), ('&#x26;', '&'),
+            ('&#xC4;', 'Ä'), ('&#xE4;', 'ä'), ('&#xD6;', 'Ö'), ('&#xF6;', 'ö'),
+            ('&#xDC;', 'Ü'), ('&#xFC;', 'ü'), ('&#xDF;', 'ß')):
+            try:
+                s = s.replace(*h)
             except:
                 pass
         try:

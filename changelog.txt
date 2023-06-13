@@ -1,4 +1,18 @@
-[B]Version: 4.0.6~Nightly 4[/B]
+[B]Version: 4.0.6~Nightly 6[/B]
+
+13.06.2023
+
+ - [GUI Element] Anpassung und Einheit Sprache
+ - [Tools] Hinzufügen HTML Konvertierung
+ - [RequestHandler] sUrl Umlaute konvertieren
+ - [Filmpalast] Entfernung temp. Fix Komödie
+ - [Kinox] Anpassung Sprachelemente
+ - [xCine] überarbeitet
+	+ Jahr hinzugefügt 
+	+ Episoden Info hinzugefügt
+	+ Thumbnail bei Episode repariert
+
+[COLOR cyan]________________________________________________________________________________________[/COLOR]
 
 11.06.2023
 

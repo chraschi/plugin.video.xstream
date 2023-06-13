@@ -112,11 +112,11 @@ def showDocuMenu():
     oGui.setEndOfDirectory()
 
 
-def __createLanguage(sLangID):
-    return {'1': 'Deutsch', '2': 'Englisch', '4': 'Chinesisch', '5': 'Spanisch', '6': 'Französisch', '7': 'Türkisch',
-            '8': 'Japanisch', '9': 'Arabisch', '11': 'Italienisch', '12': 'Kroatisch', '13': 'Serbisch',
-            '14': 'Bosnisch', '15': 'Deutsch / Englisch', '16': 'Niederländisch', '17': 'Koreanisch',
-            '24': 'Griechisch', '25': 'Russisch', '26': 'Indisch', }.get(sLangID, sLangID)
+def __createLanguage(sLangID): # Sprachenkürzel nach der internationalen Norm ISO-639-1
+    return {'1': 'DE', '2': 'EN', '4': 'ZA', '5': 'ES', '6': 'FR', '7': 'TR',
+            '8': 'JA', '9': 'AR', '11': 'IT', '12': 'HR', '13': 'SR',
+            '14': 'BS', '15': 'DE / EN', '16': 'NL', '17': 'KO',
+            '24': 'EL', '25': 'RU', '26': 'HI', }.get(sLangID, sLangID)
 
 
 def __checkSubLanguage(sTitle):

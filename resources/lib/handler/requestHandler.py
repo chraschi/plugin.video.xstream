@@ -91,7 +91,10 @@ class cRequestHandler:
             self.addHeaderEntry('Accept-Encoding', 'gzip, deflate')
 
     def request(self):
-        self._sUrl = self._sUrl.replace(' ', '+')
+        # für Leerzeichen und Umlaute in der sUrl
+        for t in ((' ', '+'), ('²', '&#xB2;'), ('³', '&#xB3;'), ('´', '&#xB4;'), ("'", "&#x27;"),('`', '&#x60;'), ('Ä', '&#xC4;'), ('ä', '&#xE4;'),
+                  ('Ö', '&#xD6;'), ('ö', '&#xF6;'), ('Ü', '&#xDC;'), ('ü', '&#xFC;'), ('ß', '&#xDF;')):
+            self._sUrl = self._sUrl.replace(*t)
         if self.caching and self.cacheTime > 0:
             sContent = self.readCache(self.getRequestUri())
             if sContent:
@@ -277,8 +280,7 @@ class cRequestHandler:
         files = os.listdir(self._cachePath)
         for file in files:
             os.remove(os.path.join(self._cachePath, file))
-            from resources.lib.gui.gui import cGui
-            cGui().showInfo('xStream', cConfig().getLocalizedString(30405), 5)
+            xbmcgui.Dialog().notification('xStream', cConfig().getLocalizedString(30405), xbmcgui.NOTIFICATION_INFO, 100, False)
 
 
 class cBF:
