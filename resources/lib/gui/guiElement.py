@@ -152,24 +152,8 @@ class cGuiElement:
             return False
 
     def setQuality(self, quality):
-        #self._sQuality = quality
-        if '4K' or 'UHD' in quality:
-            self._sQuality = '2160p'
-        if '2K' in quality:
-            self._sQuality = '1440p'
-        if '1080p' or '1080' in quality: # quality:
-            self._sQuality = 'Full HD'
-        if '720p' or '720' in quality: # quality:
-            self._sQuality = 'HD 720p'
-        if '480p' or '480' in quality: # quality:
-            self._sQuality = 'HD 480p'
-        if '360p' or '360' in quality: # quality:
-            self._sQuality = 'HD 360p'
-        if 'HD' in quality: # quality:
-            self._sQuality = 'HD'
-        else:
-            self._sQuality = 'SD' or '576i'
-        
+        self._sQuality = quality
+
     def getQuality(self):
         return self._sQuality
 
