@@ -105,7 +105,6 @@ class cGuiElement:
         if '(omu)' in self.__sTitle.lower() or '*OmU*' in self.__sTitle:
             self.__sTitle = self.__sTitle.replace('(OmU) ', '')
             self.__sTitle = self.__sTitle.replace('(Omu) ', '')
-            self.__sTitle = self.__sTitle.replace('(OmU*) ', '')
             self.setLanguage('OmU')
 
         if self._sYear: self.__sTitle = self.__sTitle.strip() + ' (' + self._sYear + ')'
@@ -152,7 +151,21 @@ class cGuiElement:
             return False
 
     def setQuality(self, quality):
-        self._sQuality = quality
+        if '2160' in quality:
+            self._sQuality = '4K 2160P'
+        elif '1440' in quality:
+            self._sQuality = '2K 1440P'
+        elif '1080' in quality:
+            self._sQuality = 'HD 1080P'
+        elif '720' in quality:
+            self._sQuality = 'HD 720P'
+        elif '480' in quality:
+            self._sQuality = 'HD 480P'
+        elif '360' in quality:
+            self._sQuality = 'HD 360P'
+        elif 'HD' in quality:
+            self._sQuality = 'HD'
+        #self._sQuality = quality
 
     def getQuality(self):
         return self._sQuality
