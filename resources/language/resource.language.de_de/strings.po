@@ -1036,7 +1036,7 @@ msgid "New"
 msgstr "Neues"
 
 msgctxt "#30501"
-msgid "Current films in the cinema"
+msgid "Current Movies in the cinema"
 msgstr "Aktuelle Filme im Kino"
 
 msgctxt "#30502"
@@ -1044,11 +1044,11 @@ msgid "Movies"
 msgstr "Filme"
 
 msgctxt "#30503"
-msgid "Films for Children"
+msgid "Movies for Children"
 msgstr "Filme für Kinder"
 
 msgctxt "#30504"
-msgid "Animated Films"
+msgid "Animated Movies"
 msgstr "Animationsfilme"
 
 msgctxt "#30505"
@@ -1140,8 +1140,8 @@ msgid "Random Serie"
 msgstr "Zufallsserie"
 
 msgctxt "#30527"
-msgid ""
-msgstr ""
+msgid "Directors"
+msgstr "Regisseure"
 
 msgctxt "#30528"
 msgid "Movies Genre"
