@@ -480,7 +480,7 @@ def ajaxCall():
         aResult = cParser().parse(sHtmlContent, pattern)
         if aResult[0]:
             for aEntry in aResult[1]:
-                iTotalCount = aEntry[0]
+                iTotalCount = int(aEntry[0])
                 iNextPage = int(iPage) + 1
                 iCurrentDisplayStart = __createDisplayStart(iNextPage)
                 if iCurrentDisplayStart < iTotalCount:
