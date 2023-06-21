@@ -160,9 +160,9 @@ class cGuiElement:
         elif '720' in quality:
             self._sQuality = 'HD 720P'
         elif '480' in quality:
-            self._sQuality = 'HD 480P'
+            self._sQuality = 'SD 480P'
         elif '360' in quality:
-            self._sQuality = 'HD 360P'
+            self._sQuality = 'SD 360P'
         elif 'HD' in quality:
             self._sQuality = 'HD'
         #self._sQuality = quality
