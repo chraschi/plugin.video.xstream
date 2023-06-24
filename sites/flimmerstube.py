@@ -101,7 +101,7 @@ def showEntries(entryUrl=False, sGui=False, sSearchText=False):
         isQuality, sQuality = cParser.parse(sName, 'HD')
         for t in (('(HD)', ''), ('(OmU/HD)', '')): # Ausblenden der Elemente im sName vorne
             sName = sName.replace(*t)
-        isYear, sYear = cParser.parse(sName, '(.*?)\((\d*)\)')  # Jahr und Name trennen
+        isYear, sYear = cParser.parse(sName, '(.*?)\((\d*)\)') # Jahr und Name trennen
         for name, year in sYear:
             sName = name
             sYear = year

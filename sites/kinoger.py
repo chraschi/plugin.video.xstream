@@ -293,7 +293,7 @@ def showHosters():
                     for sQualy, sUrl in aResult:
                         sUrl = (hUrl.split('video')[0].strip() + sUrl.strip())
                         sUrl = sUrl + '|Origin=https%3A%2F%2Fkinoger.be&Referer=https%3A%2F%2Fkinoger.be%2F' + headers
-                        hoster = {'link': sUrl, 'name': 'Kinoger.be ' + sQualy + 'p', 'resolveable': True}
+                        hoster = {'link': sUrl, 'name': 'Kinoger.be [I][HD %sp][/I]' % sQualy, 'resolveable': True}
                         hosters.append(hoster)
 
             elif 'kinoger.pw' in sUrl:
@@ -313,7 +313,7 @@ def showHosters():
                     if isMatch:
                         for sQualy, sUrl in aResult:
                             sUrl = sUrl + '|Origin=https%3A%2F%2Fkinoger.pw&Referer=https%3A%2F%2Fkinoger.pw%2F' + headers
-                            hoster = {'link': sUrl, 'name': 'StreamSB ' + sQualy + 'p', 'resolveable': True}
+                            hoster = {'link': sUrl, 'name': 'StreamSB [I][HD %sp][/I]' % sQualy, 'resolveable': True}
                             hosters.append(hoster)
                 except Exception:
                     pass
@@ -327,7 +327,7 @@ def showHosters():
                 if isMatch:
                     for sQualy, sUrl in aResult:
                         sUrl = sUrl + '|Referer=https%3A%2F%2Fkinoger.re%2F' + headers
-                        hoster = {'link': sUrl, 'name': 'Kinoger.re ' + sQualy, 'resolveable': True}
+                        hoster = {'link': sUrl, 'name': 'Kinoger.re [I][HD %s][/I]' % sQualy, 'resolveable': True}
                         hosters.append(hoster)
             elif 'start.u' in sUrl: # Da Offline überspringen
                 continue

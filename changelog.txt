@@ -1,4 +1,15 @@
-[B]Version: 4.0.6~Nightly 8[/B]
+[B]Version: 4.0.6~Nightly 9[/B]
+
+23.06.2023
+
+ - [Cinemathek] Anzeige Release Qualität
+ - [Filmpalast] Anzeige Release Qualität
+ - [Kino] Anzeige Release Qualität
+ - [KinoGer] Anpassung Qualität Anzeige
+ - [Movie2k] Temporär deaktiviert
+ - [Movie4k] wurde entfernt da jetzt Streamkiste Movie4k ist
+
+[COLOR cyan]________________________________________________________________________________________[/COLOR]
 
 23.06.2023
 
