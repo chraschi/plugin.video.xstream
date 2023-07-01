@@ -220,8 +220,7 @@ class cHosterGui:
 
         if any('quality' in hoster[1] for hoster in ranking):
             pref_quli = cConfig().getSetting('preferedQuality')
-            if pref_quli != '5' and any(
-                    'quality' in hoster[1] and int(hoster[1]['quality']) == int(pref_quli) for hoster in ranking):
+            if pref_quli != '5' and any('quality' in hoster[1] and int(hoster[1]['quality']) == int(pref_quli) for hoster in ranking):
                 ranking = sorted(ranking, key=lambda hoster: int('quality' in hoster[1] and hoster[1]['quality']) == int(pref_quli), reverse=True)
             else:
                 ranking = sorted(ranking, key=lambda hoster: 'quality' in hoster[1] and int(hoster[1]['quality']), reverse=True)

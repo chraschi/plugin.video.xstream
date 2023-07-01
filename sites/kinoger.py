@@ -206,7 +206,6 @@ def showSeasons():
 
 def showEpisodes():
     params = ParameterHandler()
-    # Parameter laden
     sSeasonNr = params.getValue('sSeasonNr')
     sThumbnail = params.getValue('sThumbnail')
     sTVShowTitle = params.getValue('TVShowTitle')
@@ -260,84 +259,86 @@ def showHosters():
         isMatch, aResult = cParser().parse(sHtmlContent, pattern)
     if isMatch:
         for sUrl in aResult:
-            if 'kinoger.ru' in sUrl: # Muss neu erstellt werden
-                continue
-
             if 'kinoger.be' in sUrl:
-                oRequest = cRequestHandler(sUrl, caching=False, ignoreErrors=True)
-                oRequest.addHeaderEntry('Referer', 'https://kinoger.com/')
-                sHtmlContent = oRequest.request()
-                isMatch, packed = cParser.parseSingleResult(sHtmlContent, '(eval\s*\(function.*?)</script>')
-                if isMatch:
-                    sHtmlContent = jsunpacker.unpack(packed)
-                isMatch, j = cParser.parse(sHtmlContent, 'ct":"([^"]+)","iv":"([^"]+)","s":"([^"]+)')
-                if isMatch:
-                    try:
-                        ciphertext = base64.b64decode(j[0][0])
-                        salt = binascii.unhexlify(j[0][2])
-                        password = 'XOmurdOgNnjMwYah'.encode('utf-8')
-                        sHtmlContent = cUtil.evp_decode(ciphertext, password, salt)
-                    except Exception:
-                        sHtmlContent = ''
-                isMatch, hUrl = cParser.parseSingleResult(sHtmlContent, 'sources.*?file.*?(http[^"]+)')
-                if isMatch:
-                    hUrl = hUrl.replace('\\', '')
-                    oRequest = cRequestHandler(hUrl, caching=False, ignoreErrors=True)
-                    oRequest.addHeaderEntry('Referer', 'https://kinoger.be/')
-                    oRequest.addHeaderEntry('Origin', 'https://kinoger.be')
-                    oRequest.removeNewLines(False)
-                    sHtmlContent = oRequest.request()
-                    pattern = 'RESOLUTION=(\d+x\d+).*?\n([^#"]+)'
-                    isMatch, aResult = cParser.parse(sHtmlContent, pattern)
-                if isMatch:
-                    for sQualy, sUrl in aResult:
-                        sUrl = (hUrl.split('video')[0].strip() + sUrl.strip())
-                        sUrl = sUrl + '|Origin=https%3A%2F%2Fkinoger.be&Referer=https%3A%2F%2Fkinoger.be%2F' + headers
-                        hoster = {'link': sUrl, 'name': 'Kinoger.be [I][HD %sp][/I]' % sQualy, 'resolveable': True}
-                        hosters.append(hoster)
-
-            elif 'kinoger.pw' in sUrl:
                 try:
-                    url = get_streamsburl('kinoger.pw', sUrl.replace('.html', '').split('/')[4])
-                    oRequest = cRequestHandler(url, caching=False, ignoreErrors=True)
-                    oRequest.addHeaderEntry('Referer', sUrl)
-                    oRequest.addHeaderEntry('watchsb', 'sbstream')
-                    sHtmlContent = oRequest.request()
-                    isMatch, aResult = cParser.parse(sHtmlContent, 'file":"([^"]+)')
+                    oRequest = cRequestHandler(sUrl, caching=False, ignoreErrors=True)
+                    oRequest.addHeaderEntry('Referer', 'https://kinoger.com/')
+                    sHtmlContent = oRequest.request() # Durchsucht sHtml Content
+                    isMatch, packed = cParser.parseSingleResult(sHtmlContent, '(eval\s*\(function.*?)</script>')
                     if isMatch:
-                        oRequest = cRequestHandler(aResult[0], caching=False, ignoreErrors=True)
-                        oRequest.addHeaderEntry('Referer', 'https://kinoger.pw/')
-                        oRequest.addHeaderEntry('Origin', 'https://kinoger.pw')
+                        sHtmlContent = jsunpacker.unpack(packed)
+                    isMatch, j = cParser.parse(sHtmlContent, 'ct":"([^"]+)","iv":"([^"]+)","s":"([^"]+)')
+                    if isMatch:
+                        try:
+                            ciphertext = base64.b64decode(j[0][0])
+                            salt = binascii.unhexlify(j[0][2])
+                            password = 'XOmurdOgNnjMwYah'.encode('utf-8')
+                            sHtmlContent = cUtil.evp_decode(ciphertext, password, salt)
+                        except Exception:
+                            sHtmlContent = ''
+                    isMatch, hUrl = cParser.parseSingleResult(sHtmlContent, 'sources.*?file.*?(http[^"]+)')
+                    if isMatch:
+                        hUrl = hUrl.replace('\\', '')
+                        oRequest = cRequestHandler(hUrl, caching=False, ignoreErrors=True)
+                        oRequest.addHeaderEntry('Referer', 'https://kinoger.be/')
+                        oRequest.addHeaderEntry('Origin', 'https://kinoger.be')
+                        oRequest.removeNewLines(False)
                         sHtmlContent = oRequest.request()
-                        isMatch, aResult = cParser.parse(sHtmlContent, 'RESOLUTION=(\d+x\d+).*?(http[^"]+)#')
+                        pattern = 'RESOLUTION=.*?x(\d+).*?\n([^#"]+)'
+                        isMatch, aResult = cParser.parse(sHtmlContent, pattern)
                     if isMatch:
                         for sQualy, sUrl in aResult:
-                            sUrl = sUrl + '|Origin=https%3A%2F%2Fkinoger.pw&Referer=https%3A%2F%2Fkinoger.pw%2F' + headers
-                            hoster = {'link': sUrl, 'name': 'StreamSB [I][HD %sp][/I]' % sQualy, 'resolveable': True}
+                            sUrl = (hUrl.split('video')[0].strip() + sUrl.strip())
+                            sUrl = sUrl + '|Origin=https%3A%2F%2Fkinoger.be&Referer=https%3A%2F%2Fkinoger.be%2F' + headers
+                            hoster = {'link': sUrl, 'name': 'Kinoger.be [I][HD %sp][/I]' % sQualy, 'quality': sQualy, 'resolveable': True}
                             hosters.append(hoster)
                 except Exception:
                     pass
+
+            if 'kinoger.pw' in sUrl:
+                url = get_streamsburl('kinoger.pw', sUrl.replace('.html', '').split('/')[4])
+                oRequest = cRequestHandler(url, caching=False, ignoreErrors=True)
+                oRequest.addHeaderEntry('Referer', sUrl)
+                oRequest.addHeaderEntry('watchsb', 'sbstream')
+                sHtmlContent = oRequest.request()
+                isMatch, aResult = cParser.parse(sHtmlContent, 'file":"([^"]+)')
+                if isMatch:
+                    oRequest = cRequestHandler(aResult[0], caching=False, ignoreErrors=True)
+                    oRequest.addHeaderEntry('Referer', 'https://kinoger.pw/')
+                    oRequest.addHeaderEntry('Origin', 'https://kinoger.pw')
+                    sHtmlContent = oRequest.request()
+                    isMatch, aResult = cParser.parse(sHtmlContent, 'RESOLUTION=.*?x(\d+).*?(http[^"]+)#')
+                if isMatch:
+                    for sQualy, sUrl in aResult:
+                        sUrl = sUrl + '|Origin=https%3A%2F%2Fkinoger.pw&Referer=https%3A%2F%2Fkinoger.pw%2F' + headers
+                        hoster = {'link': sUrl, 'name': 'StreamSB [I][HD %sp][/I]' % sQualy, 'quality': sQualy, 'resolveable': True}
+                        hosters.append(hoster)
 
             elif 'kinoger.re' in sUrl:
                 oRequest = cRequestHandler('https://kinoger.re/api/video/stream/get', ignoreErrors=True, jspost=True)
                 oRequest.addHeaderEntry('Referer', sUrl)
                 oRequest.addParameters('id', sUrl.split('/')[-1])
                 sHtmlContent = oRequest.request()
-                isMatch, aResult = cParser.parse(sHtmlContent, '"label":"([^"]+).*?file":"([^"]+)')
+                isMatch, aResult = cParser.parse(sHtmlContent, '"label":"(\d+).*?file":"([^"]+)')
                 if isMatch:
                     for sQualy, sUrl in aResult:
                         sUrl = sUrl + '|Referer=https%3A%2F%2Fkinoger.re%2F' + headers
-                        hoster = {'link': sUrl, 'name': 'Kinoger.re [I][HD %s][/I]' % sQualy, 'resolveable': True}
+                        hoster = {'link': sUrl, 'name': 'Kinoger.re [I][HD %sp][/I]' % sQualy, 'quality': sQualy, 'resolveable': True}
                         hosters.append(hoster)
-            elif 'start.u' in sUrl: # Da Offline überspringen
-                continue
 
+            elif 'start.u' in sUrl: continue # Offline
+            #elif 'delivery' in sUrl: continue
+            elif 'cdn0' in sUrl: continue
+            elif 'kinoger.ru' in sUrl: continue # Cloudflare aktiv
+            elif 'hd-stream.to' in sUrl: continue # Offline
+            elif 'protonvideo' in sUrl: continue # Offline
             else:
-                hoster = {'link': sUrl + 'DIREKT', 'name': cParser.urlparse(sUrl)}
+                sQualy = '720'
+                sName = cParser.urlparse(sUrl)
+                for x in (('Kinoger.Be', 'StreamHide'), ('Fsst.Online', 'SecVideo')):
+                    sName = sName.replace(*x)
+                hoster = {'link': sUrl + 'DIREKT', 'name': sName, 'displayedName': '%s [I][HD %sp][/I]' % (sName, sQualy), 'quality': sQualy, 'resolveable': True}
                 hosters.append(hoster)
-    if not isMatch:
-        cGui().showInfo()
-        return
 
     if hosters:
         hosters.append('getHosterUrl')
@@ -345,12 +346,15 @@ def showHosters():
 
 
 def getHosterUrl(sUrl=False):
-    if sUrl.startswith('//'):
-        sUrl = 'https:' + sUrl
     if sUrl.endswith('DIREKT'):
+        if 'kinoger.be' in sUrl:
+            sUrl = sUrl.replace('https://kinoger.be/', 'https://streamhide.com/')
+            return [{'streamUrl': sUrl[:-6], 'resolved': False}]
+
         Request = cRequestHandler(sUrl, caching=False)
         Request.request()
         sUrl = Request.getRealUrl()  # hole reale URL von der Umleitung
+
         return [{'streamUrl': sUrl[:-6], 'resolved': False}]
     else:
         return [{'streamUrl': sUrl, 'resolved': True}]

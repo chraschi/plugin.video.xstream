@@ -812,7 +812,7 @@
 						<heading>30278</heading>
 					</control>
 				</setting>
-			</group> -->
+			</group>
 			<group id="plugin_movie4k" label="30711">
 				<setting id="plugin_movie4k" type="boolean" label="30050" help="">
 					<level>0</level>
@@ -827,7 +827,7 @@
 					</dependencies>
 					<control type="toggle"/>
 				</setting>
-				<!-- Domain Überprüfung mit automatischer und manueller Anpassung -->
+				
 				<setting id="plugin_movie4k_checkDomain" type="boolean" label="30277">
 					<level>3</level>
 					<default>True</default>
@@ -851,7 +851,7 @@
 						<heading>30278</heading>
 					</control>
 				</setting>
-			</group>
+			</group> -->
 			<group id="plugin_movieking" label="30712">
 				<setting id="plugin_movieking" type="boolean" label="30050" help="">
 					<level>0</level>

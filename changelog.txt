@@ -1,4 +1,14 @@
-[B]Version: 4.0.6~Nightly 9[/B]
+[B]Version: 4.0.6~Nightly 10[/B]
+
+01.07.2023
+
+ - [KinoGer] Anpassung Qualität Anzeige
+	+ Code fixed
+	+ Qualität Prio hinzugefügt
+	+ Hoster Streamhide hinzugefügt
+ - [Movie4k] vorübergehend entfernt
+
+[COLOR cyan]________________________________________________________________________________________[/COLOR]
 
 23.06.2023
 
