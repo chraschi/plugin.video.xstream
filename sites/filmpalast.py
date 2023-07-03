@@ -245,21 +245,16 @@ def showHosters():
     sUrl = ParameterHandler().getValue('entryUrl')
     sHtmlContent = cRequestHandler(sUrl).request()
     pattern = 'hostName">([^<]+).*?(http[^"]+)' # Hoster Link
-    sReleaseQuality = 'class="rb">.*?\d{3,4}p.*?(\d+)p\.' # Release Qualität
+    releaseQuality = 'class="rb">.*?(\d\d\d+)p\.' # Release Qualität
     isMatch, aResult = cParser().parse(sHtmlContent, pattern)
-    sQuality = cParser().parse(sHtmlContent, sReleaseQuality)
+    isQuality, sQuality = cParser.parseSingleResult(sHtmlContent, releaseQuality)  # sReleaseQuality auslesen z.B. 1080
+    if not isQuality: sQuality = '720'
     hosters = []
     if isMatch:
         for sName, sUrl in aResult:
             sName = sName.strip(' HD')
             if cConfig().isBlockedHoster(sName)[0]: continue # Hoster aus settings.xml oder deaktivierten Resolver ausschließen
-            # Release Qualität wird vom Content der Webseite bestimmt und steht nicht zur realen Qualität des Streams
-            if '2160' in sQuality[1]: sReleaseQuality = '[4K 2160p]'
-            elif '1440' in sQuality[1]: sReleaseQuality = '[2K 1440p]'
-            elif '1080' in sQuality[1]: sReleaseQuality = '[HD 1080p]'
-            elif '720' in sQuality[1]: sReleaseQuality = '[HD 720p]'
-            else: sReleaseQuality = '[HD]'
-            hoster = {'link': sUrl, 'name': sName, 'displayedName': '%s [I]%s[/I]' % (sName.replace('HD', ''), sReleaseQuality)}
+            hoster = {'link': sUrl, 'name': sName, 'displayedName': '%s [I][%sp][/I]' % (sName.replace('HD', ''), sQuality), 'quality': sQuality} # Qualität Anzeige aus Release Eintrag
             hosters.append(hoster)
     if hosters:
         hosters.append('getHosterUrl')

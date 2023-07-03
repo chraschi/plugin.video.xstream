@@ -298,20 +298,15 @@ def showHosters():
     pattern += '(\d+).*?' # Eintrag [1] ist die Film oder Serien Nr.29224
     pattern += '(\d).*?' # Eintrag [2] ist die Link Nr.1
     pattern += 'starten!\s([^<]+)' # Eintrag [3] = sName des Link Eintrag
-    sReleaseQuality = 'Release:.*?\d{3,4}.*?(\d\d\d+)'  # Hoster Release Quality Kennzeichen
+    releaseQuality = 'Release:.*?\s*(\d\d\d+)p'  # Hoster Release Quality Kennzeichen
     isMatch, aResult = cParser().parse(sHtmlContent, pattern)
-    sQuality = cParser.parse(sHtmlContent, sReleaseQuality)  # sReleaseQuality auslesen z.B. 1080
+    isQuality, sQuality = cParser.parseSingleResult(sHtmlContent, releaseQuality)  # sReleaseQuality auslesen z.B. 1080
+    if not isQuality: sQuality = '720'
     if isMatch:
         for sType, sID, sLink, sName in aResult:
             sUrl = 'https://cinemathek.net/wp-json/dooplayer/v2/%s/%s/%s' % (sID, sType, sLink)
             if cConfig().isBlockedHoster(sName)[0]: continue  # Hoster aus settings.xml oder deaktivierten Resolver ausschließen
-            # Release Qualität wird vom Content der Webseite bestimmt und steht nicht zur realen Qualität des Streams
-            if '2160' in sQuality[1]: sReleaseQuality = '[4K 2160p]'
-            elif '1440' in sQuality[1]: sReleaseQuality = '[2K 1440p]'
-            elif '1080' in sQuality[1]: sReleaseQuality = '[HD 1080p]'
-            elif '720' in sQuality[1]: sReleaseQuality = '[HD 720p]'
-            else: sReleaseQuality = '[HD]'
-            hoster = {'link': sUrl, 'name': sName, 'displayedName': '%s [I]%s[/I]' % (sName, sReleaseQuality)} # Qualität Anzeige aus Release Eintrag
+            hoster = {'link': sUrl, 'name': sName, 'displayedName': '%s [I][%sp][/I]' % (sName, sQuality), 'quality': sQuality} # Qualität Anzeige aus Release Eintrag
             hosters.append(hoster)
     if not isMatch:
         cGui().showInfo()

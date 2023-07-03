@@ -162,6 +162,7 @@ def showSeasons():
         isMatchpw, L33 = cParser.parse(pwsContainer, "<'([^>]+)")
         if isMatchpw:
             total = len(L33)
+
     L44 = []
     isMatchgo, gosContainer = cParser.parseSingleResult(sHtmlContent, 'go.show.*?</script>')
     if isMatchgo:
@@ -170,7 +171,7 @@ def showSeasons():
         if isMatchgo:
             total = len(L44)
 
-    isDesc, sDesc = cParser.parseSingleResult(sHtmlContent, '</b>([^"]+)<br><br>') # Beschreibung
+    isDesc, sDesc = cParser.parseSingleResult(sHtmlContent, '</b>([^"]+)<br><br>')
     for i in range(0, total):
         try:
             params.setParam('L11', L11[i])
@@ -196,7 +197,6 @@ def showSeasons():
         oGuiElement.setThumbnail(sThumbnail)
         if isDesc:
             oGuiElement.setDescription(sDesc)
-        # Parameter übergeben
         params.setParam('sDesc', sDesc)
         params.setParam('sSeasonNr', i)
         cGui().addFolder(oGuiElement, params, True, total)
@@ -287,10 +287,10 @@ def showHosters():
                         pattern = 'RESOLUTION=.*?x(\d+).*?\n([^#"]+)'
                         isMatch, aResult = cParser.parse(sHtmlContent, pattern)
                     if isMatch:
-                        for sQualy, sUrl in aResult:
+                        for sQuality, sUrl in aResult:
                             sUrl = (hUrl.split('video')[0].strip() + sUrl.strip())
                             sUrl = sUrl + '|Origin=https%3A%2F%2Fkinoger.be&Referer=https%3A%2F%2Fkinoger.be%2F' + headers
-                            hoster = {'link': sUrl, 'name': 'Kinoger.be [I][HD %sp][/I]' % sQualy, 'quality': sQualy, 'resolveable': True}
+                            hoster = {'link': sUrl, 'name': 'Kinoger.be [I][%sp][/I]' % sQuality, 'quality': sQuality, 'resolveable': True}
                             hosters.append(hoster)
                 except Exception:
                     pass
@@ -309,9 +309,9 @@ def showHosters():
                     sHtmlContent = oRequest.request()
                     isMatch, aResult = cParser.parse(sHtmlContent, 'RESOLUTION=.*?x(\d+).*?(http[^"]+)#')
                 if isMatch:
-                    for sQualy, sUrl in aResult:
+                    for sQuality, sUrl in aResult:
                         sUrl = sUrl + '|Origin=https%3A%2F%2Fkinoger.pw&Referer=https%3A%2F%2Fkinoger.pw%2F' + headers
-                        hoster = {'link': sUrl, 'name': 'StreamSB [I][HD %sp][/I]' % sQualy, 'quality': sQualy, 'resolveable': True}
+                        hoster = {'link': sUrl, 'name': 'StreamSB [I][%sp][/I]' % sQuality, 'quality': sQuality, 'resolveable': True}
                         hosters.append(hoster)
 
             elif 'kinoger.re' in sUrl:
@@ -321,9 +321,9 @@ def showHosters():
                 sHtmlContent = oRequest.request()
                 isMatch, aResult = cParser.parse(sHtmlContent, '"label":"(\d+).*?file":"([^"]+)')
                 if isMatch:
-                    for sQualy, sUrl in aResult:
+                    for sQuality, sUrl in aResult:
                         sUrl = sUrl + '|Referer=https%3A%2F%2Fkinoger.re%2F' + headers
-                        hoster = {'link': sUrl, 'name': 'Kinoger.re [I][HD %sp][/I]' % sQualy, 'quality': sQualy, 'resolveable': True}
+                        hoster = {'link': sUrl, 'name': 'Kinoger.re [I][%sp][/I]' % sQuality, 'quality': sQuality, 'resolveable': True}
                         hosters.append(hoster)
 
             elif 'start.u' in sUrl: continue # Offline
@@ -333,11 +333,11 @@ def showHosters():
             elif 'hd-stream.to' in sUrl: continue # Offline
             elif 'protonvideo' in sUrl: continue # Offline
             else:
-                sQualy = '720'
+                sQuality = '720'
                 sName = cParser.urlparse(sUrl)
                 for x in (('Kinoger.Be', 'StreamHide'), ('Fsst.Online', 'SecVideo')):
                     sName = sName.replace(*x)
-                hoster = {'link': sUrl + 'DIREKT', 'name': sName, 'displayedName': '%s [I][HD %sp][/I]' % (sName, sQualy), 'quality': sQualy, 'resolveable': True}
+                hoster = {'link': sUrl + 'DIREKT', 'name': sName, 'displayedName': '%s [I][%sp][/I]' % (sName, sQuality), 'quality': sQuality, 'resolveable': True}
                 hosters.append(hoster)
 
     if hosters:
