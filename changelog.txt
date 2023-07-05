@@ -6,7 +6,6 @@
 	+ Code fixed
 	+ Qualität Prio hinzugefügt
 	+ Hoster Streamhide hinzugefügt
- - [Movie4k] vorübergehend entfernt
 
 [COLOR cyan]________________________________________________________________________________________[/COLOR]
 
