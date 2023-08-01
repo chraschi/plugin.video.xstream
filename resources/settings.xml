@@ -909,7 +909,7 @@
 					</control>
 				</setting>
 			</group>
-			<group id="plugin_streampalace" label="30711">
+			<group id="plugin_streampalace" label="30719">
 				<setting id="plugin_streampalace" type="boolean" label="30050" help="">
 					<level>0</level>
                     <default>True</default>

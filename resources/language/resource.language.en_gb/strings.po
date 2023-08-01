@@ -1267,7 +1267,7 @@ msgid "KinoKiste"
 msgstr ""
 
 msgctxt "#30719"
-msgid ""
+msgid "StreamPalace"
 msgstr ""
 
 msgctxt "#30720"
