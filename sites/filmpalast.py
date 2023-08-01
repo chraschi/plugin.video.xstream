@@ -97,7 +97,7 @@ def showValue():
         return
 
     for sUrl, sName in aResult:
-        sUrl = sUrl.replace('ö', '&#xF6') # Fix für Genre Komödie #Todo global setzten
+        #sUrl = sUrl.replace('ö', '&#xF6') # Fix für Genre Komödie #Todo global setzten
         params.setParam('sUrl', sUrl)
         cGui().addFolder(cGuiElement(sName, SITE_IDENTIFIER, 'showEntries'), params)
     cGui().setEndOfDirectory()
@@ -244,19 +244,21 @@ def showEpisodes():
 def showHosters():
     sUrl = ParameterHandler().getValue('entryUrl')
     sHtmlContent = cRequestHandler(sUrl).request()
-    pattern = 'hostName">([^<]+).*?(http[^"]+)'
+    pattern = 'hostName">([^<]+).*?(http[^"]+)' # Hoster Link
+    releaseQuality = 'class="rb">.*?(\d\d\d+)p\.' # Release Qualität
     isMatch, aResult = cParser().parse(sHtmlContent, pattern)
+    isQuality, sQuality = cParser.parseSingleResult(sHtmlContent, releaseQuality)  # sReleaseQuality auslesen z.B. 1080
+    if not isQuality: sQuality = '720'
     hosters = []
     if isMatch:
         for sName, sUrl in aResult:
-            hoster = sName.strip(' HD')
-            if cConfig().isBlockedHoster(hoster)[0]: continue # Hoster aus settings.xml oder deaktivierten Resolver ausschließen
-            hoster = {'link': sUrl, 'name': sName}
+            sName = sName.strip(' HD')
+            if cConfig().isBlockedHoster(sName)[0]: continue # Hoster aus settings.xml oder deaktivierten Resolver ausschließen
+            hoster = {'link': sUrl, 'name': sName, 'displayedName': '%s [I][%sp][/I]' % (sName.replace('HD', ''), sQuality), 'quality': sQuality} # Qualität Anzeige aus Release Eintrag
             hosters.append(hoster)
     if hosters:
         hosters.append('getHosterUrl')
     return hosters
-
 
 def getHosterUrl(sUrl=False):
     return [{'streamUrl': sUrl, 'resolved': False}]

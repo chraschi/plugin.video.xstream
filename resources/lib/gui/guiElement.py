@@ -39,6 +39,7 @@ class cGuiElement:
         self._sSubLanguage = ''
         self._sYear = ''
         self._sQuality = ''
+        self._sInfo = ''
         self._mediaType = ''
         self._season = ''
         self._episode = ''
@@ -73,6 +74,7 @@ class cGuiElement:
     def setTitle(self, sTitle):
         self.__sTitle = cUtil.cleanse_text(sTitle)
 
+    # Sprachen im sName ins GUI Element übernehmen
     def getTitle(self):
         if ' (19' in self.__sTitle or ' (20' in self.__sTitle:
             isMatch, aYear = cParser.parse(self.__sTitle, '(.*?)\((\d{4})\)')
@@ -88,13 +90,23 @@ class cGuiElement:
             isMatch, aLang = cParser.parse(self.__sTitle, '(.*?)\*(.*?)\*')
             if isMatch:
                 self.__sTitle = aLang[0][0]
-                self.setLanguage('Englisch')
+                self.setLanguage('EN')
+        if '*deutsch*' in self.__sTitle.lower():
+            isMatch, aLang = cParser.parse(self.__sTitle, '(.*?)\*(.*?)\*')
+            if isMatch:
+                self.__sTitle = aLang[0][0]
+                self.setLanguage('DE')
         if 'English:' in self.__sTitle:
             self.__sTitle = self.__sTitle.replace('English:', '')
-            self.setLanguage('Englisch')
-        if '(omu)' in self.__sTitle.lower():
-            self.__sTitle = self.__sTitle.replace('(OmU) ', '').replace('(Omu) ', '')
+            self.setLanguage('EN')
+        if 'Deutsch:' in self.__sTitle:
+            self.__sTitle = self.__sTitle.replace('Deutsch:', '')
+            self.setLanguage('DE')
+        if '(omu)' in self.__sTitle.lower() or '*OmU*' in self.__sTitle:
+            self.__sTitle = self.__sTitle.replace('(OmU) ', '')
+            self.__sTitle = self.__sTitle.replace('(Omu) ', '')
             self.setLanguage('OmU')
+
         if self._sYear: self.__sTitle = self.__sTitle.strip() + ' (' + self._sYear + ')'
         return self.__sTitle.strip()
 
@@ -139,11 +151,31 @@ class cGuiElement:
             return False
 
     def setQuality(self, quality):
-        self._sQuality = quality
-        
+        if '2160' in quality:
+            self._sQuality = '4K 2160P'
+        elif '1440' in quality:
+            self._sQuality = '2K 1440P'
+        elif '1080' in quality:
+            self._sQuality = 'HD 1080P'
+        elif '720' in quality:
+            self._sQuality = 'HD 720P'
+        elif '480' in quality:
+            self._sQuality = 'SD 480P'
+        elif '360' in quality:
+            self._sQuality = 'SD 360P'
+        elif 'HD' in quality:
+            self._sQuality = 'HD'
+        #self._sQuality = quality
+
     def getQuality(self):
         return self._sQuality
-    
+
+    def setInfo(self, info):
+        self._sInfo = info
+
+    def getInfo(self):
+        return self._sInfo
+
     def setTitleSecond(self, sTitleSecond):
         self.__sTitleSecond = cUtil.cleanse_text(str(sTitleSecond))
 

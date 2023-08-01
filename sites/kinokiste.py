@@ -53,7 +53,6 @@ def load(): # Menu structure of the site plugin
 def showGenre():
     params = ParameterHandler()
     entryUrl = params.getValue('sUrl')
-    #sHtmlContent = cRequestHandler(entryUrl).request()
     oRequest = cRequestHandler(entryUrl)
     if cConfig().getSetting('global_search_' + SITE_IDENTIFIER) == 'true':
         oRequest.cacheTime = 60 * 60 * 48  # 48 Stunden
@@ -84,7 +83,11 @@ def showEntries(entryUrl=False, sGui=False, sSearchText=False):
     if cConfig().getSetting('global_search_' + SITE_IDENTIFIER) == 'true':
         oRequest.cacheTime = 60 * 60 * 6  # 6 Stunden
     sHtmlContent = oRequest.request()    
-    pattern = '<span\s+class="new_movie\d+">\s*<a\s+href="([^"]+)">[^<]*</a>\s*</span>.*?<img\s+alt="([^"]+)"\s+src="([^"]+)">\s*</span>\s*<span\s+class="fl-quality[^"]+">([^<]+)</span>'
+    pattern = '<section class="fl-item.*?' # start container
+    pattern += 'href="([^"]+).*?' # url
+    pattern += 'alt="([^"]+).*?' # name
+    pattern += 'src="([^"]+).*?' # thumb
+    pattern += '(.*?)</section>' # dummy
     isMatch, aResult = cParser.parse(sHtmlContent, pattern)
 
     if not isMatch:
@@ -92,7 +95,7 @@ def showEntries(entryUrl=False, sGui=False, sSearchText=False):
         return
 
     total = len(aResult)
-    for sUrl, sName, sThumbnail, sQuality in aResult:
+    for sUrl, sName, sThumbnail, sDummy in aResult:
         # Abfrage der voreingestellten Sprache
         sLanguage = cConfig().getSetting('prefLanguage')
         if (sLanguage == '1' and 'English*' in sName):   # Deutsch
@@ -106,11 +109,16 @@ def showEntries(entryUrl=False, sGui=False, sSearchText=False):
             continue
         if sThumbnail[0] == '/':
             sThumbnail = sThumbnail[1:]
+        isQuality, sQuality = cParser.parseSingleResult(sDummy, 'fl-quality[^"]+">([^<]+)')  # Qualität
+        isInfoEpisode, sInfoEpisode = cParser.parseSingleResult(sDummy, 'mli-ep">ep.([\d]+)')  # Episodenanzahl
         isTvshow, aResult = cParser.parse(sName, '\s+-\s+Staffel\s+\d+')
         oGuiElement = cGuiElement(sName, SITE_IDENTIFIER, 'showEpisodes' if isTvshow else 'showHosters')
         oGuiElement.setThumbnail(URL_MAIN + sThumbnail)
         oGuiElement.setMediaType('season' if isTvshow else 'movie')
-        oGuiElement.setQuality(sQuality)
+        if isQuality:
+            oGuiElement.setQuality(sQuality)
+        if isInfoEpisode:
+            oGuiElement.setInfo(sInfoEpisode + ' Episoden')
         params.setParam('entryUrl', sUrl)
         params.setParam('sName', sName)
         params.setParam('sThumbnail', sThumbnail)
@@ -140,18 +148,21 @@ def showEpisodes():
         cGui().showInfo()
         return
 
-    #sHtmlContent = cRequestHandler(sUrl).request()
     oRequest = cRequestHandler(sUrl)
     if cConfig().getSetting('global_search_' + SITE_IDENTIFIER) == 'true':
         oRequest.cacheTime = 60 * 60 * 4  # HTML Cache Zeit 4 Stunden
     sHtmlContent = oRequest.request()
     pattern = '<li\s+id="serie-([^"]+)">\s*<a\s+href="#">([^<]+)</a>'
     isMatch, aResult = cParser.parse(sHtmlContent, pattern)
+
+    isDesc, sDesc = cParser.parseSingleResult(sHtmlContent, '"description"[^>]content="([^"]+)')
     total = len(aResult)
     for episode, episodeName in aResult:
         params.setParam('episodeId', episode)
         oGuiElement = cGuiElement(str(episodeName), SITE_IDENTIFIER, 'showEpisodeHosters')
         oGuiElement.setThumbnail(URL_MAIN + sThumbnail)
+        if isDesc:
+            oGuiElement.setDescription(sDesc)
         oGuiElement.setTVShowTitle(sShowName)
         oGuiElement.setSeason(sSeason)
         if '_' in episode:

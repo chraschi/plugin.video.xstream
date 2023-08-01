@@ -78,7 +78,7 @@ class cGui:
         itemValues = oGuiElement.getItemValues()
         itemTitle = oGuiElement.getTitle()
         infoString = ''
-        if self.globalSearch:
+        if self.globalSearch: # Reihenfolge der zu anzeigenden GUI Elemente
             infoString += ' %s' % oGuiElement.getSiteName()
         if oGuiElement._sLanguage != '':
             infoString += ' (%s)' % oGuiElement._sLanguage
@@ -86,6 +86,8 @@ class cGui:
             infoString += ' *Sub: %s*' % oGuiElement._sSubLanguage
         if oGuiElement._sQuality != '':
             infoString += ' [%s]' % oGuiElement._sQuality
+        if oGuiElement._sInfo != '':
+            infoString += ' [%s]' % oGuiElement._sInfo    
         # if self.globalSearch:
         #     infoString += ' %s' % oGuiElement.getSiteName()
         if infoString:

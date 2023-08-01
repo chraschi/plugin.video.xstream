@@ -167,8 +167,8 @@ def textBox(heading, announce):
     TextBox()
     while xbmc.getCondVisibility('Window.IsVisible(10147)'):
         xbmc.sleep(500)
- 
- 
+
+
 class cParser:
     @staticmethod
     def parseSingleResult(sHtmlContent, pattern):
@@ -182,6 +182,7 @@ class cParser:
 
     @staticmethod
     def replaceSpecialCharacters(s):
+        # Umlaute Unicode konvertieren
         for t in (('\\/', '/'), ('&amp;', '&'), ('\\u00c4', 'Ä'), ('\\u00e4', 'ä'),
             ('\\u00d6', 'Ö'), ('\\u00f6', 'ö'), ('\\u00dc', 'Ü'), ('\\u00fc', 'ü'),
             ('\\u00df', 'ß'), ('\\u2013', '-'), ('\\u00b2', '²'), ('\\u00b3', '³'),
@@ -189,9 +190,20 @@ class cParser:
             ('\\u00c9', 'É'), ('\\u2026', '...'), ('\\u202fh', 'h'), ('\\u2019', '’'),
             ('\\u0308', '̈'), ('\\u00e8', 'è'), ('#038;', ''), ('\\u00f8', 'ø'),
             ('／', '/'), ('\\u00e1', 'á'), ('&#8211;', '-'), ('&#8220;', '“'), ('&#8222;', '„'),
-            ('&#8217;', '’'), ('&#8230;', '…'), ('&#039;', "'")):
+            ('&#8217;', '’'), ('&#8230;', '…'), ('\\u00bc', '¼'), ('\\u00bd', '½'), ('\\u00be', '¾'),
+            ('\\u2153', '⅓')):
             try:
                 s = s.replace(*t)
+            except:
+                pass
+        # Umlaute HTML konvertieren
+        for h in (('\\/', '/'), ('&#x26;', '&'), ('&#039;', "'"), ("&#39;", "'"),
+            ('&#xC4;', 'Ä'), ('&#xE4;', 'ä'), ('&#xD6;', 'Ö'), ('&#xF6;', 'ö'),
+            ('&#xDC;', 'Ü'), ('&#xFC;', 'ü'), ('&#xDF;', 'ß') , ('&#xB2;', '²'),
+            ('&#xDC;', '³'), ('&#xBC;', '¼'), ('&#xBD;', '½'), ('&#xBE;', '¾'),
+            ('&#8531;', '⅓')):
+            try:
+                s = s.replace(*h)
             except:
                 pass
         try:
@@ -366,3 +378,5 @@ class cUtil:
         key = fd[0:key_size]
         iv = fd[key_size:key_size + iv_size]
         return key, iv
+
+

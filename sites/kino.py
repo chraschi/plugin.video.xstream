@@ -75,10 +75,11 @@ def showEntries(entryUrl=False, sGui=False, sSearchText=False):
     if cConfig().getSetting('global_search_' + SITE_IDENTIFIER) == 'true':
         oRequest.cacheTime = 60 * 60 * 6  # 6 Stunden
     sHtmlContent = oRequest.request()
-    pattern = 'class="film-.*?'  # container start
-    #pattern += '#">([^<]+)</a>'  # Quality funktioniert nur bei Filmen man könnte showSeries einfügen
+    pattern = 'class="short-in.*?'  # container start
+    pattern += 'nl">(.*?)a\s+class.*?'  # dummy
     pattern += 'href="(http[^"]+).*?'  # url
-    pattern += 'src="([^"]+).*?'  # sThumbnail
+    pattern += 'src="([^"]+).*?'  # thumbnail
+    pattern += 'alt(.*?)' # info dummy
     pattern += 'short-title">([^<]+)'  # name
     isMatch, aResult = cParser.parse(sHtmlContent, pattern)
     if not isMatch:
@@ -87,12 +88,18 @@ def showEntries(entryUrl=False, sGui=False, sSearchText=False):
 
     total = len(aResult)
     isTvshow = None
-    for sUrl, sThumbnail, sName in aResult:
+    for sDummy, sUrl, sThumbnail, sInfo, sName in aResult:
         if sSearchText and not cParser.search(sSearchText, sName):
             continue
+        isQuality, sQuality = cParser.parseSingleResult(sDummy, 'film-ripz.*?#">([^<]+)')  # Qualität
+        isInfoEpisode, sInfoEpisode = cParser.parseSingleResult(sInfo, 'mli-eps">.*?<i>([\d]+)')  # Episodenanzahl
         isTvshow, aResult = cParser.parse(sName, '\s+-\s+Staffel\s+\d+')
         oGuiElement = cGuiElement(sName, SITE_IDENTIFIER, 'showEpisodes' if isTvshow else 'showHosters')
         oGuiElement.setThumbnail(URL_MAIN + sThumbnail)
+        if isQuality:
+            oGuiElement.setQuality(sQuality)
+        if isInfoEpisode:
+            oGuiElement.setInfo(sInfoEpisode + ' Episoden')
         oGuiElement.setMediaType('season' if isTvshow else 'movie')
         params.setParam('entryUrl', sUrl)
         params.setParam('sThumbnail', sThumbnail)
@@ -119,11 +126,15 @@ def showEpisodes():
     if not isMatch:
         cGui().showInfo()
         return
+
+    isDesc, sDesc = cParser.parseSingleResult(sHtmlContent, 's-desc">([^<]+)')  # Beschreibung
     total = len(aResult)
     for sName in aResult:
         oGuiElement = cGuiElement('Episode ' + sName, SITE_IDENTIFIER, 'showHosters')
         oGuiElement.setThumbnail(URL_MAIN + sThumbnail)
         oGuiElement.setMediaType('episode')
+        if isDesc:
+            oGuiElement.setDescription(sDesc)
         params.setParam('entryUrl', entryUrl)
         params.setParam('sEpisode', sName)
         cGui().addFolder(oGuiElement, params, False, total)
@@ -145,10 +156,13 @@ def showHosters():
         pattern = '<div class="tabs-sel">.*?</div>'         # Filme
         isMatch, aResult = cParser.parse(sHtmlContent, pattern)
     pattern = 'href="([^"]+).*?seriePlayer.*?</i>([^<]+)'
+    releaseQuality = 'Qualität:.*?\d{3,4}.*?(\d\d\d+)P'  # Hoster Release Quality Kennzeichen
     isMatch, aResult = cParser.parse(aResult[0], pattern)   # Nimmt nur das 1.Result
+    isQuality, sQuality = cParser.parseSingleResult(sHtmlContent, releaseQuality)  # sReleaseQuality auslesen z.B. 1080
+    if not isQuality: sQuality = '720'
     for sUrl, sName in aResult:
         if cConfig().isBlockedHoster(sUrl)[0]: continue # Hoster aus settings.xml oder deaktivierten Resolver ausschließen
-        hoster = {'link': sUrl, 'name': sName}
+        hoster = {'link': sUrl, 'name': sName, 'displayedName': '%s [I][%sp][/I]' % (sName, sQuality), 'quality': sQuality}  # Qualität Anzeige aus Release Eintrag
         hosters.append(hoster)    
     if hosters:
         hosters.append('getHosterUrl')

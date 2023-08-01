@@ -58,7 +58,6 @@ def load(): # Menu structure of the site plugin
 def showGenre():
     params = ParameterHandler()
     entryUrl = params.getValue('sUrl')
-    #sHtmlContent = cRequestHandler(entryUrl).request()
     oRequest = cRequestHandler(entryUrl)
     if cConfig().getSetting('global_search_' + SITE_IDENTIFIER) == 'true':
         oRequest.cacheTime = 60 * 60 * 48 # 48 Stunden
@@ -87,7 +86,12 @@ def showEntries(entryUrl=False, sGui=False, sSearchText=False):
     if cConfig().getSetting('global_search_' + SITE_IDENTIFIER) == 'true':
         oRequest.cacheTime = 60 * 60 * 6  # 6 Stunden
     sHtmlContent = oRequest.request()
-    pattern = '<a[^>]*class="poster grid-item.*?href="([^"]+).*?<img data-src="([^"]+).*?alt="([^"]+)".*?class="poster__label">([^<]+).*?class="poster__text[^"]+">([^<]+)'
+    #pattern = '<a[^>]*class="poster grid-item.*?href="([^"]+).*?<img data-src="([^"]+).*?alt="([^"]+)".*?class="poster__label">([^<]+).*?class="poster__text[^"]+">([^<]+)'
+    pattern = '<a[^>]*class="poster grid-item.*?' # container start
+    pattern += 'href="([^"]+).*?' # url
+    pattern += '<img data-src="([^"]+).*?' # thumb
+    pattern += 'alt="([^"]+)".*?' # name
+    pattern += '(.*?)</a>' # dummy
     isMatch, aResult = cParser.parse(sHtmlContent, pattern)
 
     if not isMatch:
@@ -95,23 +99,38 @@ def showEntries(entryUrl=False, sGui=False, sSearchText=False):
         return
 
     total = len(aResult)
-    for sUrl, sThumbnail, sName, sQuality, sDesc in aResult:
+    for sUrl, sThumbnail, sName, sDummy in aResult:
         if sSearchText and not cParser.search(sSearchText, sName):
             continue
-
+        isQuality, sQuality = cParser.parseSingleResult(sDummy, 'poster__label">\+([\d]+)')  # Episoden Info mit +
+        if not isQuality:
+            isQuality, sQuality = cParser.parseSingleResult(sDummy, 'poster__label">\+\s([\d]+)') # Episoden Info mit + und Leerzeichen
+        if not isQuality:
+            isQuality, sQuality = cParser.parseSingleResult(sDummy, 'poster__label">([^<]+)') # Qualität bei Filmen
+        isYear, sYear = cParser.parseSingleResult(sDummy, '([\d]+)</li>\s+<li>')  # Release Jahr
+        isDesc, sDesc = cParser.parseSingleResult(sDummy, 'class="poster__text[^"]+">([^<]+)')  # Beschreibung
         isTvshow, aResult = cParser.parse(sName, '\s+-\s+Staffel\s+\d+')
         oGuiElement = cGuiElement(sName, SITE_IDENTIFIER, 'showEpisodes' if isTvshow else 'showHosters')
-      
-        if sDesc[-1] != '.':
-            sDesc += '...'
-        oGuiElement.setDescription(sDesc)
-        oGuiElement.setQuality(sQuality)          
+        if isQuality:
+            if isTvshow is True:
+                if sQuality == 'Komplett':
+                    oGuiElement.setQuality('Komplette Staffel')
+                else:
+                    oGuiElement.setQuality(sQuality + ' Episoden')
+            else:
+                oGuiElement.setQuality(sQuality)
+        if isYear:
+            oGuiElement.setYear(sYear)
+        if isDesc:
+            if sDesc[-1] != '.':
+                sDesc += '...'
+            oGuiElement.setDescription(sDesc)
         oGuiElement.setThumbnail(URL_MAIN + sThumbnail)
         oGuiElement.setMediaType('season' if isTvshow else 'movie')
         params.setParam('entryUrl', sUrl)
         params.setParam('sName', sName)
         params.setParam('sThumbnail', sThumbnail)
-
+        params.setParam('sDesc', sDesc)
         oGui.addFolder(oGuiElement, params, isTvshow, total)
     if not sGui and not sSearchText:
         isMatchNextPage, sNextUrl = cParser().parseSingleResult(sHtmlContent, '">\s*<a\s+href="([^"]+)">\D')
@@ -127,6 +146,7 @@ def showEpisodes():
     sUrl = params.getValue('entryUrl')
     sThumbnail = params.getValue("sThumbnail")
     sName = params.getValue('sName')
+    sDesc = params.getValue('sDesc')
     isMatch, sShowName = cParser.parseSingleResult(sName, '(.*?)\s+-\s+Staffel\s+\d+')
     if not isMatch:
         cGui().showInfo()
@@ -135,7 +155,7 @@ def showEpisodes():
     if not isMatch:
         cGui().showInfo()
         return
-    #sHtmlContent = cRequestHandler(sUrl).request()
+
     oRequest = cRequestHandler(sUrl)
     if cConfig().getSetting('global_search_' + SITE_IDENTIFIER) == 'true':
         oRequest.cacheTime = 60 * 60 * 4  # HTML Cache Zeit 4 Stunden
@@ -147,6 +167,7 @@ def showEpisodes():
         params.setParam('episodeId', episode)
         oGuiElement = cGuiElement(str(episodeName), SITE_IDENTIFIER, 'showEpisodeHosters')
         oGuiElement.setThumbnail(URL_MAIN + sThumbnail)
+        oGuiElement.setDescription(sDesc)
         oGuiElement.setTVShowTitle(sName)
         oGuiElement.setSeason(sSeason)
         oGuiElement.setEpisode(episode)

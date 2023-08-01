@@ -1,7 +1,83 @@
-[B]Version: 4.0.5~Release[/B]
+[B]Version: 4.0.6~Release[/B]
 
-23.03.2023 - 28.05.2023
+01.08.2023
 
+ - [Cinemathek] Regex fixed
+ - [KinoGer] Anpassung Qualität Anzeige
+	+ Code fixed
+	+ Qualität Prio hinzugefügt
+	+ Hoster Streamhide hinzugefügt
+ - [Cinemathek] Anzeige Release Qualität
+ - [Filmpalast] Anzeige Release Qualität
+ - [Kino] Anzeige Release Qualität
+ - [KinoGer] Anpassung Qualität Anzeige
+ - [Movie2k] Temporär deaktiviert
+ - [Movie4k] wurde entfernt da jetzt Streamkiste Movie4k ist
+ - [Kinox] Fix für Filme A - Z THX @ keypusher
+ - [Cinemathek] Menüpunkt Regisseure hinzugefügt
+ - [GUI Element] Anpassung und Einheit Sprache
+ - [Tools] Hinzufügen HTML Konvertierung
+ - [RequestHandler] sUrl Umlaute konvertieren
+ - [Filmpalast] Entfernung temp. Fix Komödie
+ - [Kinox] Anpassung Sprachelemente
+ - [xCine] überarbeitet
+	+ Jahr hinzugefügt 
+	+ Episoden Info hinzugefügt
+	+ Thumbnail bei Episode repariert
+ - [Flimmerstube] Regex angepasst
+	+ Qualität hinzugefügt
+	+ Sprachelemente angepasst
+ - [Tools] zusäztliche Konvertierungselemente hinzugefügt
+ - [RequestHandler] zusäztliche Konvertierungselemente hinzugefügt
+ - [Serienstream] Fix Hosterauswahl Anzeige HD SD Stream
+ - [GUI] sInfo Element hinzugefügt
+ - [GUI Element] sInfo Gui Element hinzugefügt
+ - [Cinemathek] Neue Episoden überarbeitet
+	+ Eigene Definition erstellt
+	+ TvShowTitle hinzugefügt
+	+ Staffel Nummer hinzugefügt
+	+ Episoden Nummer hinzugefügt
+ - [HDFilme] komplett überarbeitet
+	+ Neues Icon hinzugefügt
+ - [Kino] sInfo korrigiert
+ - [Kinokiste] teilweise überarbeitet
+	+ Regex angepasst 
+	+ Episoden Info hinzugefügt
+	+ Beschreibung bei Episode hinzugefügt
+ - [KKiste] sInfo korrigiert
+ - [Movie4k] teilweise überarbeitet
+	+ Regex angepasst
+	+ Episoden Info hinzugefügt
+	+ Beschreibung bei Episode hinzugefügt
+ - [Streamkiste] teilweise überarbeitet
+	+ Regex angepasst 
+	+ Episoden Info hinzugefügt
+	+ Thumbnail bei Episode repariert
+	+ Abfrage der voreingestellten Sprache
+	+ HTML Cache Episode hinzugefügt
+ - [HDFilme] komplett überarbeitet
+	+ Regex angepasst
+	+ Beschreibung hinzugefügt
+	+ Jahr hinzugefügt
+	+ Laufzeit hinzugefügt
+	+ Episoden Info hinzugefügt
+ - [Kino] teilweise überarbeitet
+	+ Regex angepasst
+	+ Qualität hinzugefügt
+	+ Episoden Info hinzugefügt
+	+ Beschreibung bei Episode hinzugefügt
+ - [KKiste] teilweise überarbeitet
+	+ Regex angepasst
+	+ Qualität hinzugefügt
+	+ Episoden Info hinzugefügt
+ - [Megakino] teilweise überarbeitet
+	+ Regex angepasst
+	+ Qualität hinzugefügt bzw. überarbeitet
+	+ Episoden Info hinzugefügt
+	+ Beschreibung bei Episode hinzugefügt
+ - [RequestHandler] ClearCache Info Einblendung hinzugefügt
+ - [Movieking] Siteplugin für neue Domain
+ - [Cinemathek] show Episodes fix (thumb Regex)
  - [Cinemathek] Hoster ausschließen hinzugefügt
  - [Filmpalast] Code überarbeitet
  - [Movieking] entfernt

@@ -153,6 +153,9 @@ def showHosters():
 
 
 def getHosterUrl(sUrl=False):
+    Request = cRequestHandler(sUrl, caching=False)
+    Request.request()
+    sUrl = Request.getRealUrl()  # hole reale URL von der Umleitung
     return [{'streamUrl': sUrl, 'resolved': False}]
 
 

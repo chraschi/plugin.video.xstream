@@ -15,12 +15,14 @@ import json
 from resources.lib.config import cConfig
 from resources.lib.tools import logger
 from resources.lib import common
+
 from urllib.parse import quote, urlencode, urlparse
 from urllib.error import HTTPError, URLError
 from urllib.request import HTTPHandler, HTTPSHandler, HTTPCookieProcessor, build_opener, Request, HTTPRedirectHandler
 from http.cookiejar import LWPCookieJar, Cookie
 from http.client import HTTPException
 from xbmc import LOGINFO as LOGNOTICE, LOGERROR, LOGWARNING, LOGDEBUG, log, executebuiltin, getCondVisibility, getInfoLabel
+
 
 class cRequestHandler:
     def __init__(self, sUrl, caching=True, ignoreErrors=False, compression=True, jspost=False, ssl_verify=False):
@@ -89,7 +91,11 @@ class cRequestHandler:
             self.addHeaderEntry('Accept-Encoding', 'gzip, deflate')
 
     def request(self):
-        self._sUrl = self._sUrl.replace(' ', '+')
+        # für Leerzeichen und Umlaute in der sUrl
+        for t in ((' ', '+'), ('²', '&#xB2;'), ('³', '&#xB3;'), ('´', '&#xB4;'), ("'", "&#x27;"),('`', '&#x60;'), ('Ä', '&#xC4;'), ('ä', '&#xE4;'),
+                  ('Ö', '&#xD6;'), ('ö', '&#xF6;'), ('Ü', '&#xDC;'), ('ü', '&#xFC;'), ('ß', '&#xDF;'), ('¼', '&#xBC;'), ('½', '&#xBD;'),
+                  ('¾', '&#xBE;'), ('⅓', '&#8531;')):
+            self._sUrl = self._sUrl.replace(*t)
         if self.caching and self.cacheTime > 0:
             sContent = self.readCache(self.getRequestUri())
             if sContent:
@@ -275,6 +281,7 @@ class cRequestHandler:
         files = os.listdir(self._cachePath)
         for file in files:
             os.remove(os.path.join(self._cachePath, file))
+            xbmcgui.Dialog().notification('xStream', cConfig().getLocalizedString(30405), xbmcgui.NOTIFICATION_INFO, 100, False)
 
 
 class cBF:

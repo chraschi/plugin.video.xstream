@@ -61,7 +61,6 @@ def load(): # Menu structure of the site plugin
 def showGenre():
     params = ParameterHandler()
     entryUrl = params.getValue('sUrl')
-    #sHtmlContent = cRequestHandler(entryUrl).request()
     oRequest = cRequestHandler(entryUrl)
     if cConfig().getSetting('global_search_' + SITE_IDENTIFIER) == 'true':
         oRequest.cacheTime = 60 * 60 * 48  # 48 Stunden
@@ -94,19 +93,19 @@ def showEntries(entryUrl=False, sGui=False, sSearchText=False):
         else:
             oRequest.addParameters('c', '')
     sHtmlContent = oRequest.request()
-    pattern = 've-screen..title="([^(]+).(....).*?url[^>]([^")]+).*?href="([^">]+)' #inklusive sYear
+    pattern = 've-screen"\s+title="([^"]+).*?url[^>]([^")]+).*?href="([^">]+)' #inklusive sYear
     isMatch, aResult = cParser.parse(sHtmlContent, pattern)
-    pattern = 'class="ve-screen..title="\(.*?D\)([^(]+).(....).*?url[^>]([^")]+).*?href="([^">]+)' #weiterer Pattern für Einträge beginnend mit (OmU...)
-    isMatch, aResult2 = cParser.parse(sHtmlContent, pattern)
-
-    aResult = aResult + aResult2
-    if not aResult:
-        if not sGui: oGui.showInfo()
-        return
 
     total = len(aResult)
-    for sName, sYear, sThumbnail, sUrl in aResult:
-        sName = sName.replace('(HD)', '')
+    for sName, sThumbnail, sUrl in aResult:
+        isQuality, sQuality = cParser.parse(sName, 'HD')
+        for t in (('(HD)', ''), ('(OmU/HD)', '')): # Ausblenden der Elemente im sName vorne
+            sName = sName.replace(*t)
+        isYear, sYear = cParser.parse(sName, '(.*?)\((\d*)\)') # Jahr und Name trennen
+        for name, year in sYear:
+            sName = name
+            sYear = year
+            break
         if sSearchText and not cParser().search(sSearchText, sName):
             continue
         if sThumbnail.startswith('/'):
@@ -114,7 +113,14 @@ def showEntries(entryUrl=False, sGui=False, sSearchText=False):
         oGuiElement = cGuiElement(sName, SITE_IDENTIFIER, 'showHosters')
         oGuiElement.setThumbnail(sThumbnail)
         oGuiElement.setMediaType('movie')
+        if isQuality:
+            oGuiElement.setQuality(sQuality)
         oGuiElement.setYear(sYear)
+        # Sprache GUI Element English und Originalsprache mit Untertiteln
+        if '/english_movies' in sUrl:
+            oGuiElement.setLanguage('EN')
+        if '/omu_originalsprache' in sUrl:
+            oGuiElement.setLanguage('OmU')
         params.setParam('entryUrl', URL_MAIN + sUrl)
         oGui.addFolder(oGuiElement, params, False, total)
     if not sGui:

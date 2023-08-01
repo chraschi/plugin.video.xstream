@@ -1026,8 +1026,9 @@ msgctxt "#30404"
 msgid "Exclude specific hosters (separate with a comma)"
 msgstr ""
 
-
-
+msgctxt "#30405"
+msgid "HTML cache folder has been cleaned"
+msgstr ""
 
 ############### Scaper Language ###############
 
@@ -1036,7 +1037,7 @@ msgid "New"
 msgstr ""
 
 msgctxt "#30501"
-msgid "Current films in the cinema"
+msgid "Current Movies in the cinema"
 msgstr ""
 
 msgctxt "#30502"
@@ -1044,11 +1045,11 @@ msgid "Movies"
 msgstr ""
 
 msgctxt "#30503"
-msgid "Films for Children"
+msgid "Movies for Children"
 msgstr ""
 
 msgctxt "#30504"
-msgid "Animated Films"
+msgid "Animated Movies"
 msgstr ""
 
 msgctxt "#30505"
@@ -1140,7 +1141,7 @@ msgid "Random Serie"
 msgstr ""
 
 msgctxt "#30527"
-msgid "Exclude specific hosters (separate with a comma)"
+msgid "Directors"
 msgstr ""
 
 msgctxt "#30528"
@@ -1238,7 +1239,7 @@ msgid "Movie4k"
 msgstr ""
 
 msgctxt "#30712"
-msgid ""
+msgid "MovieKing"
 msgstr ""
 
 msgctxt "#30713"
