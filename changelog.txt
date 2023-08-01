@@ -1,45 +1,20 @@
-[B]Version: 4.0.6~Nightly 11[/B]
+[B]Version: 4.0.6~Release[/B]
 
 01.08.2023
 
  - [Cinemathek] Regex fixed
-
-[COLOR cyan]________________________________________________________________________________________[/COLOR]
-
-01.07.2023
-
  - [KinoGer] Anpassung Qualität Anzeige
 	+ Code fixed
 	+ Qualität Prio hinzugefügt
 	+ Hoster Streamhide hinzugefügt
-
-[COLOR cyan]________________________________________________________________________________________[/COLOR]
-
-23.06.2023
-
  - [Cinemathek] Anzeige Release Qualität
  - [Filmpalast] Anzeige Release Qualität
  - [Kino] Anzeige Release Qualität
  - [KinoGer] Anpassung Qualität Anzeige
  - [Movie2k] Temporär deaktiviert
  - [Movie4k] wurde entfernt da jetzt Streamkiste Movie4k ist
-
-[COLOR cyan]________________________________________________________________________________________[/COLOR]
-
-23.06.2023
-
  - [Kinox] Fix für Filme A - Z THX @ keypusher
-
-[COLOR cyan]________________________________________________________________________________________[/COLOR]
-
-21.06.2023
-
  - [Cinemathek] Menüpunkt Regisseure hinzugefügt
-
-[COLOR cyan]________________________________________________________________________________________[/COLOR]
-
-13.06.2023
-
  - [GUI Element] Anpassung und Einheit Sprache
  - [Tools] Hinzufügen HTML Konvertierung
  - [RequestHandler] sUrl Umlaute konvertieren
@@ -54,17 +29,7 @@
 	+ Sprachelemente angepasst
  - [Tools] zusäztliche Konvertierungselemente hinzugefügt
  - [RequestHandler] zusäztliche Konvertierungselemente hinzugefügt
-
-[COLOR cyan]________________________________________________________________________________________[/COLOR]
-
-11.06.2023
-
  - [Serienstream] Fix Hosterauswahl Anzeige HD SD Stream
-
-[COLOR cyan]________________________________________________________________________________________[/COLOR]
-
-07.06.2023
-
  - [GUI] sInfo Element hinzugefügt
  - [GUI Element] sInfo Gui Element hinzugefügt
  - [Cinemathek] Neue Episoden überarbeitet
@@ -90,11 +55,6 @@
 	+ Thumbnail bei Episode repariert
 	+ Abfrage der voreingestellten Sprache
 	+ HTML Cache Episode hinzugefügt
- 
-[COLOR cyan]________________________________________________________________________________________[/COLOR]
-
-06.06.2023
-
  - [HDFilme] komplett überarbeitet
 	+ Regex angepasst
 	+ Beschreibung hinzugefügt
@@ -116,25 +76,8 @@
 	+ Episoden Info hinzugefügt
 	+ Beschreibung bei Episode hinzugefügt
  - [RequestHandler] ClearCache Info Einblendung hinzugefügt
-	
-[COLOR cyan]________________________________________________________________________________________[/COLOR]
- 
-31.05.2023
-
  - [Movieking] Siteplugin für neue Domain
- Bitte unbedingt in den xStream Einstellungen die Domain
- von movieking.cc auf movieking.io wechseln !!!
- 
-[COLOR cyan]________________________________________________________________________________________[/COLOR]
-
-30.05.2023
-
  - [Cinemathek] show Episodes fix (thumb Regex)
- 
-[COLOR cyan]________________________________________________________________________________________[/COLOR]
-
-23.03.2023 - 28.05.2023
-
  - [Cinemathek] Hoster ausschließen hinzugefügt
  - [Filmpalast] Code überarbeitet
  - [Movieking] entfernt
