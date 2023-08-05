@@ -1282,7 +1282,7 @@ msgid "Streamen"
 msgstr ""
 
 msgctxt "#30723"
-msgid "Movie2k"
+msgid "Kiste"
 msgstr ""
 
 msgctxt "#30724"
@@ -1291,4 +1291,16 @@ msgstr ""
 
 msgctxt "#30725"
 msgid "Streamcloud"
+msgstr ""
+
+msgctxt "#30726"
+msgid "Stumbleupon"
+msgstr ""
+
+msgctxt "#30727"
+msgid "CineClix"
+msgstr ""
+
+msgctxt "#30728"
+msgid "Moflix-Stream"
 msgstr ""

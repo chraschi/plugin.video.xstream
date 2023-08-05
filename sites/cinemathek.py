@@ -264,10 +264,16 @@ def showEpisodes():
     pattern = '>Season %s <i>.*?</ul>' % sSeason # Suche alles in diesem Bereich
     isMatch, sContainer = cParser.parseSingleResult(sHtmlContent, pattern)
     if isMatch:
-        pattern = "mark-([\d]+).*?" # Episoden Eintrag
+        pattern = "mark-([\d]+).*?'" # Episoden Eintrag
         pattern += "img src='([^']+).*?" # sThumbnail
         pattern += "<a href='([^']+).*?" # sUrl
         pattern += ">([^<]+)</a>" # sName
+        isMatch, aResult = cParser.parse(sContainer, pattern)
+    if not isMatch:
+        pattern = 'mark-([\d]+).*?' # Episoden Eintrag
+        pattern += 'img src="([^"]+).*?' # sThumbnail
+        pattern += '<a href="([^"]+).*?' # sUrl
+        pattern += '>([^<]+)</a>' # sName
         isMatch, aResult = cParser.parse(sContainer, pattern)
 
     isDesc, sDesc = cParser.parseSingleResult(sHtmlContent, 'class="wp-content">(.*?)</p>')  # Beschreibung
@@ -300,6 +306,14 @@ def showHosters():
     pattern += "starten!\s([^<]+)" # Eintrag [3] = sName des Link Eintrag
     releaseQuality = ">Release:.*?\s*(\d\d\d+)p"  # Hoster Release Quality Kennzeichen
     isMatch, aResult = cParser().parse(sHtmlContent, pattern)
+    if not isMatch:
+        pattern = 'player-option-\d.*?'  # Player Option Nr. z.B 1 für Link 1
+        pattern += 'type="([^"]+).*?'  # Eintrag [0] movie oder tv
+        pattern += 'post="(\d+).*?'  # Eintrag [1] ist die Film oder Serien Nr.29224
+        pattern += 'nume="(\d).*?'  # Eintrag [2] ist die Link Nr.1
+        pattern += 'starten!\s([^<]+)'  # Eintrag [3] = sName des Link Eintrag
+        releaseQuality = '>Release:.*?\s*(\d\d\d+)p'  # Hoster Release Quality Kennzeichen
+        isMatch, aResult = cParser().parse(sHtmlContent, pattern)
     isQuality, sQuality = cParser.parseSingleResult(sHtmlContent, releaseQuality)  # sReleaseQuality auslesen z.B. 1080
     if not isQuality: sQuality = '720'
     if isMatch:

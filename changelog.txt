@@ -1,5 +1,11 @@
-[B]Version: 4.0.7~Nightly1[/B]
+[B]Version: 4.0.7~Nightly2[/B]
 
+05.08.2023
+
+ - [Cinemathek] Regex fixed
+ 
+[COLOR cyan]________________________________________________________________________________________[/COLOR]
+ 
 01.08.2023
 
  - [Cinemathek] Regex fixed
