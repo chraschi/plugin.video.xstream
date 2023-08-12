@@ -21,7 +21,7 @@ if cConfig().getSetting('global_search_' + SITE_IDENTIFIER) == 'false':
     logger.info('-> [SitePlugin]: globalSearch for %s is deactivated.' % SITE_NAME)
 
 # Domain Abfrage
-DOMAIN = cConfig().getSetting('plugin_'+ SITE_IDENTIFIER +'.domain', 'www15.kinoz.to')
+DOMAIN = cConfig().getSetting('plugin_'+ SITE_IDENTIFIER +'.domain', 'ww18.kinoz.to')
 URL_MAIN = 'https://' + DOMAIN
 #URL_MAIN = 'https://www15.kinoz.to'
 URL_NEWS = URL_MAIN + '/index.php'

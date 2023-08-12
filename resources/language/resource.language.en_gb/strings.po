@@ -1251,7 +1251,7 @@ msgid "SerienStream"
 msgstr ""
 
 msgctxt "#30715"
-msgid "Streamworld"
+msgid ""
 msgstr ""
 
 msgctxt "#30716"

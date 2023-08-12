@@ -325,6 +325,45 @@
 					</control>
 				</setting>
 			</group>
+			<group id="cineclix" label="30727">
+				<setting id="plugin_cineclix" type="boolean" label="30050" help="">
+					<level>0</level>
+					<default>True</default>
+					<control type="toggle"/>
+				</setting>
+				<setting id="global_search_cineclix" type="boolean" label="30052">
+					<level>0</level>
+					<default>False</default>
+					<dependencies>
+						<dependency type="enable" operator="!is" setting="plugin_cineclix">False</dependency>
+					</dependencies>
+					<control type="toggle"/>
+				</setting>
+				<!-- Domain Überprüfung mit automatischer und manueller Anpassung -->
+				<setting id="plugin_cineclix_checkDomain" type="boolean" label="30277">
+					<level>3</level>
+					<default>False</default>
+					<dependencies>
+						<dependency type="enable" operator="!is" setting="plugin_cineclix">false</dependency>
+						<dependency type="visible" operator="!is" setting="plugin_cineclix">false</dependency>
+					</dependencies>
+					<control type="toggle"/>
+				</setting>
+				<setting id="plugin_cineclix.domain" type="string" label="30278" help="">
+					<level>3</level>
+					<default/>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<dependencies>
+						<dependency type="enable" operator="!is" setting="plugin_cineclix">false</dependency>
+						<dependency type="visible" operator="!is" setting="plugin_cineclix">false</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading>30278</heading>
+					</control>
+				</setting>
+			</group>
 			<group id="cinemathek" label="30720">
 				<setting id="plugin_cinemathek" type="boolean" label="30050" help="">
 					<level>0</level>
@@ -696,6 +735,45 @@
 					</control>
 				</setting>
 			</group>
+			<group id="plugin_kiste" label="30723">
+				<setting id="plugin_kiste" type="boolean" label="30050" help="">
+					<level>0</level>
+                    <default>True</default>
+					<control type="toggle"/>
+				</setting>
+				<setting id="global_search_kiste" type="boolean" label="30052">
+					<level>0</level>
+					<default>True</default>
+					<dependencies>
+						<dependency type="enable" operator="!is" setting="plugin_kiste">False</dependency>
+					</dependencies>
+					<control type="toggle"/>
+				</setting>
+
+				<setting id="plugin_kiste_checkDomain" type="boolean" label="30277">
+					<level>3</level>
+					<default>True</default>
+					<dependencies>
+						<dependency type="enable" operator="!is" setting="plugin_kiste">false</dependency>
+						<dependency type="visible" operator="!is" setting="plugin_kiste">false</dependency>
+					</dependencies>
+					<control type="toggle"/>
+				</setting>
+				<setting id="plugin_kiste.domain" type="string" label="30278" help="">
+					<level>3</level>
+					<default/>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<dependencies>
+						<dependency type="enable" operator="!is" setting="plugin_kiste">false</dependency>
+						<dependency type="visible" operator="!is" setting="plugin_kiste">false</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading>30278</heading>
+					</control>
+				</setting>
+			</group>
 			<group id="plugin_kkiste" label="30709">
 				<setting id="plugin_kkiste" type="boolean" label="30050" help="">
 					<level>0</level>
@@ -768,6 +846,84 @@
 					<dependencies>
 						<dependency type="enable" operator="!is" setting="plugin_megakino">false</dependency>
 						<dependency type="visible" operator="!is" setting="plugin_megakino">false</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading>30278</heading>
+					</control>
+				</setting>
+			</group>
+			<group id="plugin_moflix-stream" label="30728">
+				<setting id="plugin_moflix-stream" type="boolean" label="30050" help="">
+					<level>0</level>
+                    <default>True</default>
+					<control type="toggle"/>
+				</setting>
+				<setting id="global_search_moflix-stream" type="boolean" label="30052">
+					<level>0</level>
+					<default>True</default>
+					<dependencies>
+						<dependency type="enable" operator="!is" setting="plugin_moflix-stream">False</dependency>
+					</dependencies>
+					<control type="toggle"/>
+				</setting>
+				<!-- Domain Überprüfung mit automatischer und manueller Anpassung -->
+				<setting id="plugin_moflix-stream_checkDomain" type="boolean" label="30277">
+					<level>3</level>
+					<default>True</default>
+					<dependencies>
+						<dependency type="enable" operator="!is" setting="plugin_moflix-stream">false</dependency>
+						<dependency type="visible" operator="!is" setting="plugin_moflix-stream">false</dependency>
+					</dependencies>
+					<control type="toggle"/>
+				</setting>
+				<setting id="plugin_moflix-stream.domain" type="string" label="30278" help="">
+					<level>3</level>
+					<default/>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<dependencies>
+						<dependency type="enable" operator="!is" setting="plugin_moflix-stream">false</dependency>
+						<dependency type="visible" operator="!is" setting="plugin_moflix-stream">false</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading>30278</heading>
+					</control>
+				</setting>
+			</group>
+			<group id="plugin_movie4k" label="30711">
+				<setting id="plugin_movie4k" type="boolean" label="30050" help="">
+					<level>0</level>
+                    <default>True</default>
+					<control type="toggle"/>
+				</setting>
+				<setting id="global_search_movie4k" type="boolean" label="30052">
+					<level>0</level>
+					<default>True</default>
+					<dependencies>
+						<dependency type="enable" operator="!is" setting="plugin_movie4k">False</dependency>
+					</dependencies>
+					<control type="toggle"/>
+				</setting>
+				<!-- Domain Überprüfung mit automatischer und manueller Anpassung -->
+				<setting id="plugin_movie4k_checkDomain" type="boolean" label="30277">
+					<level>3</level>
+					<default>True</default>
+					<dependencies>
+						<dependency type="enable" operator="!is" setting="plugin_movie4k">false</dependency>
+						<dependency type="visible" operator="!is" setting="plugin_movie4k">false</dependency>
+					</dependencies>
+					<control type="toggle"/>
+				</setting>
+				<setting id="plugin_movie4k.domain" type="string" label="30278" help="">
+					<level>3</level>
+					<default/>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<dependencies>
+						<dependency type="enable" operator="!is" setting="plugin_movie4k">false</dependency>
+						<dependency type="visible" operator="!is" setting="plugin_movie4k">false</dependency>
 					</dependencies>
 					<control type="edit" format="string">
 						<heading>30278</heading>
@@ -987,39 +1143,39 @@
 					</control>
 				</setting>
 			</group>
-			<group id="plugin_streamworld" label="30715">
-				<setting id="plugin_streamworld" type="boolean" label="30050" help="">
+			<group id="plugin_stumbleupon" label="30726">
+				<setting id="plugin_stumbleupon" type="boolean" label="30050" help="">
 					<level>0</level>
                     <default>True</default>
 					<control type="toggle"/>
-				</setting>				
-				<setting id="global_search_streamworld" type="boolean" label="30052">
+				</setting>
+				<setting id="global_search_stumbleupon" type="boolean" label="30052">
 					<level>0</level>
-					<default>True</default>
+					<default>False</default>
 					<dependencies>
-						<dependency type="enable" operator="!is" setting="plugin_streamworld">False</dependency>
+						<dependency type="enable" operator="!is" setting="plugin_stumbleupon">False</dependency>
 					</dependencies>
 					<control type="toggle"/>
 				</setting>
 				<!-- Domain Überprüfung mit automatischer und manueller Anpassung -->
-				<setting id="plugin_streamworld_checkDomain" type="boolean" label="30277">
+				<setting id="plugin_stumbleupon_checkDomain" type="boolean" label="30277">
 					<level>3</level>
-					<default>True</default>
+					<default>False</default>
 					<dependencies>
-						<dependency type="enable" operator="!is" setting="plugin_streamworld">false</dependency>
-						<dependency type="visible" operator="!is" setting="plugin_streamworld">false</dependency>
+						<dependency type="enable" operator="!is" setting="plugin_stumbleupon">false</dependency>
+						<dependency type="visible" operator="!is" setting="plugin_stumbleupon">false</dependency>
 					</dependencies>
 					<control type="toggle"/>
 				</setting>
-				<setting id="plugin_streamworld.domain" type="string" label="30278" help="">
+				<setting id="plugin_stumbleupon.domain" type="string" label="30278" help="">
 					<level>3</level>
 					<default/>
 					<constraints>
 						<allowempty>true</allowempty>
 					</constraints>
 					<dependencies>
-						<dependency type="enable" operator="!is" setting="plugin_streamworld">false</dependency>
-						<dependency type="visible" operator="!is" setting="plugin_streamworld">false</dependency>
+						<dependency type="enable" operator="!is" setting="plugin_stumbleupon">false</dependency>
+						<dependency type="visible" operator="!is" setting="plugin_stumbleupon">false</dependency>
 					</dependencies>
 					<control type="edit" format="string">
 						<heading>30278</heading>

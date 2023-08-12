@@ -28,6 +28,7 @@ if cConfig().getSetting('global_search_' + SITE_IDENTIFIER) == 'false':
 DOMAIN = cConfig().getSetting('plugin_'+ SITE_IDENTIFIER +'.domain', 'xcine.click')
 URL_MAIN = 'https://' + DOMAIN + '/'
 #URL_MAIN = 'https://xcine.click/'
+URL_NEW = URL_MAIN + 'kinofilme-online/'
 URL_KINO = URL_MAIN + 'aktuelle-kinofilme-im-kino/'
 URL_MOVIES = URL_MAIN + 'kinofilme-online'
 URL_ANIMATION = URL_MAIN + 'animation/'
@@ -38,6 +39,8 @@ URL_SEARCH = URL_MAIN + 'index.php?do=search&subaction=search&story=%s'
 def load(): # Menu structure of the site plugin
     logger.info('Load %s' % SITE_NAME)
     params = ParameterHandler()
+    params.setParam('sUrl', URL_NEW)
+    cGui().addFolder(cGuiElement(cConfig().getLocalizedString(30500), SITE_IDENTIFIER, 'showEntries'), params)  # New
     params.setParam('sUrl', URL_KINO)
     cGui().addFolder(cGuiElement(cConfig().getLocalizedString(30501), SITE_IDENTIFIER, 'showEntries'), params)  # Current films in the cinema 
     params.setParam('sUrl', URL_MOVIES)

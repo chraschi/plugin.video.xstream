@@ -58,7 +58,7 @@ def showGenre():
     isMatch, sResult = cParser.parseSingleResult(sHtmlContent, pattern)
     pattern = 'href="([^"]+).*?>([^<]+)'
     isMatch, aResult = cParser.parse(sResult, pattern)
-
+    if not isMatch: return
     for sUrl, sName in aResult:
         if sUrl.startswith('/'):
             sUrl = URL_MAIN + sUrl
@@ -82,10 +82,7 @@ def showEntries(entryUrl=False, sGui=False, sSearchText=False):
     pattern += 'alt(.*?)' # info dummy
     pattern += 'short-title">([^<]+)'  # name
     isMatch, aResult = cParser.parse(sHtmlContent, pattern)
-    if not isMatch:
-        if not sGui: oGui.showInfo()
-        return
-
+    if not isMatch: return
     total = len(aResult)
     isTvshow = None
     for sDummy, sUrl, sThumbnail, sInfo, sName in aResult:
@@ -123,10 +120,7 @@ def showEpisodes():
     sHtmlContent = oRequest.request()
     pattern = 'id="episode(\d+)' # d fügt Anzahl der Episoden hinzu
     isMatch, aResult = cParser.parse(sHtmlContent, pattern)
-    if not isMatch:
-        cGui().showInfo()
-        return
-
+    if not isMatch: return
     isDesc, sDesc = cParser.parseSingleResult(sHtmlContent, 's-desc">([^<]+)')  # Beschreibung
     total = len(aResult)
     for sName in aResult:
@@ -158,11 +152,12 @@ def showHosters():
     pattern = 'href="([^"]+).*?seriePlayer.*?</i>([^<]+)'
     releaseQuality = 'Qualität:.*?\d{3,4}.*?(\d\d\d+)P'  # Hoster Release Quality Kennzeichen
     isMatch, aResult = cParser.parse(aResult[0], pattern)   # Nimmt nur das 1.Result
+    if not isMatch: return
     isQuality, sQuality = cParser.parseSingleResult(sHtmlContent, releaseQuality)  # sReleaseQuality auslesen z.B. 1080
     if not isQuality: sQuality = '720'
     for sUrl, sName in aResult:
         if cConfig().isBlockedHoster(sUrl)[0]: continue # Hoster aus settings.xml oder deaktivierten Resolver ausschließen
-        hoster = {'link': sUrl, 'name': sName, 'displayedName': '%s [I][%sp][/I]' % (sName, sQuality), 'quality': sQuality}  # Qualität Anzeige aus Release Eintrag
+        hoster = {'link': sUrl, 'name': sName, 'displayedName': '%s [I][%sp][/I]' % (sName, sQuality), 'quality': sQuality, 'resolveable': True}
         hosters.append(hoster)    
     if hosters:
         hosters.append('getHosterUrl')

@@ -1,8 +1,37 @@
-[B]Version: 4.0.7~Nightly2[/B]
+[B]Version: 4.0.7~Nightly3[/B]
+
+13.08.2023
+
+[COLOR red]Achtung der Hoster StreamSB ist Offline dadurch fehlen bei den SitePlugins
+viele Streams. Es sind mehrere SitePlugins betroffen.[/COLOR]
+
+ - [Cinemathek] Code Anpassungen
+ - [CineClix] Neue Seite hinzugefügt
+    + Experimentelles Plugin Benutzung auf eigene Gefahr!
+    + Globale Suche + Domain Aktualisierung muss selbst aktiviert werden!
+ - [GuiElement] Code Anpassungen
+ - [Kino] Code Anpassungen
+ - [Kinoger] Code Anpassungen
+    + Kinoger.pw (StreamSB) Code entfernt
+	+ Kinoger.re Code entfernt
+ - [Kinox] URL Anpassung
+ - [Moflix-Stream] Neue Seite hinzugefügt
+ - [Movie4k] Seite wieder hinzugefügt
+    + Code Anpassungen
+ - [StreamPalace] Code Anpassungen
+ - [StreamWorld] Seite entfernt
+ - [Stumbleupon]
+    + Experimentelles Plugin Benutzung auf eigene Gefahr!
+    + Globale Suche + Domain Aktualisierung muss selbst aktiviert werden!
+ - [xCine] Menü Neues hinzugefügt
+
+
+[COLOR cyan]________________________________________________________________________________________[/COLOR]
 
 05.08.2023
 
  - [Cinemathek] Regex fixed
+ - [Tools] quote hinzugefügt
  
 [COLOR cyan]________________________________________________________________________________________[/COLOR]
  

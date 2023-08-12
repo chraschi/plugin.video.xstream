@@ -62,10 +62,7 @@ def showGenre():
     isMatch, sHtmlContainer = cParser.parseSingleResult(sHtmlContent, pattern)
     if isMatch:
         isMatch, aResult = cParser.parse(sHtmlContainer, 'href="([^"]+).*?>([^<]+)') # sUrl + sName
-    if not isMatch:
-        cGui().showInfo()
-        return
-
+    if not isMatch: return
     for sUrl, sName in aResult:
         if sUrl.startswith('/'):
             sUrl = URL_MAIN + sUrl
@@ -85,10 +82,7 @@ def showRegs():
     isMatch, sHtmlContainer = cParser.parseSingleResult(sHtmlContent, pattern)
     if isMatch:
         isMatch, aResult = cParser.parse(sHtmlContainer, 'href="([^"]+).*?>([^<]+)') # sUrl + sName
-    if not isMatch:
-        cGui().showInfo()
-        return
-
+    if not isMatch: return
     for sUrl, sName in aResult:
         if sUrl.startswith('/'):
             sUrl = URL_MAIN + sUrl
@@ -121,7 +115,7 @@ def showEntries(entryUrl=False, sGui=False, sSearchText=False):
         pattern += '>([^<]+).*?'  # name
         pattern += '(.*?)</article>'  # dummy
         isMatch, aResult = cParser.parse(sHtmlContent, pattern)
-
+    if not isMatch: return
     total = len(aResult)
     for sThumbnail, sUrl, sName, sDummy in aResult:
         if sSearchText and not cParser.search(sSearchText, sName):
@@ -130,15 +124,12 @@ def showEntries(entryUrl=False, sGui=False, sSearchText=False):
         isDesc, sDesc = cParser.parseSingleResult(sDummy, '<div class="texto">([^<]+)') # Beschreibung
         if not isDesc:
             isDesc, sDesc = cParser.parseSingleResult(sDummy, 'class="contenido"><p>([^<]+)\s') # Beschreibung in der Suche
-
         isYear, sYear = cParser.parseSingleResult(sDummy, 'class="imdb">\S+.*?\S+.*?<span>([\d]+)') # Release Jahr
         if not isYear:
             isYear, sYear = cParser.parseSingleResult(sDummy, 'class="year">([\d]+)') # Release Jahr in der Suche
         if not isYear:
             isYear, sYear = cParser.parseSingleResult(sDummy, 'metadata"> <span>([\d]+)') # Release Jahr
-
         isDuration, sDuration = cParser.parseSingleResult(sDummy, '<span>([\d]+)\smin')  # Laufzeit
-
         isRating, sRating = cParser.parseSingleResult(sDummy, 'IMDb:([^<]+)') # IMDb Bewertung
         if not isRating:
             isRating, sRating = cParser.parseSingleResult(sDummy, 'IMDb\s([^<]+)')# IMDb Bewertung in der Suche
@@ -160,14 +151,11 @@ def showEntries(entryUrl=False, sGui=False, sSearchText=False):
         params.setParam('entryUrl', sUrl)
         params.setParam('sName', sName)
         oGui.addFolder(oGuiElement, params, isTvshow, total)
-
     if not sGui and not sSearchText:
-
         isMatchNextPage, sNextUrl = cParser.parseSingleResult(sHtmlContent, '<link[^>]*rel="next"[^>]*href="([^"]+)"') # Nächste Seite
         if isMatchNextPage:
             params.setParam('sUrl', sNextUrl)
             oGui.addNextPage(SITE_IDENTIFIER, 'showEntries', params)
-
         oGui.setView('tvshows' if isTvshow else 'movies')
         oGui.setEndOfDirectory()
 
@@ -189,7 +177,7 @@ def showNewEpisodes(entryUrl=False, sGui=False, sSearchText=False):
     pattern += '\sE([\d]+)'  # Episoden Nummer
     pattern += '(.*?)</article>'  # dummy
     isMatch, aResult = cParser.parse(sHtmlContent, pattern)  # neue Episoden
-
+    if not isMatch: return
     total = len(aResult)
     for sThumbnail, sUrl, sName, sSeason, sEpisode, sDummy in aResult:
         isEpisode, aResult = cParser.parse(sUrl, 'episoden') # Im Episoden Content auffindbar
@@ -212,9 +200,7 @@ def showNewEpisodes(entryUrl=False, sGui=False, sSearchText=False):
         params.setParam('entryUrl', sUrl)
         params.setParam('sName', sName)
         cGui().addFolder(oGuiElement, params, False, total)
-
     if not sGui and not sSearchText:
-
         isMatchNextPage, sNextUrl = cParser.parseSingleResult(sHtmlContent, '<link[^>]*rel="next"[^>]*href="([^"]+)"') # Nächste Seite
         if isMatchNextPage:
             params.setParam('sUrl', sNextUrl)
@@ -234,10 +220,7 @@ def showSeasons():
         oRequest.cacheTime = 60 * 60 * 6  # HTML Cache Zeit 6 Stunden
     sHtmlContent = oRequest.request()
     isMatch, aResult = cParser.parse(sHtmlContent, 'Season ([\d]+)') # Sucht den Staffel Eintrag und d fügt die Anzahl hinzu
-    if not isMatch:
-        cGui().showInfo()
-        return
-
+    if not isMatch: return
     total = len(aResult)
     for sSeason in aResult:
         oGuiElement = cGuiElement('Staffel ' + sSeason, SITE_IDENTIFIER, 'showEpisodes')
@@ -275,7 +258,7 @@ def showEpisodes():
         pattern += '<a href="([^"]+).*?' # sUrl
         pattern += '>([^<]+)</a>' # sName
         isMatch, aResult = cParser.parse(sContainer, pattern)
-
+    if not isMatch: return
     isDesc, sDesc = cParser.parseSingleResult(sHtmlContent, 'class="wp-content">(.*?)</p>')  # Beschreibung
     total = len(aResult)
     for sEpisode, sThumbnail, sUrl, sName in aResult:
@@ -314,18 +297,16 @@ def showHosters():
         pattern += 'starten!\s([^<]+)'  # Eintrag [3] = sName des Link Eintrag
         releaseQuality = '>Release:.*?\s*(\d\d\d+)p'  # Hoster Release Quality Kennzeichen
         isMatch, aResult = cParser().parse(sHtmlContent, pattern)
+    if not isMatch: return
     isQuality, sQuality = cParser.parseSingleResult(sHtmlContent, releaseQuality)  # sReleaseQuality auslesen z.B. 1080
     if not isQuality: sQuality = '720'
     if isMatch:
         for sType, sID, sLink, sName in aResult:
             sUrl = 'https://cinemathek.net/wp-json/dooplayer/v2/%s/%s/%s' % (sID, sType, sLink)
             if cConfig().isBlockedHoster(sName)[0]: continue  # Hoster aus settings.xml oder deaktivierten Resolver ausschließen
-            hoster = {'link': sUrl, 'name': sName, 'displayedName': '%s [I][%sp][/I]' % (sName, sQuality), 'quality': sQuality} # Qualität Anzeige aus Release Eintrag
+            hoster = {'link': sUrl, 'name': sName, 'displayedName': '%s [I][%sp][/I]' % (sName, sQuality), 'quality': sQuality, 'resolveable': True}
             hosters.append(hoster)
-    if not isMatch:
-        cGui().showInfo()
-        return
-
+    if not isMatch: return
     if hosters:
         hosters.append('getHosterUrl')
     return hosters

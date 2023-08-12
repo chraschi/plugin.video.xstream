@@ -17,7 +17,7 @@ from resources.lib.config import cConfig
 from resources.lib.gui.gui import cGui
 
 SITE_IDENTIFIER = 'streampalace'
-SITE_NAME = 'Streampalace'
+SITE_NAME = 'StreamPalace'
 SITE_ICON = 'streampalace.png'
 
 # Global search function is thus deactivated!
@@ -38,8 +38,7 @@ def load():
     logger.info('Load %s' % SITE_NAME)
     params = ParameterHandler()
     params.setParam('sUrl', URL_MOVIES)
-    cGui().addFolder(cGuiElement(cConfig().getLocalizedString(30502), SITE_IDENTIFIER, 'showEntries'),
-                     params)  # Movies
+    cGui().addFolder(cGuiElement(cConfig().getLocalizedString(30502), SITE_IDENTIFIER, 'showEntries'), params)  # Movies
     params.setParam('sUrl', URL_SERIES)
     cGui().addFolder(cGuiElement(cConfig().getLocalizedString(30511), SITE_IDENTIFIER, 'showEntries'), params)  # Series
     params.setParam('sUrl', URL_MAIN)
@@ -60,10 +59,7 @@ def showGenre():
     isMatch, sHtmlContainer = cParser.parseSingleResult(sHtmlContent, pattern)
     if isMatch:
         isMatch, aResult = cParser.parse(sHtmlContainer, 'href="([^"]+).*?>([^<]+)')  # sUrl + sName
-    if not isMatch:
-        cGui().showInfo()
-        return
-
+    if not isMatch: return
     for sUrl, sName in aResult:
         params.setParam('sUrl', sUrl)
         cGui().addFolder(cGuiElement(sName, SITE_IDENTIFIER, 'showEntries'), params)
@@ -81,10 +77,7 @@ def showYears():
     isMatch, sHtmlContainer = cParser.parseSingleResult(sHtmlContent, pattern)
     if isMatch:
         isMatch, aResult = cParser.parse(sHtmlContainer, 'href="([^"]+).*?>([^<]+)')  # sUrl + sName
-    if not isMatch:
-        cGui().showInfo()
-        return
-
+        if not isMatch: return
     for sUrl, sName in aResult:
         params.setParam('sUrl', sUrl)
         cGui().addFolder(cGuiElement(sName, SITE_IDENTIFIER, 'showEntries'), params)
@@ -118,11 +111,10 @@ def showEntries(entryUrl=False, sGui=False, sSearchText=False):
         pattern += '>([^<]+).*?'  # name
         pattern += '(.*?)</article>'  # dummy
         isMatch, aResult = cParser.parse(sHtmlContent, pattern)
-
+    if not isMatch: return
     total = len(aResult)
     for sThumbnail, sUrl, sName, sDummy in aResult:
-        if sSearchText and not cParser.search(sSearchText, sName):
-            continue
+        if sSearchText and not cParser.search(sSearchText, sName): continue
         isTvshow, aResult = cParser.parse(sUrl, 'serien')  # Muss nur im Serien Content auffindbar sein
         isDesc, sDesc = cParser.parseSingleResult(sDummy, '<div class="texto">([^<]+)')  # Beschreibung
         if not isDesc:
@@ -155,14 +147,11 @@ def showEntries(entryUrl=False, sGui=False, sSearchText=False):
         params.setParam('entryUrl', sUrl)
         params.setParam('sName', sName)
         oGui.addFolder(oGuiElement, params, isTvshow, total)
-
     if not sGui and not sSearchText:
-
         isMatchNextPage, sNextUrl = cParser.parseSingleResult(sHtmlContent, '<link[^>]*rel="next"[^>]*href="([^"]+)"')  # Nächste Seite
         if isMatchNextPage:
             params.setParam('sUrl', sNextUrl)
             oGui.addNextPage(SITE_IDENTIFIER, 'showEntries', params)
-
         oGui.setView('tvshows' if isTvshow else 'movies')
         oGui.setEndOfDirectory()
 
@@ -178,10 +167,7 @@ def showSeasons():
         oRequest.cacheTime = 60 * 60 * 6  # HTML Cache Zeit 6 Stunden
     sHtmlContent = oRequest.request()
     isMatch, aResult = cParser.parse(sHtmlContent, 'Staffel ([\d]+)')  # Sucht den Staffel Eintrag und d fügt die Anzahl hinzu
-    if not isMatch:
-        cGui().showInfo()
-        return
-
+    if not isMatch: return
     total = len(aResult)
     for sSeason in aResult:
         oGuiElement = cGuiElement('Staffel ' + sSeason, SITE_IDENTIFIER, 'showEpisodes')
@@ -213,7 +199,13 @@ def showEpisodes():
         pattern += "<a href='([^']+).*?"  # sUrl
         pattern += ">([^<]+)</a>"  # sName
         isMatch, aResult = cParser.parse(sContainer, pattern)
-
+    if not isMatch:
+        pattern = 'mark-([\d]+).*?'  # Episoden Eintrag
+        pattern += 'img src="([^"]+).*?'  # sThumbnail
+        pattern += '<a href="([^"]+).*?'  # sUrl
+        pattern += '>([^<]+)</a>'  # sName
+        isMatch, aResult = cParser.parse(sContainer, pattern)
+    if not isMatch: return
     isDesc, sDesc = cParser.parseSingleResult(sHtmlContent, 'class="wp-content">(.*?)</p>')  # Beschreibung
     total = len(aResult)
     for sEpisode, sThumbnail, sUrl, sName in aResult:
@@ -240,10 +232,13 @@ def showHosters():
     isMatch, sHtmlContainer = cParser.parseSingleResult(sHtmlContent, pattern)
     if isMatch:
         isMatch, aResult = cParser.parse(sHtmlContainer, "href='([^']+).*?>([^<]+)")  # sUrl + sName
-
+    if not isMatch:
+        isMatch, aResult = cParser.parse(sHtmlContainer, 'href="([^"]+).*?>([^<]+)')  # sUrl + sName
+    if not isMatch: return
+    sQuality = '720p'
     for sUrl, sName in aResult:
         if cConfig().isBlockedHoster(sName)[0]: continue # Hoster aus settings.xml oder deaktivierten Resolver ausschließen
-        hoster = {'link': sUrl, 'name': sName}
+        hoster = {'link': sUrl, 'name': sName, 'displayedName': '%s [I][%s][/I]' % (sName, sQuality), 'quality': sQuality, 'resolveable': True}
         hosters.append(hoster)
     if hosters:
         hosters.append('getHosterUrl')

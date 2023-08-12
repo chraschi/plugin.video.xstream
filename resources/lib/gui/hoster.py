@@ -173,7 +173,6 @@ class cHosterGui:
         cMyJDownloaderHandler().sendToMyJDownloader(sMediaUrl, sMovieTitle)
 
     def __getPriorities(self, hosterList, filter=True):
-
         # Sort hosters based on their resolvers priority.
         ranking = []
         # handles multihosters but is about 10 times slower
@@ -219,12 +218,16 @@ class cHosterGui:
             del(resolver) 
 
         if any('quality' in hoster[1] for hoster in ranking):
-            pref_quli = cConfig().getSetting('preferedQuality')
-            if pref_quli != '5' and any('quality' in hoster[1] and int(hoster[1]['quality']) == int(pref_quli) for hoster in ranking):
-                ranking = sorted(ranking, key=lambda hoster: int('quality' in hoster[1] and hoster[1]['quality']) == int(pref_quli), reverse=True)
-            else:
-                ranking = sorted(ranking, key=lambda hoster: 'quality' in hoster[1] and int(hoster[1]['quality']), reverse=True)
-                
+            try:
+                # Sortiere Hoster nach Qualität
+                if pref_quli != '5' and any('quality' in hoster[1] and int(hoster[1]['quality']) == int(pref_quli) for hoster in ranking):
+                    ranking = sorted(ranking, key=lambda hoster: int('quality' in hoster[1] and hoster[1]['quality']) == int(pref_quli), reverse=True)
+                else:
+                # Sortiere Hoster nach Priorität
+                    ranking = sorted(ranking, key=lambda hoster: 'quality' in hoster[1] and str(hoster[1]['quality']), reverse=True)
+                    #ranking = sorted(ranking, key=lambda hoster: 'quality' in hoster[1] and hoster[1]['quality'], reverse=True)
+            except:
+                pass
         # After sorting Quality, we sort for Hoster-Priority :) -Hep 24.01.23
         # ranking = sorted(ranking, key=lambda ranking: ranking[0])
         
