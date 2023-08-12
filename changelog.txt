@@ -18,6 +18,7 @@ viele Streams. Es sind mehrere SitePlugins betroffen.[/COLOR]
  - [Moflix-Stream] Neue Seite hinzugefügt
  - [Movie4k] Seite wieder hinzugefügt
     + Code Anpassungen
+	+ Aktuelle Domain einstellen!! movie4k.buzz
  - [StreamPalace] Code Anpassungen
  - [StreamWorld] Seite entfernt
  - [Stumbleupon]
