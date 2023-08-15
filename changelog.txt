@@ -1,5 +1,12 @@
-[B]Version: 4.0.7~Nightly3[/B]
+[B]Version: 4.0.7~Nightly4[/B]
 
+15.08.2023
+
+ - [Cinemathek] StreamSB ausgeblendet
+ - [Settings] bereinigt
+ 
+[COLOR cyan]________________________________________________________________________________________[/COLOR]
+ 
 13.08.2023
 
 [COLOR red]Achtung der Hoster StreamSB ist Offline dadurch fehlen bei den SitePlugins
@@ -25,7 +32,6 @@ viele Streams. Es sind mehrere SitePlugins betroffen.[/COLOR]
     + Experimentelles Plugin Benutzung auf eigene Gefahr!
     + Globale Suche + Domain Aktualisierung muss selbst aktiviert werden!
  - [xCine] Menü Neues hinzugefügt
-
 
 [COLOR cyan]________________________________________________________________________________________[/COLOR]
 

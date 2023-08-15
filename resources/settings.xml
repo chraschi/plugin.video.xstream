@@ -496,7 +496,7 @@
 					</control>
 				</setting>
 			</group>
-			<group id="plugin_hdfilme" label="30704">
+			<!-- <group id="plugin_hdfilme" label="30704">
 				<setting id="plugin_hdfilme" type="boolean" label="30050" help="">
 					<level>0</level>
                     <default>True</default>
@@ -510,7 +510,7 @@
 					</dependencies>
 					<control type="toggle"/>
 				</setting>
-				<!-- Domain Überprüfung mit automatischer und manueller Anpassung -->
+
 				<setting id="plugin_hdfilme_checkDomain" type="boolean" label="30277">
 					<level>3</level>
 					<default>True</default>
@@ -534,7 +534,7 @@
 						<heading>30278</heading>
 					</control>
 				</setting>
-			</group>
+			</group> -->
 			<group id="plugin_kinofox" label="30705">
 				<setting id="plugin_kinofox" type="boolean" label="30050" help="">
 					<level>0</level>
@@ -735,7 +735,7 @@
 					</control>
 				</setting>
 			</group>
-			<group id="plugin_kiste" label="30723">
+			<!-- <group id="plugin_kiste" label="30723">
 				<setting id="plugin_kiste" type="boolean" label="30050" help="">
 					<level>0</level>
                     <default>True</default>
@@ -773,7 +773,7 @@
 						<heading>30278</heading>
 					</control>
 				</setting>
-			</group>
+			</group> -->
 			<group id="plugin_kkiste" label="30709">
 				<setting id="plugin_kkiste" type="boolean" label="30050" help="">
 					<level>0</level>
