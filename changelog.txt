@@ -1,4 +1,11 @@
-[B]Version: 4.0.7~Nightly4[/B]
+[B]Version: 4.0.7~Nightly5[/B]
+
+16.08.2023
+
+ - [CineClix] Code Anpassungen
+ - [Movie2k] wieder hinzugefügt
+
+[COLOR cyan]________________________________________________________________________________________[/COLOR]
 
 15.08.2023
 
@@ -14,23 +21,23 @@ viele Streams. Es sind mehrere SitePlugins betroffen.[/COLOR]
 
  - [Cinemathek] Code Anpassungen
  - [CineClix] Neue Seite hinzugefügt
-    + Experimentelles Plugin Benutzung auf eigene Gefahr!
-    + Globale Suche + Domain Aktualisierung muss selbst aktiviert werden!
+   + Experimentelles Plugin Benutzung auf eigene Gefahr!
+   + Globale Suche + Domain Aktualisierung muss selbst aktiviert werden!
  - [GuiElement] Code Anpassungen
  - [Kino] Code Anpassungen
  - [Kinoger] Code Anpassungen
-    + Kinoger.pw (StreamSB) Code entfernt
-	+ Kinoger.re Code entfernt
+   + Kinoger.pw (StreamSB) Code entfernt
+   + Kinoger.re Code entfernt
  - [Kinox] URL Anpassung
  - [Moflix-Stream] Neue Seite hinzugefügt
  - [Movie4k] Seite wieder hinzugefügt
-    + Code Anpassungen
-	+ Aktuelle Domain einstellen!! movie4k.buzz
+   + Code Anpassungen
+   + Aktuelle Domain einstellen!! movie4k.buzz
  - [StreamPalace] Code Anpassungen
  - [StreamWorld] Seite entfernt
  - [Stumbleupon]
-    + Experimentelles Plugin Benutzung auf eigene Gefahr!
-    + Globale Suche + Domain Aktualisierung muss selbst aktiviert werden!
+   + Experimentelles Plugin Benutzung auf eigene Gefahr!
+   + Globale Suche + Domain Aktualisierung muss selbst aktiviert werden!
  - [xCine] Menü Neues hinzugefügt
 
 [COLOR cyan]________________________________________________________________________________________[/COLOR]

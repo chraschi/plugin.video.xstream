@@ -1250,7 +1250,7 @@ msgid "SerienStream"
 msgstr ""
 
 msgctxt "#30715"
-msgid ""
+msgid "Movie2k"
 msgstr ""
 
 msgctxt "#30716"
@@ -1282,7 +1282,7 @@ msgid "Streamen"
 msgstr ""
 
 msgctxt "#30723"
-msgid "Kiste"
+msgid ""
 msgstr ""
 
 msgctxt "#30724"
