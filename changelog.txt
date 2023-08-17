@@ -1,4 +1,10 @@
-[B]Version: 4.0.7~Nightly5[/B]
+[B]Version: 4.0.7~Nightly6[/B]
+
+17.08.2023
+
+ - [Moflix-Stream] Code Anpassungen wegen neuem Webseiten Design
+
+[COLOR cyan]________________________________________________________________________________________[/COLOR]
 
 16.08.2023
 

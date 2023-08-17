@@ -109,7 +109,7 @@ def showSeasons(sGui=False):
     entryUrl = params.getValue('entryUrl')
     sThumbnail = params.getValue('sThumbnail')
     oRequest = cRequestHandler(entryUrl)
-    oRequest.addHeaderEntry('Referer', params.getValue('entryUrl'))
+    oRequest.addHeaderEntry('Referer', entryUrl)
     if cConfig().getSetting('global_search_' + SITE_IDENTIFIER) == 'true':
         oRequest.cacheTime = 60 * 60 * 6  # 6 Stunden
     jSearch = json.loads(oRequest.request()) # Lade JSON aus dem Request der URL
@@ -143,7 +143,7 @@ def showEpisodes(sGui=False):
     #https://cineclix.de/api/v1/titles/2858/seasons/2?load=episodes,primaryVideo
     sUrl = URL_MAIN + 'api/v1/titles/%s/seasons/%s?load=episodes,primaryVideo' % (sId, sSeasonNr)
     oRequest = cRequestHandler(sUrl)
-    oRequest.addHeaderEntry('Referer', params.getValue('sUrl'))
+    oRequest.addHeaderEntry('Referer', sUrl)
     if cConfig().getSetting('global_search_' + SITE_IDENTIFIER) == 'true':
         oRequest.cacheTime = 60 * 60 * 4  # 4 Stunden
     jSearch = json.loads(oRequest.request()) # Lade JSON aus dem Request der URL
@@ -177,7 +177,7 @@ def showSearchEntries(entryUrl=False, sGui=False, sSearchText=''):
     # Parameter laden
     if not entryUrl: entryUrl = params.getValue('sUrl')
     oRequest = cRequestHandler(entryUrl, ignoreErrors=(sGui is not False))
-    oRequest.addHeaderEntry('Referer', params.getValue('entryUrl'))
+    oRequest.addHeaderEntry('Referer', entryUrl)
     jSearch = json.loads(oRequest.request()) # Lade JSON aus dem Request der URL
     if not 'success' in jSearch['status']: return # Status success dann weiter
     aResults = jSearch['results'] # Ausgabe der Suchresultate von jSearch
@@ -214,13 +214,12 @@ def showSearchEntries(entryUrl=False, sGui=False, sSearchText=''):
 def showHosters(sGui=False):
     oGui = sGui if sGui else cGui()
     hosters = []
-    params = ParameterHandler()
-    sUrl = params.getValue('entryUrl')
+    sUrl = ParameterHandler().getValue('entryUrl')
     oRequest = cRequestHandler(sUrl)
-    oRequest.addHeaderEntry('Referer', params.getValue('sUrl'))
+    oRequest.addHeaderEntry('Referer', sUrl)
     jSearch = json.loads(oRequest.request())  # Lade JSON aus dem Request der URL
     if not 'success' in jSearch['status']: return  # Status success dann weiter
-    if params.getValue('mediaType') == 'movie': #Bei MediaTyp Filme nutze das Result
+    if ParameterHandler().getValue('mediaType') == 'movie': #Bei MediaTyp Filme nutze das Result
         aResults = jSearch['title']['videos'] # Ausgabe der Suchresultate von jSearch für Filme
     else:
         aResults = jSearch['episode']['videos'] # Ausgabe der Suchresultate von jSearch für Episoden
