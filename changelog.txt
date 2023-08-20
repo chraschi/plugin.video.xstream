@@ -1,4 +1,11 @@
-[B]Version: 4.0.7~Nightly6[/B]
+[B]Version: 4.0.7~Nightly7[/B]
+
+20.08.2023
+
+ - [CineClix] Code Anpassungen bei der Suche für Episoden
+ - [Moflix-Stream] Code Anpassungen bei der Suche für Episoden
+
+[COLOR cyan]________________________________________________________________________________________[/COLOR]
 
 17.08.2023
 

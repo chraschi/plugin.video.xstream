@@ -88,7 +88,6 @@ def showEntries(entryUrl=False, sGui=False):
         params.setParam('entryUrl', URL_HOSTER % sId)
         params.setParam('sThumbnail', i['poster'])
         params.setParam('sName', sName)
-        params.setParam('sId', sId)
         oGui.addFolder(oGuiElement, params, isTvshow, total)
     if not sGui:
         sPageNr = int(params.getValue('page'))
@@ -122,6 +121,7 @@ def showSeasons(sGui=False):
         if not sGui: oGui.showInfo()
         return
     for i in aResults:
+        sId = i['title_id'] # ID ändert sich !!!
         sSeasonNr = str(i['number']) # Staffel Nummer
         oGuiElement = cGuiElement('Staffel ' + sSeasonNr, SITE_IDENTIFIER, 'showEpisodes')
         oGuiElement.setMediaType('season')
@@ -129,6 +129,7 @@ def showSeasons(sGui=False):
         oGuiElement.setThumbnail(sThumbnail)
         if sDesc != '': oGuiElement.setDescription(sDesc)
         params.setParam('sSeasonNr', sSeasonNr)
+        params.setParam('sId', sId)
         cGui().addFolder(oGuiElement, params, True, total)
     cGui().setView('seasons')
     cGui().setEndOfDirectory()
