@@ -151,21 +151,38 @@ class cGuiElement:
             return False
 
     def setQuality(self, quality):
-        if '2160' in quality:
-            self._sQuality = '4K 2160P'
-        elif '1440' in quality:
-            self._sQuality = '2K 1440P'
-        elif '1080' in quality:
-            self._sQuality = 'HD 1080P'
-        elif '720' in quality:
-            self._sQuality = 'HD 720P'
-        elif '480' in quality:
-            self._sQuality = 'SD 480P'
-        elif '360' in quality:
-            self._sQuality = 'SD 360P'
-        elif 'HD' in quality:
-            self._sQuality = 'HD'
-        #self._sQuality = quality
+        try:
+            if '2160' in quality:
+                self._sQuality = '4K 2160p'
+            elif '1440' in quality:
+                self._sQuality = '2K 1440p'
+            elif '1080' in quality:
+                self._sQuality = 'HD 1080p'
+            elif '720' in quality:
+                self._sQuality = 'HD 720p'
+            elif '480' in quality:
+                self._sQuality = 'SD 480p'
+            elif '360' in quality:
+                self._sQuality = 'SD 360p'
+            elif 'HD' in quality:
+                self._sQuality = 'HD'
+            elif 'BDRip' in quality:
+                self._sQuality = 'BD Rip'
+            elif 'WEBRip' in quality:
+                self._sQuality = 'WEB Rip'
+            elif 'TS.MD' in quality:
+                self._sQuality = 'TS Mic'
+            elif 'MD.TS' in quality:
+                self._sQuality = 'TS Mic'
+            elif 'TS.LD' in quality:
+                self._sQuality = 'TS Line'
+            elif 'LD.TS' in quality:
+                self._sQuality = 'TS Line'
+            elif 'TS' in quality:
+                self._sQuality = 'TS'
+            #self._sQuality = quality
+        except:
+            pass
 
     def getQuality(self):
         return self._sQuality
@@ -195,9 +212,11 @@ class cGuiElement:
 
     def setThumbnail(self, sThumbnail):
         self.__sThumbnail = sThumbnail
-        if cConfig().getSetting('replacefanart') == 'true' and sThumbnail.startswith('http'):
-            self.__sFanart = sThumbnail
-
+        try:
+            if cConfig().getSetting('replacefanart') == 'true' and sThumbnail.startswith('http'):
+                self.__sFanart = sThumbnail
+        except:
+            pass
     def getThumbnail(self):
         return self.__sThumbnail
 

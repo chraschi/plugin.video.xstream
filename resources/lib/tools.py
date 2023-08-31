@@ -191,7 +191,7 @@ class cParser:
             ('\\u0308', '̈'), ('\\u00e8', 'è'), ('#038;', ''), ('\\u00f8', 'ø'),
             ('／', '/'), ('\\u00e1', 'á'), ('&#8211;', '-'), ('&#8220;', '“'), ('&#8222;', '„'),
             ('&#8217;', '’'), ('&#8230;', '…'), ('\\u00bc', '¼'), ('\\u00bd', '½'), ('\\u00be', '¾'),
-            ('\\u2153', '⅓')):
+            ('\\u2153', '⅓'), ('\\u002A', '*')):
             try:
                 s = s.replace(*t)
             except:
@@ -201,7 +201,7 @@ class cParser:
             ('&#xC4;', 'Ä'), ('&#xE4;', 'ä'), ('&#xD6;', 'Ö'), ('&#xF6;', 'ö'),
             ('&#xDC;', 'Ü'), ('&#xFC;', 'ü'), ('&#xDF;', 'ß') , ('&#xB2;', '²'),
             ('&#xDC;', '³'), ('&#xBC;', '¼'), ('&#xBD;', '½'), ('&#xBE;', '¾'),
-            ('&#8531;', '⅓')):
+            ('&#8531;', '⅓'), ('&#8727;', '*')):
             try:
                 s = s.replace(*h)
             except:
@@ -260,6 +260,10 @@ class cParser:
     @staticmethod
     def urlEncode(sUrl, safe=''):
         return quote(sUrl, safe)
+
+    @staticmethod
+    def quote(sUrl):
+        return quote(sUrl)
 
     @staticmethod
     def unquotePlus(sUrl):

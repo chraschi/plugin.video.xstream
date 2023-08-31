@@ -1250,7 +1250,7 @@ msgid "SerienStream"
 msgstr ""
 
 msgctxt "#30715"
-msgid "Streamworld"
+msgid "Movie2k"
 msgstr ""
 
 msgctxt "#30716"
@@ -1266,7 +1266,7 @@ msgid "KinoKiste"
 msgstr ""
 
 msgctxt "#30719"
-msgid ""
+msgid "StreamPalace"
 msgstr ""
 
 msgctxt "#30720"
@@ -1282,7 +1282,7 @@ msgid "Streamen"
 msgstr ""
 
 msgctxt "#30723"
-msgid "Movie2k"
+msgid ""
 msgstr ""
 
 msgctxt "#30724"
@@ -1291,4 +1291,16 @@ msgstr ""
 
 msgctxt "#30725"
 msgid "Streamcloud"
+msgstr ""
+
+msgctxt "#30726"
+msgid "Stumbleupon"
+msgstr ""
+
+msgctxt "#30727"
+msgid "CineClix"
+msgstr ""
+
+msgctxt "#30728"
+msgid "Moflix-Stream"
 msgstr ""

@@ -293,37 +293,8 @@ def showHosters():
                             hoster = {'link': sUrl, 'name': 'Kinoger.be [I][%sp][/I]' % sQuality, 'quality': sQuality, 'resolveable': True}
                             hosters.append(hoster)
 
-                if 'kinoger.pw' in sUrl:
-                    url = get_streamsburl('kinoger.pw', sUrl.replace('.html', '').split('/')[4])
-                    oRequest = cRequestHandler(url, caching=False, ignoreErrors=True)
-                    oRequest.addHeaderEntry('Referer', sUrl)
-                    oRequest.addHeaderEntry('watchsb', 'sbstream')
-                    sHtmlContent = oRequest.request()
-                    isMatch, aResult = cParser.parse(sHtmlContent, 'file":"([^"]+)')
-                    if isMatch:
-                        oRequest = cRequestHandler(aResult[0], caching=False, ignoreErrors=True)
-                        oRequest.addHeaderEntry('Referer', 'https://kinoger.pw/')
-                        oRequest.addHeaderEntry('Origin', 'https://kinoger.pw')
-                        sHtmlContent = oRequest.request()
-                        isMatch, aResult = cParser.parse(sHtmlContent, 'RESOLUTION=.*?x(\d+).*?(http[^"]+)#')
-                    if isMatch:
-                        for sQuality, sUrl in aResult:
-                            sUrl = sUrl + '|Origin=https%3A%2F%2Fkinoger.pw&Referer=https%3A%2F%2Fkinoger.pw%2F' + headers
-                            hoster = {'link': sUrl, 'name': 'StreamSB [I][%sp][/I]' % sQuality, 'quality': sQuality, 'resolveable': True}
-                            hosters.append(hoster)
-
-                elif 'kinoger.re' in sUrl:
-                    oRequest = cRequestHandler('https://kinoger.re/api/video/stream/get', ignoreErrors=True, jspost=True)
-                    oRequest.addHeaderEntry('Referer', sUrl)
-                    oRequest.addParameters('id', sUrl.split('/')[-1])
-                    sHtmlContent = oRequest.request()
-                    isMatch, aResult = cParser.parse(sHtmlContent, '"label":"(\d+).*?file":"([^"]+)')
-                    if isMatch:
-                        for sQuality, sUrl in aResult:
-                            sUrl = sUrl + '|Referer=https%3A%2F%2Fkinoger.re%2F' + headers
-                            hoster = {'link': sUrl, 'name': 'Kinoger.re [I][%sp][/I]' % sQuality, 'quality': sQuality, 'resolveable': True}
-                            hosters.append(hoster)
-
+                elif 'kinoger.pw' in sUrl: continue # Offline
+                elif 'kinoger.re' in sUrl: continue # Offline
                 elif 'start.u' in sUrl: continue # Offline
                 elif 'delivery' in sUrl: continue
                 elif 'cdn0' in sUrl: continue
@@ -332,11 +303,11 @@ def showHosters():
                 elif 'protonvideo' in sUrl: continue # Offline
 
                 else:
-                    sQuality = '720'
+                    sQuality = '720p'
                     sName = cParser.urlparse(sUrl)
                     for x in (('Kinoger.Be', 'StreamHide'), ('Fsst.Online', 'SecVideo')):
                         sName = sName.replace(*x)
-                    hoster = {'link': sUrl + 'DIREKT', 'name': sName, 'displayedName': '%s [I][%sp][/I]' % (sName, sQuality), 'quality': sQuality, 'resolveable': True}
+                    hoster = {'link': sUrl + 'DIREKT', 'name': sName, 'displayedName': '%s [I][%s][/I]' % (sName, sQuality), 'quality': sQuality, 'resolveable': True}
                     hosters.append(hoster)
             except Exception:
                 pass
