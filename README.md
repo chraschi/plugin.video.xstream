@@ -23,7 +23,7 @@ Fixes zu Seiten bzw. neue Seiten am besten als PullRequest einreichen (oder auf 
 ***
 
 Pull Requests einreichen oder Fehler melden könnt Ihr hier.
-### | [Pull Request](https://github.com/streamxstream/plugin.video.xstream/compare/matrix...nightly)
+### | [Pull Request Nightly](https://github.com/streamxstream/plugin.video.xstream/compare)
 
 ### | [Fehler melden](https://github.com/streamxstream/plugin.video.xstream/issues/new?assignees=&labels=Fehlermeldung&projects=&template=fehler-melden.md&title=Fehler+Melden)
 
