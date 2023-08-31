@@ -24,27 +24,30 @@ if cConfig().getSetting('global_search_' + SITE_IDENTIFIER) == 'false':
     logger.info('-> [SitePlugin]: globalSearch for %s is deactivated.' % SITE_NAME)
 
 # Domain Abfrage
-DOMAIN = cConfig().getSetting('plugin_'+ SITE_IDENTIFIER +'.domain', 'hdfilme.tattoo')
+DOMAIN = cConfig().getSetting('plugin_'+ SITE_IDENTIFIER +'.domain', 'hdfilme.mom')
 URL_MAIN = 'https://' + DOMAIN + '/'
-#URL_MAIN = 'https://hdfilme.hair/'
+#URL_MAIN = 'https://hdfilme.mom/'
+URL_NEW = URL_MAIN + 'kinofilme-online/'
 URL_KINO = URL_MAIN + 'aktuelle-kinofilme-im-kino/'
-URL_MOVIES = URL_MAIN + 'kinofilme-online/'
+URL_MOVIES = URL_MAIN + 'kinofilme-online'
 URL_SERIES = URL_MAIN + 'serienstream-deutsch/'
-URL_SEARCH = URL_MAIN + 'index.php?story=%s&do=search&subaction=search'
+URL_SEARCH = URL_MAIN + 'index.php?do=search&subaction=search&story=%s'
 
 
 def load(): # Menu structure of the site plugin
     logger.info('Load %s' % SITE_NAME)
     params = ParameterHandler()
+    params.setParam('sUrl', URL_NEW)
+    cGui().addFolder(cGuiElement(cConfig().getLocalizedString(30500), SITE_IDENTIFIER, 'showEntries'), params)  # New
     params.setParam('sUrl', URL_KINO)
     cGui().addFolder(cGuiElement(cConfig().getLocalizedString(30501), SITE_IDENTIFIER, 'showEntries'), params)  # Current films in the cinema
     params.setParam('sUrl', URL_MOVIES)
     cGui().addFolder(cGuiElement(cConfig().getLocalizedString(30502), SITE_IDENTIFIER, 'showEntries'), params)  # Movies
-    params.setParam('sUrl', URL_MAIN)
-    cGui().addFolder(cGuiElement(cConfig().getLocalizedString(30506), SITE_IDENTIFIER, 'showGenre'), params)    # Genre
     params.setParam('sUrl', URL_SERIES)
     cGui().addFolder(cGuiElement(cConfig().getLocalizedString(30511), SITE_IDENTIFIER, 'showEntries'), params)  # Series
-    cGui().addFolder(cGuiElement(cConfig().getLocalizedString(30520), SITE_IDENTIFIER, 'showSearch'))   # Search
+    params.setParam('sUrl', URL_MAIN)
+    cGui().addFolder(cGuiElement(cConfig().getLocalizedString(30506), SITE_IDENTIFIER, 'showGenre'), params)# Genre
+    cGui().addFolder(cGuiElement(cConfig().getLocalizedString(30520), SITE_IDENTIFIER, 'showSearch'))# Search
     cGui().setEndOfDirectory()
 
 
@@ -54,8 +57,8 @@ def showGenre(entryUrl=False):
     oRequest = cRequestHandler(entryUrl)
     if cConfig().getSetting('global_search_' + SITE_IDENTIFIER) == 'true':
         oRequest.cacheTime = 60 * 60 * 48  # 48 Stunden
-    sHtmlContent = oRequest.request()    
-    pattern = 'Genres.*?</ul>'
+    sHtmlContent = oRequest.request()
+    pattern = 'Genre">Genre.*?</ul>'
     isMatch, sHtmlContainer = cParser.parseSingleResult(sHtmlContent, pattern)
     if isMatch:
         isMatch, aResult = cParser.parse(sHtmlContainer, 'href="([^"]+).*?>([^<]+)')
@@ -78,13 +81,15 @@ def showEntries(entryUrl=False, sGui=False, sSearchText=False):
     if not entryUrl: entryUrl = params.getValue('sUrl')
     oRequest = cRequestHandler(entryUrl, ignoreErrors=(sGui is not False))
     if cConfig().getSetting('global_search_' + SITE_IDENTIFIER) == 'true':
-        oRequest.cacheTime = 60 * 60 * 6  # HTML Cache Zeit 6 Stunden
+        oRequest.cacheTime = 60 * 60 * 6  # 6 Stunden
+    iPage = int(params.getValue('page'))
+    oRequest = cRequestHandler(entryUrl + 'page/' + str(iPage) if iPage > 0 else entryUrl, ignoreErrors=(sGui is not False))
     sHtmlContent = oRequest.request()
-    pattern = '<div class="col-md.*?' # container start
-    pattern += 'href="([^"]+).*?'  # url
-    pattern += 'data-src="([^"]+).*?' # thumbnail
-    pattern += '<h2>([^<]+).*?'  # name
-    pattern += '(.*?)</div>' # dummy
+    pattern = '<div class="box-product' # Container Start
+    pattern += '(.*?)<h3.*?'  # info dummy
+    pattern += 'href="([^"]+).*?' # URL
+    pattern += '">([^<]+).*?' # Name
+    pattern += '(.*?)</li>' # dummy
     isMatch, aResult = cParser.parse(sHtmlContent, pattern)
 
     if not isMatch:
@@ -92,7 +97,9 @@ def showEntries(entryUrl=False, sGui=False, sSearchText=False):
         return
 
     total = len(aResult)
-    for sUrl, sThumbnail, sName, sDummy in aResult:
+    for sInfo, sUrl, sName, sDummy in aResult:
+        if sSearchText and not cParser().search(sSearchText, sName):
+            continue
         # Abfrage der voreingestellten Sprache
         sLanguage = cConfig().getSetting('prefLanguage')
         if (sLanguage == '1' and 'English*' in sName):   # Deutsch
@@ -102,32 +109,34 @@ def showEntries(entryUrl=False, sGui=False, sSearchText=False):
         elif sLanguage == '3':    # Japanisch
             cGui().showLanguage()
             continue
-        if sSearchText and not cParser.search(sSearchText, sName):
-            continue
-        if sThumbnail[0] == '/':
-            sThumbnail = sThumbnail[1:]
-        isYear, sYear = cParser.parse(sName, '(.*?)\((\d*)\)')  # Jahr und Name trennen
-        for name, year in sYear:
-            sName = name
-            sYear = year
-            break
-
-        isTvshow, aResult = cParser.parse(sName, '\s+-\s+Staffel\s+\d+')
+        isThumbnail, sThumbnail = cParser.parseSingleResult(sInfo, 'data-src="([^"]+)')  # Thumbnail
+        isYear, sYear = cParser.parseSingleResult(sDummy, '([\d]+)\s</p>')  # Release Jahr
+        isQuality, sQuality = cParser.parseSingleResult(sDummy, 'quality-product">([^<]+)')  # Qualität
+        isTvshow = True if 'taffel' in sName else False
         oGuiElement = cGuiElement(sName, SITE_IDENTIFIER, 'showEpisodes' if isTvshow else 'showHosters')
-        oGuiElement.setThumbnail(URL_MAIN + sThumbnail)
-        oGuiElement.setMediaType('season' if isTvshow else 'movie')
+        oGuiElement.setMediaType('tvshow' if isTvshow else 'movie')
+        if isThumbnail:
+            sThumbnail = URL_MAIN + sThumbnail
+            oGuiElement.setThumbnail(sThumbnail)
         if isYear:
             oGuiElement.setYear(sYear)
+        if isQuality:
+            oGuiElement.setQuality(sQuality)
+        oGuiElement.setMediaType('season' if isTvshow else 'movie')
         params.setParam('entryUrl', sUrl)
         params.setParam('sName', sName)
         params.setParam('sThumbnail', sThumbnail)
         oGui.addFolder(oGuiElement, params, isTvshow, total)
-        
+
     if not sGui and not sSearchText:
-        isMatchNextPage, sNextUrl = cParser().parseSingleResult(sHtmlContent, '/a>\s+<span class="pp">.*?href="([^"]+)')
-        if isMatchNextPage:
-            params.setParam('sUrl', sNextUrl)
-            oGui.addNextPage(SITE_IDENTIFIER, 'showEntries', params)
+        sPageNr = int(params.getValue('page'))
+        if sPageNr == 0:
+            sPageNr = 2
+        else:
+            sPageNr += 1
+        params.setParam('page', int(sPageNr))
+        params.setParam('sUrl', entryUrl)
+        oGui.addNextPage(SITE_IDENTIFIER, 'showEntries', params)
         oGui.setView('tvshows' if isTvshow else 'movies')
         oGui.setEndOfDirectory()
 
@@ -136,7 +145,10 @@ def showEpisodes():
     params = ParameterHandler()
     entryUrl = params.getValue('entryUrl')
     sThumbnail = params.getValue('sThumbnail')
-    sHtmlContent = cRequestHandler(entryUrl).request()
+    oRequest = cRequestHandler(entryUrl)
+    if cConfig().getSetting('global_search_' + SITE_IDENTIFIER) == 'true':
+        oRequest.cacheTime = 60 * 60 * 6  # 6 Stunden
+    sHtmlContent = oRequest.request()
     isMatch, aResult = cParser.parse(sHtmlContent, '"><a href="#">([^<]+)')
     if not isMatch:
         cGui().showInfo()
@@ -146,7 +158,7 @@ def showEpisodes():
     total = len(aResult)
     for sName in aResult:
         oGuiElement = cGuiElement(sName, SITE_IDENTIFIER, 'showHosters')
-        oGuiElement.setThumbnail(URL_MAIN + sThumbnail)
+        oGuiElement.setThumbnail(sThumbnail)
         if isDesc:
             oGuiElement.setDescription(sDesc)
         oGuiElement.setMediaType('episode')
@@ -159,22 +171,24 @@ def showEpisodes():
 
 def showHosters():
     hosters = []
-    sUrl = ParameterHandler().getValue('entryUrl')
-    sHtmlContent = cRequestHandler(sUrl).request()
-    if ParameterHandler().exist('episode'):
-        episode = ParameterHandler().getValue('episode')
-        pattern = '>{0}<.*?</ul></li>'.format(episode)
+    sHtmlContent = cRequestHandler(ParameterHandler().getValue('entryUrl')).request()
+    if ParameterHandler().getValue('episode'):
+        pass
+        pattern = '%s<.*?</ul>' % ParameterHandler().getValue('episode')
         isMatch, sHtmlContent = cParser.parseSingleResult(sHtmlContent, pattern)
     isMatch, aResult = cParser().parse(sHtmlContent, 'link="([^"]+)')
     if isMatch:
+        sQuality = '720p'
         for sUrl in aResult:
             sName = cParser.urlparse(sUrl)
             if cConfig().isBlockedHoster(sName)[0]: continue # Hoster aus settings.xml oder deaktivierten Resolver ausschließen
             if 'youtube' in sUrl:
                 continue
+            elif 'vod' in sUrl:
+                continue
             elif sUrl.startswith('//'):
                  sUrl = 'https:' + sUrl
-            hoster = {'link': sUrl, 'name': cParser.urlparse(sUrl)}
+            hoster = {'link': sUrl, 'name': cParser.urlparse(sUrl), 'displayedName': '%s [I][%s][/I]' % (sName, sQuality), 'quality': sQuality, 'resolveable': True}
             hosters.append(hoster)
     if hosters:
         hosters.append('getHosterUrl')

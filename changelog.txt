@@ -1,37 +1,17 @@
-[B]Version: 4.0.7~Nightly7[/B]
+[B]Version: 4.0.7~Release[/B]
 
-20.08.2023
+01.08.2023 - 31.08.2023
 
+ - [HDFilme] Seite hinzugefügt (Domain: hdfilme.mom)
+ - [GuiElement] Erweiterung setQuality
+ - [Settings] Code Anpassung der Indexseiten
  - [CineClix] Code Anpassungen bei der Suche für Episoden
  - [Moflix-Stream] Code Anpassungen bei der Suche für Episoden
-
-[COLOR cyan]________________________________________________________________________________________[/COLOR]
-
-17.08.2023
-
  - [Moflix-Stream] Code Anpassungen wegen neuem Webseiten Design
-
-[COLOR cyan]________________________________________________________________________________________[/COLOR]
-
-16.08.2023
-
  - [CineClix] Code Anpassungen
  - [Movie2k] wieder hinzugefügt
-
-[COLOR cyan]________________________________________________________________________________________[/COLOR]
-
-15.08.2023
-
  - [Cinemathek] StreamSB ausgeblendet
  - [Settings] bereinigt
- 
-[COLOR cyan]________________________________________________________________________________________[/COLOR]
- 
-13.08.2023
-
-[COLOR red]Achtung der Hoster StreamSB ist Offline dadurch fehlen bei den SitePlugins
-viele Streams. Es sind mehrere SitePlugins betroffen.[/COLOR]
-
  - [Cinemathek] Code Anpassungen
  - [CineClix] Neue Seite hinzugefügt
    + Experimentelles Plugin Benutzung auf eigene Gefahr!
@@ -52,18 +32,8 @@ viele Streams. Es sind mehrere SitePlugins betroffen.[/COLOR]
    + Experimentelles Plugin Benutzung auf eigene Gefahr!
    + Globale Suche + Domain Aktualisierung muss selbst aktiviert werden!
  - [xCine] Menü Neues hinzugefügt
-
-[COLOR cyan]________________________________________________________________________________________[/COLOR]
-
-05.08.2023
-
  - [Cinemathek] Regex fixed
  - [Tools] quote hinzugefügt
- 
-[COLOR cyan]________________________________________________________________________________________[/COLOR]
- 
-01.08.2023
-
  - [Cinemathek] Regex fixed
  - [StreamPalace] neue Seite hinzugefügt
 

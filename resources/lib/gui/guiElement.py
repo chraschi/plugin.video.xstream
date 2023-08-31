@@ -166,6 +166,20 @@ class cGuiElement:
                 self._sQuality = 'SD 360p'
             elif 'HD' in quality:
                 self._sQuality = 'HD'
+            elif 'BDRip' in quality:
+                self._sQuality = 'BD Rip'
+            elif 'WEBRip' in quality:
+                self._sQuality = 'WEB Rip'
+            elif 'TS.MD' in quality:
+                self._sQuality = 'TS Mic'
+            elif 'MD.TS' in quality:
+                self._sQuality = 'TS Mic'
+            elif 'TS.LD' in quality:
+                self._sQuality = 'TS Line'
+            elif 'LD.TS' in quality:
+                self._sQuality = 'TS Line'
+            elif 'TS' in quality:
+                self._sQuality = 'TS'
             #self._sQuality = quality
         except:
             pass

@@ -496,7 +496,7 @@
 					</control>
 				</setting>
 			</group>
-			<!-- <group id="plugin_hdfilme" label="30704">
+			<group id="plugin_hdfilme" label="30704">
 				<setting id="plugin_hdfilme" type="boolean" label="30050" help="">
 					<level>0</level>
                     <default>True</default>
@@ -534,7 +534,7 @@
 						<heading>30278</heading>
 					</control>
 				</setting>
-			</group> -->
+			</group>
 			<group id="plugin_kinofox" label="30705">
 				<setting id="plugin_kinofox" type="boolean" label="30050" help="">
 					<level>0</level>
@@ -693,15 +693,12 @@
 					</control>
 				</setting>
 			</group>
-		</category>
-		<!-- Kategorie Indexseiten 1 (30094) und Indexseiten 2 (30095) werden vom PluginHandler gesetzt und sind somit kein fester Bestandteil der settings.xml -->
-		<category id="indexsite2" label="30095">
-			<group id="plugin_kinox" label="30708">
+            <group id="plugin_kinox" label="30708">
 				<setting id="plugin_kinox" type="boolean" label="30050" help="">
 					<level>0</level>
                     <default>True</default>
 					<control type="toggle"/>
-				</setting>				
+				</setting>
 				<setting id="global_search_kinox" type="boolean" label="30052">
 					<level>0</level>
 					<default>True</default>
@@ -735,6 +732,9 @@
 					</control>
 				</setting>
 			</group>
+		</category>
+		<!-- Kategorie Indexseiten 1 (30094) und Indexseiten 2 (30095) werden vom PluginHandler gesetzt und sind somit kein fester Bestandteil der settings.xml -->
+		<category id="indexsite2" label="30095">
 			<group id="plugin_kkiste" label="30709">
 				<setting id="plugin_kkiste" type="boolean" label="30050" help="">
 					<level>0</level>
