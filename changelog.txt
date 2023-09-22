@@ -3,6 +3,8 @@
 22.09.2023
 
  - [Serienstream] Neuen Proxyserver in Einstellungen übernommen
+ - [CineClix] Update Plugin
+ - [Moflix-Stream] Update Plugin
 
 [COLOR cyan]________________________________________________________________________________________[/COLOR]
 
