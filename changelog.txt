@@ -1,41 +1,8 @@
-[B]Version: 4.0.7~Release[/B]
+[B]Version: 4.0.8~nightly1[/B]
 
-01.08.2023 - 31.08.2023
+22.09.2023
 
- - [HDFilme] Seite hinzugefügt (Domain: hdfilme.mom)
- - [GuiElement] Erweiterung setQuality
- - [Settings] Code Anpassung der Indexseiten
- - [CineClix] Code Anpassungen bei der Suche für Episoden
- - [Moflix-Stream] Code Anpassungen bei der Suche für Episoden
- - [Moflix-Stream] Code Anpassungen wegen neuem Webseiten Design
- - [CineClix] Code Anpassungen
- - [Movie2k] wieder hinzugefügt
- - [Cinemathek] StreamSB ausgeblendet
- - [Settings] bereinigt
- - [Cinemathek] Code Anpassungen
- - [CineClix] Neue Seite hinzugefügt
-   + Experimentelles Plugin Benutzung auf eigene Gefahr!
-   + Globale Suche + Domain Aktualisierung muss selbst aktiviert werden!
- - [GuiElement] Code Anpassungen
- - [Kino] Code Anpassungen
- - [Kinoger] Code Anpassungen
-   + Kinoger.pw (StreamSB) Code entfernt
-   + Kinoger.re Code entfernt
- - [Kinox] URL Anpassung
- - [Moflix-Stream] Neue Seite hinzugefügt
- - [Movie4k] Seite wieder hinzugefügt
-   + Code Anpassungen
-   + Aktuelle Domain einstellen!! movie4k.buzz
- - [StreamPalace] Code Anpassungen
- - [StreamWorld] Seite entfernt
- - [Stumbleupon]
-   + Experimentelles Plugin Benutzung auf eigene Gefahr!
-   + Globale Suche + Domain Aktualisierung muss selbst aktiviert werden!
- - [xCine] Menü Neues hinzugefügt
- - [Cinemathek] Regex fixed
- - [Tools] quote hinzugefügt
- - [Cinemathek] Regex fixed
- - [StreamPalace] neue Seite hinzugefügt
+ - [Serienstream] Neuen Proxyserver in Einstellungen übernommen
 
 [COLOR cyan]________________________________________________________________________________________[/COLOR]
-[I]*Editierhinweis: Text nicht länger als die Linie. Keine Tabulatoren verwenden![/I]
+

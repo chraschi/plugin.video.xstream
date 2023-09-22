@@ -1015,7 +1015,7 @@
 						<options>
 							<option label="s.to">s.to</option>
 							<option label="serienstream.to">serienstream.to</option>
-							<option label="Proxy Server">190.115.18.20</option>
+							<option label="Proxy Server">186.2.175.5</option>
 						</options>
 					<allowempty>true</allowempty>
 					</constraints>

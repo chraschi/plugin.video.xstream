@@ -32,7 +32,7 @@ if cConfig().getSetting('global_search_' + SITE_IDENTIFIER) == 'false':
 # Domain Abfrage
 domain = cConfig().getSetting('plugin_serienstream.domain') # Domain Auswahl über die xStream Einstellungen möglich
 #URL_MAIN = 'https://s.to/'
-if domain == "190.115.18.20":
+if domain == "186.2.175.5":
     URL_MAIN = 'http://' + domain
     proxy = 'true'
 else:
