@@ -94,7 +94,7 @@ class cRequestHandler:
         # für Leerzeichen und Umlaute in der sUrl
         for t in (('²', '&#xB2;'), ('³', '&#xB3;'), ('´', '&#xB4;'), ("'", "&#x27;"),('`', '&#x60;'), ('Ä', '&#xC4;'), ('ä', '&#xE4;'),
                   ('Ö', '&#xD6;'), ('ö', '&#xF6;'), ('Ü', '&#xDC;'), ('ü', '&#xFC;'), ('ß', '&#xDF;'), ('¼', '&#xBC;'), ('½', '&#xBD;'),
-                  ('¾', '&#xBE;'), ('⅓', '&#8531;'), ('*', '&#x2A;')):
+                  ('¾', '&#xBE;'), ('⅓', '&#8531;'), ('*', '%2a')):
             self._sUrl = self._sUrl.replace(*t)
         if self.caching and self.cacheTime > 0:
             sContent = self.readCache(self.getRequestUri())
