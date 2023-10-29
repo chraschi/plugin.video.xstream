@@ -1,4 +1,10 @@
-[B]Version: 4.0.8~nightly2[/B]
+[B]Version: 4.0.8~nightly3[/B]
+
+29.10.2023
+
+ - [xstream] Anpassung Zensurmeldung
+
+[COLOR cyan]________________________________________________________________________________________[/COLOR]
 
 22.10.2023
 

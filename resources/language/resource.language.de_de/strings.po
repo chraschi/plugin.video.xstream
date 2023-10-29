@@ -909,8 +909,8 @@ msgid "Your ISP censors your Internet access!"
 msgstr "Ihr Internetanbieter zensiert ihren Internetzugang!"
 
 msgctxt "#30261"
-msgid "To protect yourself from censorship, we recommend changing your DNS server to Google 8.8.8.8 and 8.8.4.4 or Cloudflare 1.1.1.1 and 1.0.0.1. Instructions can be found with a Google search, e.g. 'Change Fritzbox DNS Server'"
-msgstr "Um sich vor der Zensur zu schützen, empfehlen wir euren DNS Server auf die von Google 8.8.8.8 und 8.8.4.4 oder Cloudflare 1.1.1.1 und 1.0.0.1 umzustellen. Anleitungen finden sie per Googlesuche z.B. 'Fritzbox DNS Server ändern'"
+msgid "To protect yourself from censorship, we recommend to change your DNS at your router and/or boxes to Google or Cloudflare - for both ipV4 and ipV6 protocols. Instructions can be found with a Google search, e.g. 'Change Fritzbox DNS Server'"
+msgstr "Um sich vor der Zensur zu schützen, empfehlen wir Euren DNS Server im Router oder auf Euren Geräten auf Google oder Cloudflare umzustellen - für die Protokolle ipV4 UND ipV6! Anleitungen findet Ihr per Googlesuche z.B. 'Fritzbox DNS Server ändern'"
 
 msgctxt "#30262"
 msgid "[COLOR red]This page requires a free user account. Please register at http://flimmerstube.com and enter your account details in the xStream settings.[/COLOR]"
