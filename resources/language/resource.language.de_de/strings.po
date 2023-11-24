@@ -1210,7 +1210,7 @@ msgid "HD-Filme"
 msgstr ""
 
 msgctxt "#30705"
-msgid "KinoFox"
+msgid ""
 msgstr ""
 
 msgctxt "#30706"
@@ -1282,7 +1282,7 @@ msgid "Streamen"
 msgstr ""
 
 msgctxt "#30723"
-msgid ""
+msgid "einfach.to"
 msgstr ""
 
 msgctxt "#30724"
@@ -1294,7 +1294,7 @@ msgid "Streamcloud"
 msgstr ""
 
 msgctxt "#30726"
-msgid "Stumbleupon"
+msgid ""
 msgstr ""
 
 msgctxt "#30727"

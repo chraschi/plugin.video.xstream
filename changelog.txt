@@ -1,4 +1,11 @@
-[B]Version: 4.0.8~nightly3[/B]
+[B]Version: 4.0.8~nightly4[/B]
+
+24.11.2023
+
+ - [Kinofox] Offline -> deaktiviert
+ - [Stumbleupon] Offline -> deaktiviert
+
+[COLOR cyan]________________________________________________________________________________________[/COLOR]
 
 29.10.2023
 

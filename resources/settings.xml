@@ -535,45 +535,6 @@
 					</control>
 				</setting>
 			</group>
-			<group id="plugin_kinofox" label="30705">
-				<setting id="plugin_kinofox" type="boolean" label="30050" help="">
-					<level>0</level>
-                    <default>True</default>
-					<control type="toggle"/>
-				</setting>				
-				<setting id="global_search_kinofox" type="boolean" label="30052">
-					<level>0</level>
-					<default>True</default>
-					<dependencies>
-						<dependency type="enable" operator="!is" setting="plugin_kinofox">False</dependency>
-					</dependencies>
-					<control type="toggle"/>
-				</setting>
-				<!-- Domain Überprüfung mit automatischer und manueller Anpassung -->
-				<setting id="plugin_kinofox_checkDomain" type="boolean" label="30277">
-					<level>3</level>
-					<default>True</default>
-					<dependencies>
-						<dependency type="enable" operator="!is" setting="plugin_kinofox">false</dependency>
-						<dependency type="visible" operator="!is" setting="plugin_kinofox">false</dependency>
-					</dependencies>
-					<control type="toggle"/>
-				</setting>
-				<setting id="plugin_kinofox.domain" type="string" label="30278" help="">
-					<level>3</level>
-					<default/>
-					<constraints>
-						<allowempty>true</allowempty>
-					</constraints>
-					<dependencies>
-						<dependency type="enable" operator="!is" setting="plugin_kinofox">false</dependency>
-						<dependency type="visible" operator="!is" setting="plugin_kinofox">false</dependency>
-					</dependencies>
-					<control type="edit" format="string">
-						<heading>30278</heading>
-					</control>
-				</setting>
-			</group>
 			<group id="plugin_kinoger" label="30717">
 				<setting id="plugin_kinoger" type="boolean" label="30050" help="">
 					<level>0</level>
@@ -1137,45 +1098,6 @@
 					<dependencies>
 						<dependency type="enable" operator="!is" setting="plugin_streamen">false</dependency>
 						<dependency type="visible" operator="!is" setting="plugin_streamen">false</dependency>
-					</dependencies>
-					<control type="edit" format="string">
-						<heading>30278</heading>
-					</control>
-				</setting>
-			</group>
-			<group id="plugin_stumbleupon" label="30726">
-				<setting id="plugin_stumbleupon" type="boolean" label="30050" help="">
-					<level>0</level>
-                    <default>True</default>
-					<control type="toggle"/>
-				</setting>
-				<setting id="global_search_stumbleupon" type="boolean" label="30052">
-					<level>0</level>
-					<default>False</default>
-					<dependencies>
-						<dependency type="enable" operator="!is" setting="plugin_stumbleupon">False</dependency>
-					</dependencies>
-					<control type="toggle"/>
-				</setting>
-				<!-- Domain Überprüfung mit automatischer und manueller Anpassung -->
-				<setting id="plugin_stumbleupon_checkDomain" type="boolean" label="30277">
-					<level>3</level>
-					<default>False</default>
-					<dependencies>
-						<dependency type="enable" operator="!is" setting="plugin_stumbleupon">false</dependency>
-						<dependency type="visible" operator="!is" setting="plugin_stumbleupon">false</dependency>
-					</dependencies>
-					<control type="toggle"/>
-				</setting>
-				<setting id="plugin_stumbleupon.domain" type="string" label="30278" help="">
-					<level>3</level>
-					<default/>
-					<constraints>
-						<allowempty>true</allowempty>
-					</constraints>
-					<dependencies>
-						<dependency type="enable" operator="!is" setting="plugin_stumbleupon">false</dependency>
-						<dependency type="visible" operator="!is" setting="plugin_stumbleupon">false</dependency>
 					</dependencies>
 					<control type="edit" format="string">
 						<heading>30278</heading>
