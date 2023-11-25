@@ -4,6 +4,7 @@
 
  - [Cineclix] Fix: Erste Staffel wird bei mehr als acht Staffeln nicht mehr angezeigt
  - [xstream] Code maintenance
+ - [Movieking] Fix für falsche Domain, temporär nicht erreichbar wegen reCaptcha
 
 [COLOR cyan]________________________________________________________________________________________[/COLOR]
 

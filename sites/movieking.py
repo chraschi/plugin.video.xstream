@@ -22,9 +22,9 @@ if cConfig().getSetting('global_search_' + SITE_IDENTIFIER) == 'false':
     logger.info('-> [SitePlugin]: globalSearch for %s is deactivated.' % SITE_NAME)
 
 # Domain Abfrage
-DOMAIN = cConfig().getSetting('plugin_'+ SITE_IDENTIFIER +'.domain', 'movieking.io')
-URL_MAIN = 'https://' + DOMAIN + '/'
-#URL_MAIN = 'https://movieking.io/'
+#DOMAIN = cConfig().getSetting('plugin_'+ SITE_IDENTIFIER +'.domain', 'movieking.io') #TODO Fix Domaincheck, doesnt switch to default
+#URL_MAIN = 'https://' + DOMAIN + '/'
+URL_MAIN = 'https://movieking.io/'
 URL_KINO = URL_MAIN + 'cinema'
 URL_MOVIES = URL_MAIN + 'movies.html'
 URL_YEAR = URL_MAIN + 'year.html'

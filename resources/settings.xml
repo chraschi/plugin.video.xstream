@@ -418,6 +418,47 @@
 					<control type="toggle"/>
 				</setting>
 			</group>
+			<!-- Not yet
+			<group id="einfach" label="30723">
+				<setting id="plugin_einfach" type="boolean" label="30050" help="">
+					<level>0</level>
+                    <default>True</default>
+					<control type="toggle"/>
+				</setting>
+				<setting id="global_search_einfach" type="boolean" label="30052">
+					<level>0</level>
+					<default>True</default>
+					<dependencies>
+						<dependency type="enable" operator="!is" setting="plugin_einfach">False</dependency>
+					</dependencies>
+					<control type="toggle"/>
+				</setting>
+
+				<setting id="plugin_einfach_checkDomain" type="boolean" label="30277">
+					<level>3</level>
+					<default>True</default>
+					<dependencies>
+						<dependency type="enable" operator="!is" setting="plugin_einfach">false</dependency>
+						<dependency type="visible" operator="!is" setting="plugin_einfach">false</dependency>
+					</dependencies>
+					<control type="toggle"/>
+				</setting>
+				<setting id="plugin_einfach.domain" type="string" label="30278" help="">
+					<level>3</level>
+					<default/>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<dependencies>
+						<dependency type="enable" operator="!is" setting="plugin_einfach">false</dependency>
+						<dependency type="visible" operator="!is" setting="plugin_einfach">false</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading>30278</heading>
+					</control>
+				</setting>
+			</group>
+		-->
 			<group id="filmpalast" label="30702">
 				<setting id="plugin_filmpalast" type="boolean" label="30050" help="">
 					<level>0</level>
@@ -917,7 +958,7 @@
 				</setting>
 				<setting id="plugin_movieking.domain" type="string" label="30278" help="">
 					<level>3</level>
-					<default/>
+					<default>movieking.io</default>
 					<constraints>
 						<allowempty>true</allowempty>
 					</constraints>
