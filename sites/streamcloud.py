@@ -34,7 +34,7 @@ URL_SERIES = URL_MAIN + 'serien/'
 URL_NEW = URL_MAIN + 'neue-filme/'
 URL_SEARCH = URL_MAIN + 'index.php?story=%s&do=search&subaction=search'
 
-
+#ToDo Serien auch auf reinen Filmseiten, prüfen ob Filterung möglich
 def load(): # Menu structure of the site plugin
     logger.info('Load %s' % SITE_NAME)
     params = ParameterHandler()
@@ -42,8 +42,8 @@ def load(): # Menu structure of the site plugin
     cGui().addFolder(cGuiElement(cConfig().getLocalizedString(30501), SITE_IDENTIFIER, 'showEntries'), params)  # Current films in the cinema
     params.setParam('sUrl', URL_NEW)
     cGui().addFolder(cGuiElement(cConfig().getLocalizedString(30500), SITE_IDENTIFIER, 'showEntries'), params)  # New Movies
-    params.setParam('sUrl', URL_FAVOURITE_MOVIE_PAGE)
-    cGui().addFolder(cGuiElement(cConfig().getLocalizedString(30521), SITE_IDENTIFIER, 'showEntries'), params)  # Favorite Movies
+    #params.setParam('sUrl', URL_FAVOURITE_MOVIE_PAGE)
+    #cGui().addFolder(cGuiElement(cConfig().getLocalizedString(30521), SITE_IDENTIFIER, 'showEntries'), params)  # Favorite Movies #ToDo Auskommentiert da URL auf Webseite fehlerhaft, zukünftig prüfen ob Fehler behoben
     #params.setParam('sUrl', URL_MOVIES)
     #cGui().addFolder(cGuiElement(cConfig().getLocalizedString(30502), SITE_IDENTIFIER, 'showEntries'), params)  # Movies #ToDo Auskommentiert da URL auf Webseite fehlerhaft, zukünftig prüfen ob Fehler behoben
     params.setParam('sUrl', URL_MAINPAGE)
