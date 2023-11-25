@@ -102,8 +102,6 @@ def showEntries(entryUrl=False, sGui=False):
 
 
 def showSeasons(sGui=False):
-    #import pydevd_pycharm
-    #pydevd_pycharm.settrace('127.0.0.1', port=12345, stdoutToServer=True, stderrToServer=True)
     oGui = sGui if sGui else cGui()
     params = ParameterHandler()
     # Parameter laden

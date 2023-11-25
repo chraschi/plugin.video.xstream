@@ -2,7 +2,7 @@
 
 25.11.2023
 
- - [Cineclix] Problem das bei mehr als 8 Staffeln die erste Staffel nicht mehr angezeigt wurde behoben
+ - [Cineclix] Fix: Erste Staffel wird bei mehr als acht Staffeln nicht mehr angezeigt
 
 [COLOR cyan]________________________________________________________________________________________[/COLOR]
 
