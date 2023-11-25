@@ -102,6 +102,8 @@ def showEntries(entryUrl=False, sGui=False):
 
 
 def showSeasons(sGui=False):
+    #import pydevd_pycharm
+    #pydevd_pycharm.settrace('127.0.0.1', port=12345, stdoutToServer=True, stderrToServer=True)
     oGui = sGui if sGui else cGui()
     params = ParameterHandler()
     # Parameter laden
@@ -114,7 +116,23 @@ def showSeasons(sGui=False):
     jSearch = json.loads(oRequest.request()) # Lade JSON aus dem Request der URL
     if not jSearch: return # Wenn Suche erfolglos - Abbruch
     sDesc = jSearch['title']['description'] # Lade Beschreibung aus JSON
-    aResults = jSearch['seasons']['data']
+
+    #Nachdem Titel und Beschreibung ausgelesen ist, Wechsel der URL um alle Staffeln darzustellen (max. 50 Staffeln)
+    token = oRequest.getCookie('XSRF-TOKEN')
+    title_id = jSearch['title']['id']
+    entryUrl1 = URL_MAIN + 'api/v1/titles/' + str(title_id) + '/seasons?perPage=50&query=&page=1' # max 50 Staffeln (Page=50)
+    oRequest = cRequestHandler(entryUrl1)
+    oRequest.addHeaderEntry('Accept', 'application/json')
+    oRequest.addHeaderEntry('Content-Type', 'application/json')
+    oRequest.addHeaderEntry('Sec-Fetch-Dest', 'empty')
+    oRequest.addHeaderEntry('Sec-Fetch-Mode', 'cors')
+    oRequest.addHeaderEntry('Sec-Fetch-Site', 'same-origin')
+    oRequest.addHeaderEntry('X-XSRF-TOKEN', str(token.value))
+    oRequest.addHeaderEntry('Referer', entryUrl)
+    jSearch = json.loads(oRequest.request())
+    if not jSearch: return
+    aResults = jSearch['pagination']['data']
+
     aResults = sorted(aResults, key=lambda k: k['number'])  # Sortiert die Staffeln nach Nummer aufsteigend
     total = len(aResults)
     if len(aResults) == 0:

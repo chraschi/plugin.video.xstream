@@ -1,4 +1,10 @@
-[B]Version: 4.0.8~nightly4[/B]
+[B]Version: 4.0.8~nightly5[/B]
+
+25.11.2023
+
+ - [Cineclix] Problem das bei mehr als 8 Staffeln die erste Staffel nicht mehr angezeigt wurde behoben
+
+[COLOR cyan]________________________________________________________________________________________[/COLOR]
 
 24.11.2023
 
