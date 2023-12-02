@@ -1,4 +1,9 @@
-[B]Version: 4.0.8~nightly5[/B]
+[B]Version: 4.0.8~nightly6[/B]
+
+02.12.2023
+
+ - [moflix-stream] Fix: Staffeln mit mehr als 30 Episoden wurden nicht korrekt angezeigt
+ - [Movieking.cc] deaktiviert
 
 25.11.2023
 

@@ -142,14 +142,15 @@ def showEpisodes(sGui=False):
     # Parameter laden
     sId = params.getValue('sId')
     sSeasonNr = params.getValue('sSeasonNr')
-    sUrl = URL_MAIN + 'api/v1/titles/%s/seasons/%s?load=episodes,primaryVideo' % (sId, sSeasonNr)
+    sUrl = URL_MAIN + 'api/v1/titles/%s/seasons/%s/episodes?perPage=100&query=&page=1' % (sId, sSeasonNr) #Hep 02.12.23: Abfrage für einzelne Episoden per query force auf 100 erhöht
     oRequest = cRequestHandler(sUrl)
     oRequest.addHeaderEntry('Referer', sUrl)
     if cConfig().getSetting('global_search_' + SITE_IDENTIFIER) == 'true':
         oRequest.cacheTime = 60 * 60 * 4  # 4 Stunden
     jSearch = json.loads(oRequest.request()) # Lade JSON aus dem Request der URL
     if not jSearch: return  # Wenn Suche erfolglos - Abbruch
-    aResults = jSearch['episodes']['data'] # Ausgabe der Suchresultate von jSearch
+    #aResults = jSearch['episodes']['data'] # Ausgabe der Suchresultate von jSearch
+    aResults = jSearch['pagination']['data']  # Ausgabe der Suchresultate von jSearch
     total = len(aResults) # Anzahl aller Ergebnisse
     if len(aResults) == 0:
         if not sGui: oGui.showInfo()
