@@ -19,6 +19,7 @@ class XstreamPlayer(xbmc.Player):
     def onPlayBackStarted(self):
         log(LOGMESSAGE + ' -> [player]: starting Playback', LOGNOTICE)
         self.totalTime = self.getTotalTime()
+        cGui.showNofication("test")
 
     def onPlayBackStopped(self):
         log(LOGMESSAGE + ' -> [player]: Playback stopped', LOGNOTICE)
